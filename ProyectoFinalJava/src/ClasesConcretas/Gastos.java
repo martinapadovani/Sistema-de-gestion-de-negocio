@@ -1,5 +1,5 @@
-package ClasesTransaccion;
-import Abstractas.Transaccion;
+package ClasesConcretas;
+import ClasesAbstractas.Transaccion;
 import Interfaces.*;
 
 public class Gastos extends Transaccion{

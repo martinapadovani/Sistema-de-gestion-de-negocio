@@ -1,4 +1,4 @@
-package Abstractas;
+package ClasesAbstractas;
 import Interfaces.*;
 
 public abstract class Transaccion implements GestionDeFacturas{

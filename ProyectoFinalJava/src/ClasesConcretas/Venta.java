@@ -1,5 +1,5 @@
-package ClasesTransaccion;
-import Abstractas.Transaccion;
+package ClasesConcretas;
+import ClasesAbstractas.Transaccion;
 
 public class Venta {
 
@@ -11,7 +11,6 @@ public class Venta {
 	public Venta() {
 		
 	}
-
 	
 	
 	
