@@ -3,11 +3,13 @@ import Interfaces.*;
 
 public abstract class Transaccion implements GestionDeFacturas{
 	
+	// ATRIBUTOS:
 	private int id;
 	private int fecha;
 	private String medioDePago;
 	private int montoTotal;
 	
+	// CONSTRUCTOR:
 	public Transaccion(int id, int fecha, String medioDePago, int montoTotal) {
 		this.id = id;
 		this.fecha = fecha;
@@ -15,15 +17,12 @@ public abstract class Transaccion implements GestionDeFacturas{
 		this.montoTotal = montoTotal;
 	}
 	
-	// Métodos: 
-	
+	// MÉTODOS: 
 	@Override
 	public String toString() {
 		return "Transaccion [id=" + id + ", fecha=" + fecha + ", medioDePago=" + medioDePago + ", montoTotal="
 				+ montoTotal + "]";
 	}
-	
-	// Provenientes de interfaz: 
 	
 	@Override 
 	public void generarFactura() {

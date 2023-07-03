@@ -38,4 +38,40 @@ public class Proveedor implements GestionDeDatos{
 	@Override
 	public void Eliminar() {
 	}
+
+	// GETTERS-SETTERS: 
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getNombreProveedor() {
+		return nombreProveedor;
+	}
+
+	public void setNombreProveedor(String nombreProveedor) {
+		this.nombreProveedor = nombreProveedor;
+	}
+
+	public int getTelefono() {
+		return telefono;
+	}
+
+	public void setTelefono(int telefono) {
+		this.telefono = telefono;
+	}
+
+	public int getPrecioProductoXUnidad() {
+		return precioProductoXUnidad;
+	}
+
+	public void setPrecioProductoXUnidad(int precioProductoXUnidad) {
+		this.precioProductoXUnidad = precioProductoXUnidad;
+	}
+	
+	
 }
