@@ -2,7 +2,7 @@ package ClasesConcretas;
 
 import Interfaces.GestionDeDatos;
 
-public class Producto implements GestionDeDatos{
+public class Producto implements GestionDeDatos<Producto>{
 	
 	//ATRIBUTOS
 	private int ID;
@@ -12,9 +12,16 @@ public class Producto implements GestionDeDatos{
 	private Proveedor proveedorDelProducto;
 	private int precio;
 
+	@Override
+	public String toString() {
+		return "Producto [ID=" + ID + ", nombreProducto=" + nombreProducto + ", categoríaProducto=" + categoríaProducto
+				+ ", stockDisponible=" + stockDisponible + ", proveedorDelProducto=" + proveedorDelProducto
+				+ ", precio=" + precio + "]";
+	}
 
+	
 	//METODOS
-
+	
 	public void verStockDeProducto(Producto producto) {
 	
 	}
@@ -26,7 +33,7 @@ public class Producto implements GestionDeDatos{
 	//OVERRIDE
 
 	@Override
-	public void Agregar() {
+	public void Agregar(Producto producto) {
 	}
 
 	@Override
@@ -34,11 +41,11 @@ public class Producto implements GestionDeDatos{
 	}
 
 	@Override
-	public void Actualizar() {
+	public void Actualizar(Producto producto) {
 	}
 
 	@Override
-	public void Eliminar() {
+	public void Eliminar(Producto producto){
 	}
 	
 	

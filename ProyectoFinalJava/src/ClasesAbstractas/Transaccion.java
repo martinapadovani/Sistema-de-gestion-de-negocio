@@ -1,7 +1,7 @@
 package ClasesAbstractas;
 import Interfaces.*;
 
-public abstract class Transaccion implements GestionDeFacturas{
+public abstract class Transaccion implements GestionDeFacturas<Transaccion>{
 	
 	// ATRIBUTOS:
 	private int id;
@@ -25,7 +25,7 @@ public abstract class Transaccion implements GestionDeFacturas{
 	}
 	
 	@Override 
-	public void generarFactura() {
+	public void generarFactura(Transaccion transaccion) {
 		
 	}
 	
@@ -35,12 +35,12 @@ public abstract class Transaccion implements GestionDeFacturas{
 	}
 	
 	@Override
-	public void verInfoFactura() {
+	public void verInfoFactura(Transaccion transaccion) {
 		
 	}
 	
 	@Override 
-	public void eliminarFactura() {
+	public void eliminarFactura(Transaccion transaccion) {
 		
 	}
 	

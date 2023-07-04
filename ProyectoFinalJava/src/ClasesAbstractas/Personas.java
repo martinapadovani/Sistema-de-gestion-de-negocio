@@ -6,25 +6,32 @@ public abstract class Personas {
 	
 	private String nombre;
 	private String apellido;
-	private int DNI;
+	private int dni;
 	private int teléfono;
 	private String email;
 	private int fechaDeRegistro;
 	
 	//CONSTRUCTOR
 	
-	public Personas(String nombre, String apellido, int dNI, int teléfono, String email, int fechaDeRegistro) {
-		super();
+	public Personas(String nombre, String apellido, int dni, int teléfono, String email, int fechaDeRegistro) {
 		this.nombre = nombre;
 		this.apellido = apellido;
-		DNI = dNI;
+		this.dni = dni;
 		this.teléfono = teléfono;
 		this.email = email;
 		this.fechaDeRegistro = fechaDeRegistro;
 	}
 	
-	//GETTERS-SETTERS
 	
+	@Override
+	public String toString() {
+		return "Personas [nombre=" + nombre + ", apellido=" + apellido + ", dni=" + dni + ", teléfono=" + teléfono
+				+ ", email=" + email + ", fechaDeRegistro=" + fechaDeRegistro + "]";
+	}
+	
+
+	//GETTERS-SETTERS
+
 	public String getNombre() {
 		return nombre;
 	}
@@ -46,12 +53,12 @@ public abstract class Personas {
 
 
 	public int getDNI() {
-		return DNI;
+		return dni;
 	}
 
 
 	public void setDNI(int dNI) {
-		DNI = dNI;
+		dni = dNI;
 	}
 
 

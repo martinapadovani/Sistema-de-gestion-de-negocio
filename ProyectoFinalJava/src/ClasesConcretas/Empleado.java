@@ -3,11 +3,11 @@ import ClasesAbstractas.Personas;
 import Interfaces.GestionDeDatos;
 
 
-public class Empleado extends Personas implements GestionDeDatos{
+public class Empleado extends Personas implements GestionDeDatos<Empleado>{
 
 	//ATRIBUTOS
 	
-	private int ID;
+	private int id;
 	private int horasMensuales;
 	private int sueldo;
 	private int ventasMensuales;
@@ -18,10 +18,10 @@ public class Empleado extends Personas implements GestionDeDatos{
 	
 	//CONSTRUCTOR
 	
-	public Empleado(String nombre, String apellido, int dNI, int teléfono, String email, int fechaDeRegistro, int iD,
+	public Empleado(String nombre, String apellido, int dni, int teléfono, String email, int fechaDeRegistro, int id,
 			int horasMensuales, int sueldo, int ventasMensuales, String turno, String puesto, boolean activo) {
-		super(nombre, apellido, dNI, teléfono, email, fechaDeRegistro);
-		ID = iD;
+		super(nombre, apellido, dni, teléfono, email, fechaDeRegistro);
+		this.id = id;
 		this.horasMensuales = horasMensuales;
 		this.sueldo = sueldo;
 		this.ventasMensuales = ventasMensuales;
@@ -30,15 +30,21 @@ public class Empleado extends Personas implements GestionDeDatos{
 		this.activo = activo;
 	}
 	
-	
-	//GETTERS-SETTERS
-	
-	public int getID() {
-		return ID;
+	@Override
+	public String toString() {
+		return "Empleado [id=" + id + ", horasMensuales=" + horasMensuales + ", sueldo=" + sueldo + ", ventasMensuales="
+				+ ventasMensuales + ", turno=" + turno + ", puesto=" + puesto + ", activo=" + activo + "]";
 	}
 
-	public void setID(int iD) {
-		ID = iD;
+	
+	//GETTERS-SETTERS
+
+	public int getID() {
+		return id;
+	}
+
+	public void setID(int id) {
+		id = id;
 	}
 
 	public int getHorasMensuales() {
@@ -93,18 +99,18 @@ public class Empleado extends Personas implements GestionDeDatos{
 	//OVERRIDES
 	
 	@Override
-	public void Agregar() {
+	public void Agregar(Empleado empleado) {
 	}
 	
 	@Override
-	public void Buscar(int ID) {
+	public void Buscar(int id) {
 	}
 	
 	@Override
-	public void Actualizar() {
+	public void Actualizar(Empleado empleado) {
 	}
 	
 	@Override
-	public void Eliminar() {
+	public void Eliminar(Empleado empleado) {
 	}
 }

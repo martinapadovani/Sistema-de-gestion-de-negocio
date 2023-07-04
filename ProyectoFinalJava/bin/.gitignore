@@ -1,8 +1,5 @@
-/Abstractas/
-/ConexionDB/
-/ClasesTransaccion/
-/ClasesEmpleado/
-/Interfaces/
-/ClasesConcretas/
 /ClasesAbstractas/
-/Transacciones/
+/ClasesConcretas/
+/ConexionDB/
+/Interfaces/
+/ManejoDeArchivos/

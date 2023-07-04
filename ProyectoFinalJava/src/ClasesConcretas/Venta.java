@@ -56,6 +56,26 @@ public class Venta extends Transaccion{
 		this.cantidad = cantidad;
 	}
 	
+	@Override 
+	public void generarFactura(Transaccion transaccion) {
+		
+	}
+	
+	@Override 
+	public void buscarFactura(int id) {
+		
+	}
+	
+	@Override
+	public void verInfoFactura(Transaccion transaccion) {
+		
+	}
+	
+	@Override 
+	public void eliminarFactura(Transaccion transaccion) {
+		
+	}
+	
 	
 	
 	

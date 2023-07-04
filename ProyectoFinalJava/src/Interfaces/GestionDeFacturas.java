@@ -1,10 +1,10 @@
 package Interfaces;
 
-public interface GestionDeFacturas {
+public interface GestionDeFacturas <T> {
 	
-	public void generarFactura();
+	public void generarFactura(T objeto);
 	public void buscarFactura(int id);
-	public void verInfoFactura();
-	public void eliminarFactura();
+	public void verInfoFactura(T objeto);
+	public void eliminarFactura(T objeto);
 
 }
