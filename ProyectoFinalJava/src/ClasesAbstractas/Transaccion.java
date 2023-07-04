@@ -1,7 +1,13 @@
 package ClasesAbstractas;
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDate;
 
-import Interfaces.*;
+import ConexionDB.Conexion;
+import Interfaces.GestionDeFacturas;
 
 public abstract class Transaccion implements GestionDeFacturas<Transaccion>{
 	
@@ -10,11 +16,13 @@ public abstract class Transaccion implements GestionDeFacturas<Transaccion>{
 	private LocalDate fecha;
 	private String medioDePago;
 	private int montoTotal;
+
+
 	
 	// CONSTRUCTOR:
-	public Transaccion(int id, LocalDate fecha2, String medioDePago, int montoTotal) {
+	public Transaccion(String medioDePago, int montoTotal) {
 		this.id = id;
-		this.fecha = fecha2;
+		this.fecha = LocalDate.now();
 		this.medioDePago = medioDePago;
 		this.montoTotal = montoTotal;
 	}
@@ -26,7 +34,6 @@ public abstract class Transaccion implements GestionDeFacturas<Transaccion>{
 				+ montoTotal + "]";
 	}
 	
-	@Override 
 	public void generarFactura(Transaccion transaccion) {
 		
 	}

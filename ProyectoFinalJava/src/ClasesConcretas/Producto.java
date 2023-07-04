@@ -1,24 +1,36 @@
 package ClasesConcretas;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.logging.Logger;
+
+import ConexionDB.Conexion;
 import Interfaces.GestionDeDatos;
 
 public class Producto implements GestionDeDatos<Producto>{
 	
-	//ATRIBUTOS
-	private int ID;
+	//ATRIBUTOS DE CLASE
 	private String nombreProducto;
-	private String categoríaProducto;
+	private String categoriaProducto;
 	private int stockDisponible;
 	private Proveedor proveedorDelProducto;
 	private int precio;
+	private int id; 
 	
+	//ATRIBUTOS PARA CONEXION
+	Conexion conexion = new Conexion();
+	private Connection cn = null;
+	private PreparedStatement ps = null;
+	private ResultSet rs = null;
 
-	public Producto(int iD, String nombreProducto, String categoríaProducto, int stockDisponible,
+
+	public Producto(int id, String nombreProducto, String categoriaProducto, int stockDisponible,
 			Proveedor proveedorDelProducto, int precio) {
-		super();
-		ID = iD;
+		this.id = id;
 		this.nombreProducto = nombreProducto;
-		this.categoríaProducto = categoríaProducto;
+		this.categoriaProducto = categoriaProducto;
 		this.stockDisponible = stockDisponible;
 		this.proveedorDelProducto = proveedorDelProducto;
 		this.precio = precio;
@@ -27,8 +39,8 @@ public class Producto implements GestionDeDatos<Producto>{
 
 	@Override
 	public String toString() {
-		return "Producto [ID=" + ID + ", nombreProducto=" + nombreProducto + ", categoríaProducto=" + categoríaProducto
-				+ ", stockDisponible=" + stockDisponible + ", proveedorDelProducto=" + proveedorDelProducto
+		return "Producto [nombreProducto=" + nombreProducto + ", categoríaProducto=" + categoriaProducto
+				+ ", stockDisponible=" + stockDisponible + ", proveedorDelProducto=" + proveedorDelProducto.getNombreProveedor()
 				+ ", precio=" + precio + "]";
 	}
 
@@ -36,7 +48,27 @@ public class Producto implements GestionDeDatos<Producto>{
 	//METODOS
 	
 	public void verStockDeProducto(Producto producto) {
+		
+		try{
+			cn = conexion.conectar();
 	
+			
+			String nombreProducto = producto.getNombreProducto();
+			
+			ps = cn.prepareStatement("SELECT stockDisponible FROM producto WHERE nombreProducto =" + nombreProducto );
+			
+			rs = ps.executeQuery();
+			
+			while(rs.next()) {
+				 stockDisponible += rs.getInt("stockDisponible");	
+			}
+			
+			System.out.println("El stock de" + nombreProducto + "es de: " + stockDisponible);
+
+		} catch(SQLException e){
+			e.printStackTrace();
+		}
+
 	}
 
 	public void calcularStock(Producto producto) {
@@ -44,10 +76,33 @@ public class Producto implements GestionDeDatos<Producto>{
 	}
 
 	//OVERRIDE
-
+	
 	@Override
 	public void Agregar(Producto producto) {
-	}
+		try{
+			
+			cn = conexion.conectar();
+			/* No se agrega el dato "id" ya que es auto_incremental directamente del workbench. 
+			 * Tampoco se agrega el dato proveedorDelProducto ya que traducido a MySQL este será una llave foranea que contendrá
+			 * el id de ese proveedor. */
+			String query = "INSERT INTO producto (nombreProducto, categoria, stockDisponible, precioxUnidad) VALUES (?, ?, ?, ?)";
+			ps = cn.prepareStatement(query);
+			
+			ps.setString(1, producto.getNombreProducto());
+			ps.setString(2, producto.getCategoríaProducto());
+			ps.setInt(3, producto.getStockDisponible());
+			ps.setInt(4, producto.getPrecio());
+			
+			ps.executeUpdate();
+			
+			System.out.println("Se han insertado los datos correctamente");
+			
+			
+		} catch(SQLException e){
+			e.printStackTrace();
+		}
+			
+	}	
 
 	@Override
 	public void Buscar(int ID) {
@@ -64,14 +119,6 @@ public class Producto implements GestionDeDatos<Producto>{
 	
 
 	//GETTERS-SETTERS
-
-	public int getID() {
-		return ID;
-	}
-	
-	public void setID(int iD) {
-		ID = iD;
-	}
 	
 	public String getNombreProducto() {
 		return nombreProducto;
@@ -82,11 +129,11 @@ public class Producto implements GestionDeDatos<Producto>{
 	}
 	
 	public String getCategoríaProducto() {
-		return categoríaProducto;
+		return categoriaProducto;
 	}
 	
-	public void setCategoríaProducto(String categoríaProducto) {
-		this.categoríaProducto = categoríaProducto;
+	public void setCategoríaProducto(String categoriaProducto) {
+		this.categoriaProducto = categoriaProducto;
 	}
 	
 	public int getStockDisponible() {
@@ -112,6 +159,8 @@ public class Producto implements GestionDeDatos<Producto>{
 	public void setPrecio(int precio) {
 		this.precio = precio;
 	}
+
+
 
 
 

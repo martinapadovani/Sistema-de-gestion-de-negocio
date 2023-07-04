@@ -1,8 +1,14 @@
 package ClasesConcretas;
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
 import ClasesAbstractas.Transaccion;
+import ConexionDB.Conexion;
 
 public class Venta extends Transaccion{
 
@@ -11,11 +17,17 @@ public class Venta extends Transaccion{
 	private ArrayList<ProductoVentas>productos;
 
 	// CONSTRUCTOR:
-	public Venta(int id, LocalDate fecha, String medioDePago, int montoTotal, Empleado empleado, ArrayList<ProductoVentas>productos){
-		super(id, fecha, medioDePago, montoTotal);
+	public Venta(String medioDePago, int montoTotal, Empleado empleado, ArrayList<ProductoVentas>productos){
+		super(medioDePago, montoTotal);
 		this.empleado = empleado;
 		this.productos = productos;
 	}
+	
+	//ATRIBUTOS PARA LA CONEXIÓN: 
+	Conexion conexion = new Conexion();
+	private Connection cn = null;
+	private PreparedStatement ps = null;
+	private ResultSet rs = null;
 	
 
 	
@@ -50,6 +62,7 @@ public class Venta extends Transaccion{
 	
 	@Override 
 	public void generarFactura(Transaccion transaccion) {
+
 		
 	}
 	

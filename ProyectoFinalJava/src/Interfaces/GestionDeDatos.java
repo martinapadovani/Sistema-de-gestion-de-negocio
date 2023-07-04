@@ -1,5 +1,7 @@
 package Interfaces;
 
+import ClasesConcretas.Producto;
+
 public interface GestionDeDatos <T> {
 	
 	abstract void Agregar(T objeto);
