@@ -9,31 +9,43 @@ public abstract class Personas {
 	private int dni;
 	private int teléfono;
 	private String email;
-	private int fechaDeRegistro;
+	private int edad;
 	
 	//CONSTRUCTOR
 	
-	public Personas(String nombre, String apellido, int dni, int teléfono, String email, int fechaDeRegistro) {
+	public Personas(String nombre, String apellido, int dni, int teléfono, String email, int edad) {
 		this.nombre = nombre;
 		this.apellido = apellido;
 		this.dni = dni;
 		this.teléfono = teléfono;
 		this.email = email;
-		this.fechaDeRegistro = fechaDeRegistro;
+		this.edad = edad;
 	}
 	
 	
 	@Override
 	public String toString() {
 		return "Personas [nombre=" + nombre + ", apellido=" + apellido + ", dni=" + dni + ", teléfono=" + teléfono
-				+ ", email=" + email + ", fechaDeRegistro=" + fechaDeRegistro + "]";
+				+ ", email=" + email + ", fechaDeRegistro=" +  "]";
 	}
 	
 
 	//GETTERS-SETTERS
+	
+	
 
 	public String getNombre() {
 		return nombre;
+	}
+
+
+	public int getEdad() {
+		return edad;
+	}
+
+
+	public void setEdad(int edad) {
+		this.edad = edad;
 	}
 
 
@@ -79,16 +91,6 @@ public abstract class Personas {
 
 	public void setEmail(String email) {
 		this.email = email;
-	}
-
-
-	public int getFechaDeRegistro() {
-		return fechaDeRegistro;
-	}
-
-
-	public void setFechaDeRegistro(int fechaDeRegistro) {
-		this.fechaDeRegistro = fechaDeRegistro;
 	}
 
 

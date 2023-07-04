@@ -1,18 +1,20 @@
 package ClasesAbstractas;
+import java.time.LocalDate;
+
 import Interfaces.*;
 
 public abstract class Transaccion implements GestionDeFacturas<Transaccion>{
 	
 	// ATRIBUTOS:
 	private int id;
-	private int fecha;
+	private LocalDate fecha;
 	private String medioDePago;
 	private int montoTotal;
 	
 	// CONSTRUCTOR:
-	public Transaccion(int id, int fecha, String medioDePago, int montoTotal) {
+	public Transaccion(int id, LocalDate fecha2, String medioDePago, int montoTotal) {
 		this.id = id;
-		this.fecha = fecha;
+		this.fecha = fecha2;
 		this.medioDePago = medioDePago;
 		this.montoTotal = montoTotal;
 	}
@@ -55,11 +57,11 @@ public abstract class Transaccion implements GestionDeFacturas<Transaccion>{
 		this.id = id;
 	}
 
-	public int getFecha() {
+	public LocalDate getFecha() {
 		return fecha;
 	}
 
-	public void setFecha(int fecha) {
+	public void setFecha(LocalDate fecha) {
 		this.fecha = fecha;
 	}
 

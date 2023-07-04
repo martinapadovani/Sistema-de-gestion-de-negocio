@@ -11,6 +11,19 @@ public class Producto implements GestionDeDatos<Producto>{
 	private int stockDisponible;
 	private Proveedor proveedorDelProducto;
 	private int precio;
+	
+
+	public Producto(int iD, String nombreProducto, String categoríaProducto, int stockDisponible,
+			Proveedor proveedorDelProducto, int precio) {
+		super();
+		ID = iD;
+		this.nombreProducto = nombreProducto;
+		this.categoríaProducto = categoríaProducto;
+		this.stockDisponible = stockDisponible;
+		this.proveedorDelProducto = proveedorDelProducto;
+		this.precio = precio;
+	}
+
 
 	@Override
 	public String toString() {

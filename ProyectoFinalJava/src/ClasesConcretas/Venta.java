@@ -1,27 +1,28 @@
 package ClasesConcretas;
+import java.time.LocalDate;
+import java.util.ArrayList;
+
 import ClasesAbstractas.Transaccion;
 
 public class Venta extends Transaccion{
 
 	// ATRIBUTOS:
 	private Empleado empleado;
-	private Producto producto;
-	private int cantidad; 
+	private ArrayList<ProductoVentas>productos;
 
 	// CONSTRUCTOR:
-	public Venta(int id, int fecha, String medioDePago, int montoTotal, Empleado empleado, Producto producto,
-			int cantidad) {
+	public Venta(int id, LocalDate fecha, String medioDePago, int montoTotal, Empleado empleado, ArrayList<ProductoVentas>productos){
 		super(id, fecha, medioDePago, montoTotal);
 		this.empleado = empleado;
-		this.producto = producto;
-		this.cantidad = cantidad;
+		this.productos = productos;
 	}
+	
 
 	
 	// MÉTODOS: 
 	@Override
 	public String toString() {
-		return "Venta [empleado=" + empleado + ", producto=" + producto + ", cantidad=" + cantidad + "]";
+		return "Venta [empleado=" + empleado + ", productos=" + productos +  "]";
 	}
 	
 	
@@ -37,24 +38,15 @@ public class Venta extends Transaccion{
 	}
 
 
-	public Producto getProducto() {
-		return producto;
+	public ArrayList<ProductoVentas> getProducto() {
+		return productos;
 	}
 
 
-	public void setProducto(Producto producto) {
-		this.producto = producto;
+	public void setProducto(ArrayList<ProductoVentas>productos) {
+		this.productos = productos;
 	}
 
-
-	public int getCantidad() {
-		return cantidad;
-	}
-
-
-	public void setCantidad(int cantidad) {
-		this.cantidad = cantidad;
-	}
 	
 	@Override 
 	public void generarFactura(Transaccion transaccion) {

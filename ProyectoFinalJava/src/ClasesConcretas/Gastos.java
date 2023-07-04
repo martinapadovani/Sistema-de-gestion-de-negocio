@@ -1,4 +1,6 @@
 package ClasesConcretas;
+import java.time.LocalDate;
+
 import ClasesAbstractas.Transaccion;
 import Interfaces.*;
 
@@ -9,7 +11,7 @@ public class Gastos extends Transaccion{
 	
 	// CONSTRUCTOR
 
-	public Gastos(int id, int fecha, String medioDePago, int montoTotal, String destino) {
+	public Gastos(int id, LocalDate fecha, String medioDePago, int montoTotal, String destino) {
 		super(id, fecha, medioDePago, montoTotal);
 		this.destino = destino;
 	}

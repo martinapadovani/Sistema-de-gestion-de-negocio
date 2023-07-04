@@ -1,4 +1,6 @@
 package ClasesConcretas;
+import java.time.LocalDate;
+
 import ClasesAbstractas.Personas;
 import Interfaces.GestionDeDatos;
 
@@ -10,17 +12,19 @@ public class Empleado extends Personas implements GestionDeDatos<Empleado>{
 	private int id;
 	private int horasMensuales;
 	private int sueldo;
-	private int ventasMensuales;
+	private int ventasMensuales;	
 	private String turno;
 	private String puesto;
 	private boolean activo;
+	private LocalDate fechaDeInicio;
 	
 	
 	//CONSTRUCTOR
 	
-	public Empleado(String nombre, String apellido, int dni, int teléfono, String email, int fechaDeRegistro, int id,
+
+	public Empleado(String nombre, String apellido, int dni, int teléfono, String email, int edad, int fechaDeRegistro, int id,
 			int horasMensuales, int sueldo, int ventasMensuales, String turno, String puesto, boolean activo) {
-		super(nombre, apellido, dni, teléfono, email, fechaDeRegistro);
+		super(nombre, apellido, dni, teléfono, email, edad);
 		this.id = id;
 		this.horasMensuales = horasMensuales;
 		this.sueldo = sueldo;
@@ -94,6 +98,15 @@ public class Empleado extends Personas implements GestionDeDatos<Empleado>{
 	public void setActivo(boolean activo) {
 		this.activo = activo;
 	}
+	
+	public LocalDate getFechaDeInicio() {
+		return fechaDeInicio;
+	}
+
+	public void setFechaDeInicio(LocalDate fechaDeInicio) {
+		this.fechaDeInicio = fechaDeInicio;
+	}
+	
 
 	
 	//OVERRIDES
