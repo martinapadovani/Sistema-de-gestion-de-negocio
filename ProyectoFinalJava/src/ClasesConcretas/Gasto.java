@@ -47,30 +47,48 @@ public class Gasto extends Transaccion{
 		this.destino = destino;
 	}
 	
-	public void generarFactura(Transaccion transaccion, Gasto gasto) {
+	/* Al intentar overridear con el tipo de dato "Factura" únicamente, hay ciertos parámetros pertenecientes a Gasto
+	 * como "getDestino" que no se podrían llamar. Por lo tanto, el tipo de dato que recibe generarFactura en este caso sería
+	 * Gasto, para poder traer consigo todo lo de "Factura" y a su vez incorporar los atributos de "Gasto".
+	 * Si yo quisiera implementar la interfaz directamente en esta clase "Gasto" se podría hacer únicamente si saco la implementación
+	 * del objeto "Transaccion". 
+	 * La implementación del método "generarFactura" en el objeto "Transaccion" tal vez no sería necesaria ya que este se va a aplicar 
+	 * desde las clases hijas (Gasto y Venta), trayendo consigo todo lo que pertenezca a Transaccion. 
+	 * Otra opción podría ser crear métodos abstractos desde la clase "Transaccion" e incorporarlos en estas clases hijas. */
+	
+	public void generarFactura(Gasto gasto) {
 		try {
-			LocalDate fecha = transaccion.getFecha();
-			Date fechaSQL = Date.valueOf(fecha);
-			int idTransaccion = 0;
-			
-			
-			String query = "INSERT INTO transaccion (fechaDeTransaccion, medioDePago, montoTotal, transaccion_id) VALUES (?, ?, ?, ?)";
+			// Establecemos conexion con la base de datos.
 			cn = conexion.conectar();
+			
+			/* Pasamos la fecha que se registro al momento de instanciar el objeto a uno de tipo Date 
+			 * para que se pueda registrar en la DB. */
+			LocalDate fecha = gasto.getFecha();
+			Date fechaSQL = Date.valueOf(fecha);
+
+			/* Insertamos los datos que vienen con el objeto "gasto" que recibe la función por parámetro. */
+			String query = "INSERT INTO transaccion (fechaDeTransaccion, medioDePago, montoTotal) VALUES (?, ?, ?)";
 			ps = cn.prepareStatement(query);
 			
 			ps.setDate(1, fechaSQL);
-			ps.setString(2, transaccion.getMedioDePago());
-			ps.setFloat(3, transaccion.getMontoTotal());
+			ps.setString(2, gasto.getMedioDePago());
+			ps.setFloat(3, gasto.getMontoTotal());
 			
-			/* Llamo el id "transaccion_id" de la tabla de transaccion. */
-			while(rs.next()) {
-				idTransaccion = rs.getInt("idTransaccion");
-			}
+			ps.executeUpdate();
 			
 			
+			/* Creo una variable "idTransaccion" para asignarle el valor de la idTransaccion al llamar a la tabla
+			 * "transaccion" en la base de datos. Esto con el fin de poder asignarle el valor "transaccion_id" a la 
+			 * tabla "gastos" y poder generar el enlazamiento de los generales de la Transaccion con el Gasto que le pertenece. */
+			int idTransaccion = 0;
+			
+			/* Llamo al idTransaccion */
+
 		
-			String query2 = "INSERT INTO gastos(destino, transaccion_id) VALUES (?, ?)";
-			ps = cn.prepareStatement(query2);
+			/* Inserto los datos del objeto Gasto en la tabla "gastos" con su respectivo transaccion_id que va a conectarlo con la
+			 * Transaccion a la que pertenece. */
+			String query3 = "INSERT INTO gastos(destino, transaccion_id) VALUES (?, ?)";
+			ps = cn.prepareStatement(query3);
 			ps.setString(1, gasto.getDestino());
 			ps.setInt(2, idTransaccion);
 			

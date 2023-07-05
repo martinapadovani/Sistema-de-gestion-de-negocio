@@ -11,7 +11,7 @@ public class Main {
 		
 		Gasto gasto = new Gasto("tarjeta", 3000, "alla");
 		
-		gasto.generarFactura(gasto, gasto);
+		gasto.generarFactura(gasto);
 	}
 
 }

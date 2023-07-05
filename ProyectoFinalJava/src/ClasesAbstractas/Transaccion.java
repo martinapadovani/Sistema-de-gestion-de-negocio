@@ -34,6 +34,7 @@ public abstract class Transaccion implements GestionDeFacturas<Transaccion>{
 				+ montoTotal + "]";
 	}
 	
+	@Override
 	public void generarFactura(Transaccion transaccion) {
 		
 	}

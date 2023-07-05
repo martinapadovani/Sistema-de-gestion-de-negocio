@@ -1,5 +1,7 @@
 package Interfaces;
 
+import ClasesConcretas.Gasto;
+
 public interface GestionDeFacturas <T> {
 	
 	public void generarFactura(T objeto);
