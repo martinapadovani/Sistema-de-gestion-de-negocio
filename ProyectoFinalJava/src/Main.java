@@ -9,7 +9,7 @@ public class Main {
 
 	public static void main(String[] args) {
 		
-		Gasto gasto = new Gasto("tarjeta", 3000, "alla");
+		Gasto gasto = new Gasto("efectivo", 3000, "otro");
 		
 		gasto.generarFactura(gasto);
 	}

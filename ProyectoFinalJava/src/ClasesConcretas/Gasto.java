@@ -83,6 +83,13 @@ public class Gasto extends Transaccion{
 			int idTransaccion = 0;
 			
 			/* Llamo al idTransaccion */
+			String query2 = "SELECT idTransaccion FROM transaccion";
+			
+			rs = ps.executeQuery(query2);
+			
+			while(rs.next()) {
+				idTransaccion = rs.getInt(1);
+			}
 
 		
 			/* Inserto los datos del objeto Gasto en la tabla "gastos" con su respectivo transaccion_id que va a conectarlo con la
