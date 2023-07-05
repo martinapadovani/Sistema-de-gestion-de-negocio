@@ -5,10 +5,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Scanner;
 
 import ClasesAbstractas.Transaccion;
 import ConexionDB.Conexion;
-import Interfaces.*;
+import Interfaces.GestionDeFacturas;
 
 public class Gasto extends Transaccion implements GestionDeFacturas<Gasto>{
 
@@ -21,6 +23,17 @@ public class Gasto extends Transaccion implements GestionDeFacturas<Gasto>{
 	private Connection cn = null;
 	private PreparedStatement ps = null;
 	private ResultSet rs = null;
+	
+	//ATRIBUTOS AUXILIARES: 
+	Scanner sc = new Scanner(System.in);
+	
+	/* Inicializo las variables globalmente. Estas van a ser rellenadas con lo que se obtenga 
+	 * de la base de datos.*/
+	int idTransaccion = 0;
+	Date fechaDeTransaccion = null;
+	String medioDePago = null;
+	float montoTotal = 0;
+	int idGastos = 0;
 	
 	
 	// CONSTRUCTOR
@@ -106,17 +119,7 @@ public class Gasto extends Transaccion implements GestionDeFacturas<Gasto>{
 	}
 	
 	@Override 
-	public void buscarFactura(int id) {
-		
-		/* Inicializo las variables que van a ser rellenadas con lo que se llame de la base de datos. Esto lo hago
-		 * para poder llamarlas luego fuera del ciclo while. */
-		int idTransaccion = 0;
-		Date fechaDeTransaccion = null;
-		String medioDePago = null;
-		float montoTotal = 0;
-		int idGastos = 0;
-		String destino = null;
-		
+	public void buscarFactura(int id) {		
 		try {
 			
 			cn = conexion.conectar();
@@ -137,6 +140,7 @@ public class Gasto extends Transaccion implements GestionDeFacturas<Gasto>{
 			ps.executeQuery();
 		
 			rs = ps.executeQuery(query);
+			/* Obtenemos los datos desde la DB y los almacenamos en sus correspondientes variables.*/
 			while(rs.next()) {
 				idTransaccion = rs.getInt("idTransaccion");
 				fechaDeTransaccion = rs.getDate("fechaDeTransaccion");
@@ -146,6 +150,7 @@ public class Gasto extends Transaccion implements GestionDeFacturas<Gasto>{
 				destino = rs.getString("destino");
 			}
 			
+			/* Luego, mostramos los datos obtenidos por pantalla. */
 			System.out.println("Datos solicitados: " + "[ID de transaccion= " + idTransaccion
 					+ ", ID de gasto= " + idGastos 
 					+", fecha= " + fechaDeTransaccion 
@@ -160,16 +165,130 @@ public class Gasto extends Transaccion implements GestionDeFacturas<Gasto>{
 		
 	}
 	
+	/* El método "verInfoFactura" se podría eliminar ya que el método "buscarFactura" cumple la misma
+	 * funcionalidad. */
 	@Override
 	public void verInfoFactura(Gasto gasto) {
 
 		
 	}
+	
+	/* Método axuliar para mostrarFacturas (se puede utilizar sólo o reutilizar en los métodos en donde se precise)*/
+	public ArrayList<String> mostrarFacturas() {
+		/* Creo un ArrayList en donde se registrarán todos los Gastos existentes en la DB. */
+		ArrayList<String>datos = new ArrayList<>();
+		try {
+			/* MOSTRAR DATOS */
+			
+			cn = conexion.conectar();
 
+			
+			/* Llamo a los datos de los Gastos.*/
+			String query1 = "SELECT transaccion.idTransaccion,"
+					+ "transaccion.fechaDeTransaccion,"
+					+ "transaccion.medioDePago,"
+					+ "transaccion.montoTotal,"
+					+ "gastos.idGastos,"
+					+ "gastos.destino "
+					+ "FROM transaccion "
+					+ "INNER JOIN gastos "
+					+ "ON transaccion.idTransaccion = gastos.transaccion_id ";
+			
+			ps = cn.prepareStatement(query1);
+			rs = ps.executeQuery(query1);
+			
+			/* Leo los datos */
+			while (rs.next()) {
+				idTransaccion = rs.getInt("idTransaccion");
+				fechaDeTransaccion = rs.getDate("fechaDeTransaccion");
+				medioDePago = rs.getString("medioDePago");
+				montoTotal = rs.getFloat("montoTotal");
+				idGastos = rs.getInt("idGastos");
+				destino = rs.getString("destino");
+				
+				/* Registro los datos en una variable de tipo String para despuyés insertarla en el ArrayList de tipo String.*/
+				String cadenaDeDatos = "[ID de transaccion= " + idTransaccion
+						+ ", ID de gasto= " + idGastos 
+						+", fecha= " + fechaDeTransaccion 
+						+ ", medio de pago= " + medioDePago 
+						+ ", monto total= " + montoTotal 
+						+ ", destino= " + destino + "]";
+				
+				/* Inserto en el ArrayList los datos que se obtuvieron de la base de datos. */
+					datos.add(cadenaDeDatos);
+				
+			}
+			
+			/* Muestro en pantalla los datos obtenidos desde la base de datos. */
+			for (String dato : datos) {
+				System.out.println(dato);
+			}
 
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return datos;
+
+		
+	}
+	
+
+	/* Este método muestra los datos existentes y nos da la opción de seleccionar por ID. */
 	@Override
-	public void eliminarFactura(Gasto objeto) {
-		// TODO Auto-generated method stub
+	public void eliminarFactura(Gasto gasto) {
+		try {
+			/* MOSTRAR DATOS */
+			ArrayList<String> datos = mostrarFacturas();
+			
+			int idSeleccionador = 0;
+			
+			cn = conexion.conectar();
+			/* Creo un ArrayList en donde se registrarán todos los Gastos existentes en la DB. */
+			
+			
+			/* BORRAR DATOS (esto se puede hacer en un método aparte en donde llamemos un método para mostrar los datos. */
+			
+			if(datos.isEmpty() == false) {
+				System.out.println("Seleccione la factura a eliminar por su ID: ");
+				idSeleccionador = sc.nextInt();
+				
+				/* Creamos dos QUERY, uno para borrar en primera instancia los datos contenidos en "gastos". En segunda instancia
+				 * borramos los datos en "transaccion". Esto se hace ya que no se puede borrar la "transaccion" primero debido a que 
+				 * tiene una llave foranea de la cual depende "gastos". Hacer esto es un modo de simular el borrado simultáneo. */
+				String query2 = "DELETE from gastos WHERE transaccion_id ="+idSeleccionador;
+				String query3 = "DELETE from transaccion WHERE idTransaccion="+idSeleccionador;
+				
+				ps = cn.prepareStatement(query2);
+				ps.executeUpdate();
+				
+				ps = cn.prepareStatement(query3);
+				ps.executeUpdate();
+				
+				System.out.println("La transaccion seleccionada ha sido eliminada con éxito!");
+				
+			} else {
+				System.out.println("No hay transacciones disponibles.");
+				
+				/* Si no hay ningún dato dentro de la base de datos, lo que hacen los siguientes QUERIES es
+				 * actualizar la el incremento del ID. Sin esto, los id's de los siguientes registros empezarán
+				 * con después del último id borrado. Ahora, los id's, al no tener contenido la tabla, comenzarán 
+				 * su auto-incremento desde cero nuevamente. */
+				String actualizarIDQuery1 = "ALTER TABLE transaccion AUTO_INCREMENT = 1";
+				String actualizarIDQuery2 = "ALTER TABLE gastos AUTO_INCREMENT = 1";
+				
+				ps = cn.prepareStatement(actualizarIDQuery1);
+				ps.executeUpdate();
+				ps = cn.prepareStatement(actualizarIDQuery2);
+				ps.executeUpdate();
+
+			}
+
+
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		
 	}
 
