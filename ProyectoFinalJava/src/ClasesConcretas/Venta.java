@@ -9,8 +9,9 @@ import java.util.ArrayList;
 
 import ClasesAbstractas.Transaccion;
 import ConexionDB.Conexion;
+import Interfaces.GestionDeFacturas;
 
-public class Venta extends Transaccion{
+public class Venta extends Transaccion implements GestionDeFacturas<Venta>{
 
 	// ATRIBUTOS:
 	private Empleado empleado;
@@ -59,25 +60,32 @@ public class Venta extends Transaccion{
 		this.productos = productos;
 	}
 
-	
-	@Override 
-	public void generarFactura(Transaccion transaccion) {
 
-		
-	}
-	
-	@Override 
-	public void buscarFactura(int id) {
-		
-	}
-	
+
 	@Override
-	public void verInfoFactura(Transaccion transaccion) {
+	public void generarFactura(Venta venta) {
+		// TODO Auto-generated method stub
 		
 	}
-	
-	@Override 
-	public void eliminarFactura(Transaccion transaccion) {
+
+
+	@Override
+	public void verInfoFactura(Venta venta) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void eliminarFactura(Venta venta) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void buscarFactura(int id) {
+		// TODO Auto-generated method stub
 		
 	}
 	

@@ -10,7 +10,7 @@ import ClasesAbstractas.Transaccion;
 import ConexionDB.Conexion;
 import Interfaces.*;
 
-public class Gasto extends Transaccion{
+public class Gasto extends Transaccion implements GestionDeFacturas<Gasto>{
 
 	// ATRIBUTOS
 	private String destino;
@@ -56,6 +56,7 @@ public class Gasto extends Transaccion{
 	 * desde las clases hijas (Gasto y Venta), trayendo consigo todo lo que pertenezca a Transaccion. 
 	 * Otra opción podría ser crear métodos abstractos desde la clase "Transaccion" e incorporarlos en estas clases hijas. */
 	
+	@Override
 	public void generarFactura(Gasto gasto) {
 		try {
 			// Establecemos conexion con la base de datos.
@@ -73,7 +74,6 @@ public class Gasto extends Transaccion{
 			ps.setDate(1, fechaSQL);
 			ps.setString(2, gasto.getMedioDePago());
 			ps.setFloat(3, gasto.getMontoTotal());
-			
 			ps.executeUpdate();
 			
 			
@@ -84,25 +84,74 @@ public class Gasto extends Transaccion{
 			
 			/* Llamo al idTransaccion */
 			String query2 = "SELECT idTransaccion FROM transaccion";
-			
 			rs = ps.executeQuery(query2);
-			
 			while(rs.next()) {
 				idTransaccion = rs.getInt(1);
 			}
 
-		
 			/* Inserto los datos del objeto Gasto en la tabla "gastos" con su respectivo transaccion_id que va a conectarlo con la
 			 * Transaccion a la que pertenece. */
 			String query3 = "INSERT INTO gastos(destino, transaccion_id) VALUES (?, ?)";
 			ps = cn.prepareStatement(query3);
 			ps.setString(1, gasto.getDestino());
 			ps.setInt(2, idTransaccion);
-			
 			ps.executeUpdate();
 
 			
 			System.out.println("Se han insertado los datos correctamente");
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Override 
+	public void buscarFactura(int id) {
+		
+		/* Inicializo las variables que van a ser rellenadas con lo que se llame de la base de datos. Esto lo hago
+		 * para poder llamarlas luego fuera del ciclo while. */
+		int idTransaccion = 0;
+		Date fechaDeTransaccion = null;
+		String medioDePago = null;
+		float montoTotal = 0;
+		int idGastos = 0;
+		String destino = null;
+		
+		try {
+			
+			cn = conexion.conectar();
+			
+			/* Con el siguiente QUERY llamamos a la tabla de transaccion y la tabla de gastos correspondiente al id ingresado. El id ingresado será el id
+			 * perteneciente a la transaccion, el cual a su vez es el "transaccion_id" correspondiente al gasto. */
+			String query = "SELECT transaccion.idTransaccion,"
+					+ "transaccion.fechaDeTransaccion,"
+					+ "transaccion.medioDePago,"
+					+ "transaccion.montoTotal,"
+					+ "gastos.idGastos,"
+					+ "gastos.destino "
+					+ "FROM transaccion "
+					+ "INNER JOIN gastos "
+					+ "ON transaccion.idTransaccion = gastos.transaccion_id "
+					+ "WHERE transaccion.idTransaccion = " + id; // Concateno el id ya que al poner "?" y luego ingresarlo con el ps.setInt(x, x) me daba error.
+			ps = cn.prepareStatement(query);
+			ps.executeQuery();
+		
+			rs = ps.executeQuery(query);
+			while(rs.next()) {
+				idTransaccion = rs.getInt("idTransaccion");
+				fechaDeTransaccion = rs.getDate("fechaDeTransaccion");
+				medioDePago = rs.getString("medioDePago");
+				montoTotal = rs.getFloat("montoTotal");
+				idGastos = rs.getInt("idGastos");
+				destino = rs.getString("destino");
+			}
+			
+			System.out.println("Datos solicitados: " + "[ID de transaccion= " + idTransaccion
+					+ ", ID de gasto= " + idGastos 
+					+", fecha= " + fechaDeTransaccion 
+					+ ", medio de pago= " + medioDePago 
+					+ ", monto total= " + montoTotal 
+					+ ", destino= " + destino + "]");
 			
 			
 		} catch (SQLException e) {
@@ -111,21 +160,19 @@ public class Gasto extends Transaccion{
 		
 	}
 	
-	@Override 
-	public void buscarFactura(int id) {
-		
-	}
-	
 	@Override
-	public void verInfoFactura(Transaccion transaccion) {
+	public void verInfoFactura(Gasto gasto) {
+
 		
 	}
-	
-	@Override 
-	public void eliminarFactura(Transaccion transaccion) {
+
+
+	@Override
+	public void eliminarFactura(Gasto objeto) {
+		// TODO Auto-generated method stub
 		
 	}
-	
+
 
 	
 	

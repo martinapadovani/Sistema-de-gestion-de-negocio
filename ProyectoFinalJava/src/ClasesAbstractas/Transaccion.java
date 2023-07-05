@@ -9,7 +9,7 @@ import java.time.LocalDate;
 import ConexionDB.Conexion;
 import Interfaces.GestionDeFacturas;
 
-public abstract class Transaccion implements GestionDeFacturas<Transaccion>{
+public abstract class Transaccion{
 	
 	// ATRIBUTOS:
 	private int id;
@@ -34,6 +34,7 @@ public abstract class Transaccion implements GestionDeFacturas<Transaccion>{
 				+ montoTotal + "]";
 	}
 	
+	/* 
 	@Override
 	public void generarFactura(Transaccion transaccion) {
 		
@@ -53,7 +54,7 @@ public abstract class Transaccion implements GestionDeFacturas<Transaccion>{
 	public void eliminarFactura(Transaccion transaccion) {
 		
 	}
-	
+	*/
 	// Getters y setters:
 	
 
