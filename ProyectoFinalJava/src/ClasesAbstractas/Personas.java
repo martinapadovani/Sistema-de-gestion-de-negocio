@@ -23,6 +23,10 @@ public abstract class Personas {
 		this.fechaDeRegistro = fechaDeRegistro;
 	}
 	
+	// METODOS
+	
+	
+	
 	//GETTERS-SETTERS
 	
 	public String getNombre() {
