@@ -165,18 +165,11 @@ public class Gasto extends Transaccion implements GestionDeFacturas<Gasto>{
 		
 	}
 	
-	/* El método "verInfoFactura" se podría eliminar ya que el método "buscarFactura" cumple la misma
-	 * funcionalidad. */
-	@Override
-	public void verInfoFactura(Gasto gasto) {
-
-		
-	}
-	
 	/* Método axuliar para mostrarFacturas (se puede utilizar sólo o reutilizar en los métodos en donde se precise)*/
 	public ArrayList<String> mostrarFacturas() {
 		/* Creo un ArrayList en donde se registrarán todos los Gastos existentes en la DB. */
 		ArrayList<String>datos = new ArrayList<>();
+		
 		try {
 			/* MOSTRAR DATOS */
 			
@@ -227,9 +220,7 @@ public class Gasto extends Transaccion implements GestionDeFacturas<Gasto>{
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
 		return datos;
-
 		
 	}
 	
@@ -291,6 +282,8 @@ public class Gasto extends Transaccion implements GestionDeFacturas<Gasto>{
 		}
 		
 	}
+
+
 
 
 	
