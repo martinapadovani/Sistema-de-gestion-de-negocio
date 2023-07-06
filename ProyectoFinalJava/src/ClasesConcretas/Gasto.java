@@ -29,7 +29,6 @@ public class Gasto extends Transaccion implements GestionDeFacturas<Gasto>{
 	
 	/* Inicializo las variables globalmente. Estas van a ser rellenadas con lo que se obtenga 
 	 * de la base de datos.*/
-	String stringPrueba = "probando";
 	int idTransaccion = 0;
 	Date fechaDeTransaccion = null;
 	String medioDePago = null;
