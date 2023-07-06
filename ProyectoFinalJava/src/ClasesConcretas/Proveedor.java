@@ -1,30 +1,39 @@
 package ClasesConcretas;
 
+import java.util.ArrayList;
+
 import Interfaces.GestionDeDatos;
 
-public class Proveedor implements GestionDeDatos{
+public class Proveedor implements GestionDeDatos<Proveedor>{
 
 	//ATRIBUTOS
 	private int id;
 	private String nombreProveedor;
 	private int telefono;
-	//private ArrayList<Producto>productosProveedor;
-	private int precioProductoXUnidad;
+	private ArrayList<Producto>productosProveedor;
 	
 	//CONSTRUCTOR
 	
-	public Proveedor(int id, String nombreProveedor, int telefono, int precioProductoXUnidad) {
+	public Proveedor(int id, String nombreProveedor, int telefono, ArrayList<Producto>productosProveedor) {
 		super();
 		this.id = id;
 		this.nombreProveedor = nombreProveedor;
 		this.telefono = telefono;
-		this.precioProductoXUnidad = precioProductoXUnidad;
+		this.productosProveedor = productosProveedor;
 	}
-
-	//OVERRIDES
+	
 	
 	@Override
-	public void Agregar() {
+	public String toString() {
+		return "Proveedor [id=" + id + ", nombreProveedor=" + nombreProveedor + ", telefono=" + telefono
+				+ ", productosProveedor=" + productosProveedor + "]";
+	}
+
+	
+	//OVERRIDES
+
+	@Override
+	public void Agregar(Proveedor proveedor) {
 	}
 	
 	@Override
@@ -32,11 +41,11 @@ public class Proveedor implements GestionDeDatos{
 	}
 	
 	@Override
-	public void Actualizar() {
+	public void Actualizar(Proveedor proveedor) {
 	}
 	
 	@Override
-	public void Eliminar() {
+	public void Eliminar(Proveedor proveedor) {
 	}
 
 	// GETTERS-SETTERS: 
@@ -65,13 +74,6 @@ public class Proveedor implements GestionDeDatos{
 		this.telefono = telefono;
 	}
 
-	public int getPrecioProductoXUnidad() {
-		return precioProductoXUnidad;
-	}
-
-	public void setPrecioProductoXUnidad(int precioProductoXUnidad) {
-		this.precioProductoXUnidad = precioProductoXUnidad;
-	}
 	
 	
 }

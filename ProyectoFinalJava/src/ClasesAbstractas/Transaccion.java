@@ -1,18 +1,28 @@
 package ClasesAbstractas;
-import Interfaces.*;
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.LocalDate;
 
-public abstract class Transaccion implements GestionDeFacturas{
+import ConexionDB.Conexion;
+import Interfaces.GestionDeFacturas;
+
+public abstract class Transaccion{
 	
 	// ATRIBUTOS:
 	private int id;
-	private int fecha;
+	private LocalDate fecha;
 	private String medioDePago;
 	private int montoTotal;
+
+
 	
 	// CONSTRUCTOR:
-	public Transaccion(int id, int fecha, String medioDePago, int montoTotal) {
+	public Transaccion(String medioDePago, int montoTotal) {
 		this.id = id;
-		this.fecha = fecha;
+		this.fecha = LocalDate.now();
 		this.medioDePago = medioDePago;
 		this.montoTotal = montoTotal;
 	}
@@ -24,8 +34,9 @@ public abstract class Transaccion implements GestionDeFacturas{
 				+ montoTotal + "]";
 	}
 	
-	@Override 
-	public void generarFactura() {
+	/* 
+	@Override
+	public void generarFactura(Transaccion transaccion) {
 		
 	}
 	
@@ -35,15 +46,15 @@ public abstract class Transaccion implements GestionDeFacturas{
 	}
 	
 	@Override
-	public void verInfoFactura() {
+	public void verInfoFactura(Transaccion transaccion) {
 		
 	}
 	
 	@Override 
-	public void eliminarFactura() {
+	public void eliminarFactura(Transaccion transaccion) {
 		
 	}
-	
+	*/
 	// Getters y setters:
 	
 
@@ -55,11 +66,11 @@ public abstract class Transaccion implements GestionDeFacturas{
 		this.id = id;
 	}
 
-	public int getFecha() {
+	public LocalDate getFecha() {
 		return fecha;
 	}
 
-	public void setFecha(int fecha) {
+	public void setFecha(LocalDate fecha) {
 		this.fecha = fecha;
 	}
 

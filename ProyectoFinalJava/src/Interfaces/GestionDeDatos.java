@@ -1,10 +1,12 @@
 package Interfaces;
 
+import ClasesConcretas.Producto;
+
 public interface GestionDeDatos <T> {
 	
-	abstract void Agregar();
+	abstract void Agregar(T objeto);
 	abstract void Buscar(int ID);
-	abstract void Actualizar();
-	abstract void Eliminar();
+	abstract void Actualizar(T objeto);
+	abstract void Eliminar(T objeto);
 
 }

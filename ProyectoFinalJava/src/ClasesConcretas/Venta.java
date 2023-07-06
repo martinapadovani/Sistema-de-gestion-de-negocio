@@ -1,27 +1,41 @@
 package ClasesConcretas;
-import ClasesAbstractas.Transaccion;
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.ArrayList;
 
-public class Venta extends Transaccion{
+import ClasesAbstractas.Transaccion;
+import ConexionDB.Conexion;
+import Interfaces.GestionDeFacturas;
+
+public class Venta extends Transaccion implements GestionDeFacturas<Venta>{
 
 	// ATRIBUTOS:
 	private Empleado empleado;
-	private Producto producto;
-	private int cantidad; 
+	private ArrayList<ProductoVentas>productos;
 
 	// CONSTRUCTOR:
-	public Venta(int id, int fecha, String medioDePago, int montoTotal, Empleado empleado, Producto producto,
-			int cantidad) {
-		super(id, fecha, medioDePago, montoTotal);
+	public Venta(String medioDePago, int montoTotal, Empleado empleado, ArrayList<ProductoVentas>productos){
+		super(medioDePago, montoTotal);
 		this.empleado = empleado;
-		this.producto = producto;
-		this.cantidad = cantidad;
+		this.productos = productos;
 	}
+	
+	//ATRIBUTOS PARA LA CONEXIÓN: 
+	Conexion conexion = new Conexion();
+	private Connection cn = null;
+	private PreparedStatement ps = null;
+	private ResultSet rs = null;
+	
 
 	
 	// MÉTODOS: 
 	@Override
 	public String toString() {
-		return "Venta [empleado=" + empleado + ", producto=" + producto + ", cantidad=" + cantidad + "]";
+		return "Venta [empleado=" + empleado + ", productos=" + productos +  "]";
 	}
 	
 	
@@ -37,23 +51,42 @@ public class Venta extends Transaccion{
 	}
 
 
-	public Producto getProducto() {
-		return producto;
+	public ArrayList<ProductoVentas> getProducto() {
+		return productos;
 	}
 
 
-	public void setProducto(Producto producto) {
-		this.producto = producto;
+	public void setProducto(ArrayList<ProductoVentas>productos) {
+		this.productos = productos;
 	}
 
 
-	public int getCantidad() {
-		return cantidad;
+
+	@Override
+	public void generarFactura(Venta venta) {
+		// TODO Auto-generated method stub
+		
 	}
 
 
-	public void setCantidad(int cantidad) {
-		this.cantidad = cantidad;
+	@Override
+	public void verInfoFactura(Venta venta) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void eliminarFactura(Venta venta) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void buscarFactura(int id) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	

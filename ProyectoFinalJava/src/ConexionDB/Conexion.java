@@ -6,18 +6,23 @@ import java.sql.SQLException;
 
 public class Conexion {
 	
-	private static final String CONTROLADOR = "com.mysql.cj.jdbc.Driver";
-	private static final String URL = "jdbc:mysql://aws.connect.psdb.cloud/java_project?sslMode=VERIFY_IDENTITY";
-	private static final String USER = "acn8hu1nr8bj2e7zbdbb";
-	private static final String PASSWORD = "pscale_pw_TvqxMvf3dLDM7fKJELo38uOTM4l6ofrkTvcGrue3Bca";
+
+	private final static String CONTROLADOR = "com.mysql.cj.jdbc.Driver";
+	private final static String URL = "jdbc:mysql://localhost:3306/java_proyecto";
+	private final static String USER = "root";
+	private final static String PASSWORD = "roukoperro2013";
+
 	
 	static {
 		try {
 			Class.forName(CONTROLADOR);
+
 		} catch(ClassNotFoundException e) {
 			e.printStackTrace();
 		}
 	}
+	
+
 	
 	public Connection conectar() {
 		
