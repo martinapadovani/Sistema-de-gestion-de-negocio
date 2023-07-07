@@ -82,6 +82,47 @@ public class Proveedor implements GestionDeDatos<Proveedor>{
 	
 	@Override
 	public void Actualizar(int id) {
+		
+		System.out.println("Por favor, ingrese los datos correspondientes");
+		System.out.println("Nombre: ");
+		String nombreProveedor = (scanner.nextLine()).trim().replace(" ", "_");
+		System.out.println("Telefono: ");
+		int telefono = scanner.nextInt();
+		
+		try{
+			cn = conexion.conectar();
+			
+			//ACTUALIZACION
+			
+			String queryUpdate = "UPDATE proveedor SET nombreProveedor = ?, telefonoProveedor = ? WHERE  idProveedor = ?";
+			
+			PreparedStatement declaracionUpdate  = cn.prepareStatement(queryUpdate);
+		
+			declaracionUpdate.setString(1, nombreProveedor);
+			declaracionUpdate.setInt(2, telefono);
+			declaracionUpdate.setInt(3, id);
+				
+			declaracionUpdate.executeUpdate();
+			
+			//VER DATOS
+				
+				String querySelect = "SELECT * FROM proveedor WHERE  idProveedor = ?";
+				
+				PreparedStatement declaracionSelect  = cn.prepareStatement(querySelect);
+			
+				declaracionSelect.setInt(1, id);
+				ResultSet resultados = declaracionSelect.executeQuery();
+				
+			while(resultados.next()) { //mientras haya datos por leer
+				System.out.println("Proceso exitoso! Datos actualizados: ");
+					System.out.println(
+								"ID: " + resultados.getInt("idProveedor") + ". Nombre: " +resultados.getString("nombreProveedor") + 
+								 ". Telefono: " + resultados.getInt("telefonoProveedor"));
+			}
+			
+		} catch(SQLException e){
+			e.printStackTrace();
+		} 
 	}
 	
 	@Override
@@ -115,6 +156,53 @@ public class Proveedor implements GestionDeDatos<Proveedor>{
 	
 	@Override
 	public void Eliminar(int id) {
+		
+		try{
+			cn = conexion.conectar();
+			
+			String querySelect = "SELECT * FROM proveedor WHERE  idProveedor = ?";
+			
+			PreparedStatement declaracionSelect  = cn.prepareStatement(querySelect);
+		
+			declaracionSelect.setInt(1, id);
+			ResultSet resultados = declaracionSelect.executeQuery();
+				
+			while(resultados.next()) { //mientras haya datos por leer
+				System.out.println("Seguro que desea eliminar el proveedor: ");
+					System.out.println(
+								"ID: " + resultados.getInt("idProveedor") + ". Nombre: " +resultados.getString("nombreProveedor") + 
+								 ". Telefono: " + resultados.getInt("telefonoProveedor"));
+					System.out.println("Si eliminas el proveedor, ten en cuenta que tambien seran eliminados todos los productos que provee");
+					System.out.println("Ingrese si/no segun desee.");
+			}
+		}catch(SQLException e){
+				e.printStackTrace();
+			} 
+		
+		String confirmacion = scanner.nextLine();
+		
+		 if(confirmacion.equalsIgnoreCase("si")) {
+			 
+			 try{
+				 cn = conexion.conectar();
+			
+				 String queryDelete = "DELETE FROM proveedor WHERE idProveedor = ?";
+				 //excluyo el id ya que es autoincremental
+			
+					PreparedStatement declaracionDelete  = cn.prepareStatement(queryDelete);
+					
+					declaracionDelete.setInt(1, id);
+					declaracionDelete.executeUpdate();
+				
+				 	System.out.println("Proveedor eliminado del sistema!");
+			
+			 } catch(SQLException e){
+				 e.printStackTrace();
+			 }
+			 
+		  }else {
+			  System.out.println("Perfecto! El proveedor no será eliminado");
+		  }
 	}
 	
 	

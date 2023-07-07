@@ -41,8 +41,8 @@ public class Main {
 			case 1 : //EMPLEADOS
 				  System.out.println("Bienvenido al sector de Empleados!");	
 				  System.out.println("Seleccione según corresponda:");
-				  System.out.println("1. Datos personales");
-				  System.out.println("2. Datos laborales");
+				  System.out.println("1. Datos laborales");
+				  System.out.println("2. Datos personales");
 				  
 				  int opcionEmpleados = scanner.nextInt();
 
@@ -54,7 +54,7 @@ public class Main {
 					  System.out.println("Seleccione según corresponda:");
 					  System.out.println("1. Ver empleados");
 					  System.out.println("2. Buscar empleado");
-					  System.out.println("3. Actualizar empleado");
+					  System.out.println("3. Actualizar datos laborales");
 					  System.out.println("4. Agregar nuevo empleado");
 					  System.out.println("5. Eliminar empleado del sistema");
 					  System.out.println("6. Calcular salario");
@@ -86,6 +86,8 @@ public class Main {
 					  case 3:
 						  
 						  System.out.println("Elegiste la opcion de actualizar empleados!");
+						  
+						  System.out.println("Ingrese el id del Empleado:");
       					int idActualizar = scanner.nextInt(); 
       					ejecutarMetodosEmpleado.Actualizar(idActualizar);
 						  
@@ -99,6 +101,8 @@ public class Main {
 					  case 5:
 						  
 						  System.out.println("Elegiste la opcion de eliminar empleados!");
+						  
+						  System.out.println("Ingrese el id del Empleado:");
       					int idEliminar = scanner.nextInt(); 
       					ejecutarMetodosEmpleado.Eliminar(idEliminar);
 						  
@@ -132,21 +136,38 @@ public class Main {
 					  System.out.println("3. Actualizar Datos personales");
 					  System.out.println("5. Eliminar Datos personales");
 					  
-				scanner.nextLine(); // adicional
+					  scanner.nextLine(); // adicional
+					  Personas ejecutarMetodosPersonales = new Personas(null, null, 0, 0, null, 0);
 
 					  int opcionDatosPersonales = scanner.nextInt(); 
 					  
-				 switch (opcionDatosPersonales) {
-					 
-					  case 1:
-						  System.out.println("Elegiste la opcion de ver datos personales!");
-						  break;  
-						  
-						default:
-							
-							System.out.println("Opcion inválida! Vuelva a intentarlo");
-							salir.set(false);
-							
+				 switch (opcionDatosPersonales) {	 
+				 
+				  	case 1:
+				  		System.out.println("Elegiste la opcion de ver datos personales!");
+				  		ejecutarMetodosPersonales.Ver();
+				  		
+				  		break;  
+				  	case 2:
+				  		System.out.println("Elegiste la opcion de Buscar empleado");
+				  		
+						System.out.println("Ingrese el id del Empleado:");
+						int idBuscar = scanner.nextInt(); 
+				  		ejecutarMetodosPersonales.Buscar(idBuscar);
+				  		
+				  		break;
+				  	case 3:
+				  		System.out.println("Elegiste la opcion de actualizar datos personales");
+				  		
+						System.out.println("Ingrese el id del Empleado:");
+						int idActualizar = scanner.nextInt(); 
+				  		ejecutarMetodosPersonales.Actualizar(idActualizar);
+				  		
+					  
+				  		default:
+						
+						System.out.println("Opcion inválida! Vuelva a intentarlo");
+						salir.set(false);			
 				 }
 					break;//Brek switch opcion datos laborales/personales
 				default:
@@ -262,6 +283,7 @@ public class Main {
 				  case 3:
 					  
 	        			System.out.println("Elegiste la opcion de actualizar producto!");
+	        			System.out.println("Ingrese el id del Producto:");
 	        			int idActualizar = scanner.nextInt(); 
 	        			ejecutarMetodosProductos.Actualizar(idActualizar);
 					  
@@ -275,6 +297,7 @@ public class Main {
 				  case 5:
 					  
 	        			System.out.println("Elegiste la opcion de eliminar producto!");
+	        			System.out.println("Ingrese el id del Producto:");
 	        			int idEliminar = scanner.nextInt(); 
 	        			ejecutarMetodosProductos.Eliminar(idEliminar);
 					  
