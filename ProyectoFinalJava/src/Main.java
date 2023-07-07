@@ -11,16 +11,8 @@ import ClasesAbstractas.*;
 public class Main {
 
 	public static void main(String[] args) {
-		
-		ArrayList<ProductoVentas> productos = null;
-		LocalDate fecha = LocalDate.now();
-		
-		Empleado empleado = null;
-		Venta venta = new Venta("tarjeta", 4000, empleado, productos);
 
-		venta.mostrarFacturas();
-
-				Scanner scanner = new Scanner (System.in);
+		Scanner scanner = new Scanner (System.in);
 		
 		//boolean salir = false;
 	/*En Java, los parámetros se pasan por valor, si uso este parámetro booleano para el metodo método volverAlMenu
@@ -301,9 +293,100 @@ public class Main {
 			   break;
 			
 			case 4://VENTAS
+
+				  System.out.println("Bienvenido al sector de ventas!");	
+				  System.out.println("Seleccione según corresponda:");
+				  System.out.println("1. Ver ventas");
+				  System.out.println("2. Buscar ventas");
+				  System.out.println("3. Agregar nueva venta");
+				  System.out.println("4. Eliminar venta del sistema");
+				  
+				  scanner.nextLine();
+				  
+				  Empleado ejecutarMetodosEmpleado = new Empleado(null, null, 0, 0, null, 0, 0, 0, 0, 0, 0, null, null, false);
+				  ArrayList<ProductoVentas> arrayProductoVentas = null;
+				  Venta ejecutarMetodosVenta = new Venta(null, 0, ejecutarMetodosEmpleado, arrayProductoVentas);
+				  
+				  int opcionVenta = scanner.nextInt();
+				  
+				  switch(opcionVenta) {
+				  case 1:
+					  
+					  ejecutarMetodosVenta.mostrarVentas();
+					  
+					  break;
+				  case 2:
+					  ejecutarMetodosVenta.mostrarVentas();
+					  
+					  System.out.println("Ingrese el ID de la transaccion que desea ver: ");
+					  int id = scanner.nextInt();
+					  
+					  ejecutarMetodosVenta.buscarFactura(id);
+					  
+					  break;
+				  case 3:
+					  int idEmpleado = 0;
+					  System.out.println("Ingrese los datos de la venta:");
+					  System.out.println("Seleccione el empleado que realizó la venta: ");
+					  ejecutarMetodosEmpleado.Ver();
+					  
+					  idEmpleado = scanner.nextInt();
+					  
+					  
+					  ejecutarMetodosEmpleado.Buscar(idEmpleado);
+
+					  break;
+					  
+				  case 4:
+					  
+					  ejecutarMetodosVenta.eliminarFactura();
+					  
+					  break;
+				  }
+				  
+				
 				break;
 				
 			case 5://GASTOS
+				
+				  System.out.println("Bienvenido al sector de gastos!");	
+				  System.out.println("Seleccione según corresponda:");
+				  System.out.println("1. Ver gastos");
+				  System.out.println("2. Buscar gastos");
+				  System.out.println("3. Agregar nueva gasto");
+				  System.out.println("4. Eliminar gasto del sistema");
+				  
+				  scanner.nextLine();
+				  
+				  Gasto ejecutarMetodosGastos = new Gasto(null, 0, null);
+				  
+				  int opcionGastos = scanner.nextInt();
+				
+				  switch(opcionGastos) {
+				  case 1:
+					  
+					  	ejecutarMetodosGastos.mostrarGastos();
+					  	
+					  break;
+				  case 2:
+					  
+					  System.out.println("Ingrese el ID del gasto que desea ver: ");
+					  int id = scanner.nextInt();
+					  
+					  ejecutarMetodosGastos.buscarFactura(id);
+					  
+					  break;
+				  case 3:
+					  
+					  ejecutarMetodosGastos.generarFactura(ejecutarMetodosGastos);
+					  
+					  break;
+				  case 4:
+					  
+					  ejecutarMetodosGastos.eliminarFactura();
+					  break;
+				  }
+				
 				break;
 				
 			case 0: //Salir
