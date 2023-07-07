@@ -1,6 +1,9 @@
 package ClasesAbstractas;
 
-public abstract class Personas {
+import ClasesConcretas.Empleado;
+import Interfaces.GestionDeDatos;
+
+public class Personas implements GestionDeDatos<Empleado>{
 	
 	//ATRIBUTOS
 	
@@ -24,7 +27,34 @@ public abstract class Personas {
 
 	// METODOS
 	
-
+   //OVERRIDE
+	
+	@Override
+	public void Ver() {
+		
+	}
+	
+	@Override
+	public void Buscar(int ID) {
+		
+	}
+	
+	@Override
+	public void Actualizar(Empleado empleado) {
+		
+	}
+	
+	@Override
+	public void Agregar() {
+		
+	}
+	
+	@Override
+	public void Eliminar(Empleado empleado) {
+		
+	}
+	
+	//TO STRING
 	
 	@Override
 	public String toString() {
@@ -35,9 +65,6 @@ public abstract class Personas {
 
 
 	//GETTERS-SETTERS
-	
-	
-
 	public String getNombre() {
 		return nombre;
 	}
