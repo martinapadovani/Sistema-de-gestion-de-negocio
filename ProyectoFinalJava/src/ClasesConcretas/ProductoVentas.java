@@ -11,8 +11,5 @@ public class ProductoVentas extends Producto{
 	}
 
 	
-
-	
-	
 	
 }

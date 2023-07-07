@@ -335,13 +335,8 @@ public class Main {
 				  case 3:
 					  int idEmpleado = 0;
 					  System.out.println("Ingrese los datos de la venta:");
-					  System.out.println("Seleccione el empleado que realizó la venta: ");
-					  ejecutarMetodosEmpleado.Ver();
-					  
-					  idEmpleado = scanner.nextInt();
-					  
-					  
-					  ejecutarMetodosEmpleado.Buscar(idEmpleado);
+
+					  ejecutarMetodosVenta.generarFactura(); 
 
 					  break;
 					  
@@ -386,7 +381,7 @@ public class Main {
 					  break;
 				  case 3:
 					  
-					  ejecutarMetodosGastos.generarFactura(ejecutarMetodosGastos);
+					  ejecutarMetodosGastos.generarFactura();
 					  
 					  break;
 				  case 4:

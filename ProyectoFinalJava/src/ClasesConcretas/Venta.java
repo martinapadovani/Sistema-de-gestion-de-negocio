@@ -1,4 +1,5 @@
 package ClasesConcretas;
+import ClasesAbstractas.*;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -80,23 +81,36 @@ public class Venta extends Transaccion implements GestionDeFacturas<Venta>{
 
 
 	@Override
-	public void generarFactura(Venta venta) {
+	public void generarFactura() {
 		try {
 			// Establecemos conexion con la base de datos.
 			cn = conexion.conectar();
 			
 			/* Pasamos la fecha que se registro al momento de instanciar el objeto a uno de tipo Date 
 			 * para que se pueda registrar en la DB. */
-			LocalDate fecha = venta.getFecha();
+			LocalDate fecha = LocalDate.now();
 			Date fechaSQL = Date.valueOf(fecha);
+			Empleado ejecutarMetodosEmpleado = new Empleado(null, null, 0, 0, null, 0, 0, 0, 0, 0, 0, null, null, false);
+
+			
+			System.out.println("Seleccione el empleado que realizó la venta: ");
+			ejecutarMetodosEmpleado.Ver();
+			idEmpleado = sc.nextInt();
+			
+			System.out.println("Medio de pago: ");
+			medioDePago = sc.nextLine();
+			medioDePago = sc.nextLine();
+			
+			System.out.println("Monto total: ");
+			montoTotal = sc.nextFloat();
 
 			/* Insertamos los datos que vienen con el objeto "venta" que recibe la función por parámetro. */
 			String query = "INSERT INTO transaccion (fechaDeTransaccion, medioDePago, montoTotal) VALUES (?, ?, ?)";
 			ps = cn.prepareStatement(query);
 			
 			ps.setDate(1, fechaSQL);
-			ps.setString(2, venta.getMedioDePago());
-			ps.setFloat(3, venta.getMontoTotal());
+			ps.setString(2, medioDePago);
+			ps.setFloat(3, montoTotal);
 			ps.executeUpdate();
 			
 			
@@ -112,17 +126,7 @@ public class Venta extends Transaccion implements GestionDeFacturas<Venta>{
 			while(rs.next()) {
 				idTransaccion = rs.getInt(1);
 			}
-			
-			/* Llamo al id del empleado. */ 
-			int idEmpleado = 0;
-			
-			String query3 = "SELECT idEmpleado FROM empleado";
-			rs = ps.executeQuery(query3);
-			while(rs.next()) {
-				idEmpleado = rs.getInt(1);
-			}
-			
-			
+
 			/* Inserto los datos del objeto Gasto en la tabla "ventas" con su respectivo transaccion_id que va a conectarlo con la
 			 * Transaccion a la que pertenece. */
 			String query4 = "INSERT INTO ventas(empleado_id, transaccion_id) VALUES (?, ?)";

@@ -4,7 +4,7 @@ import ClasesConcretas.Gasto;
 
 public interface GestionDeFacturas <T> {
 	
-	public void generarFactura(T objeto);
+	public void generarFactura();
 	public void buscarFactura(int id);
 	public void eliminarFactura();
 

@@ -96,10 +96,10 @@ public class Personas implements GestionDeDatos<Empleado>{
 		
 	}
 	
-	@Override
+	/*@Override
 	public void Agregar() {
 		
-	}
+	}*/
 	
 	@Override
 	public void Actualizar(int id) {

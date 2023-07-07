@@ -70,23 +70,30 @@ public class Gasto extends Transaccion implements GestionDeFacturas<Gasto>{
 	 * Otra opción podría ser crear métodos abstractos desde la clase "Transaccion" e incorporarlos en estas clases hijas. */
 	
 	@Override
-	public void generarFactura(Gasto gasto) {
+	public void generarFactura() {
 		try {
 			// Establecemos conexion con la base de datos.
 			cn = conexion.conectar();
 			
 			/* Pasamos la fecha que se registro al momento de instanciar el objeto a uno de tipo Date 
 			 * para que se pueda registrar en la DB. */
-			LocalDate fecha = gasto.getFecha();
+			LocalDate fecha = LocalDate.now();
 			Date fechaSQL = Date.valueOf(fecha);
+			
+			System.out.println("Ingrese el medio de pago: ");
+			medioDePago = sc.nextLine();
+			System.out.println("Ingrese el monto total: ");
+			montoTotal = sc.nextFloat();
+			System.out.println("Ingrese el destino: ");
+			destino = sc.nextLine();
 
 			/* Insertamos los datos que vienen con el objeto "gasto" que recibe la función por parámetro. */
 			String query = "INSERT INTO transaccion (fechaDeTransaccion, medioDePago, montoTotal) VALUES (?, ?, ?)";
 			ps = cn.prepareStatement(query);
 			
 			ps.setDate(1, fechaSQL);
-			ps.setString(2, gasto.getMedioDePago());
-			ps.setFloat(3, gasto.getMontoTotal());
+			ps.setString(2, medioDePago);
+			ps.setFloat(3, montoTotal);
 			ps.executeUpdate();
 			
 			
@@ -106,7 +113,7 @@ public class Gasto extends Transaccion implements GestionDeFacturas<Gasto>{
 			 * Transaccion a la que pertenece. */
 			String query3 = "INSERT INTO gastos(destino, transaccion_id) VALUES (?, ?)";
 			ps = cn.prepareStatement(query3);
-			ps.setString(1, gasto.getDestino());
+			ps.setString(1, destino);
 			ps.setInt(2, idTransaccion);
 			ps.executeUpdate();
 
