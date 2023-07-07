@@ -97,6 +97,11 @@ public class Personas implements GestionDeDatos<Empleado>{
 	}
 	
 	@Override
+	public void Agregar() {
+		
+	}
+	
+	@Override
 	public void Actualizar(int id) {
 		
 	}

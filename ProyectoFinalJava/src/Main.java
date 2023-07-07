@@ -86,7 +86,8 @@ public class Main {
 					  case 3:
 						  
 						  System.out.println("Elegiste la opcion de actualizar empleados!");
-						  ejecutarMetodosEmpleado.Actualizar(ejecutarMetodosEmpleado);
+      					int idActualizar = scanner.nextInt(); 
+      					ejecutarMetodosEmpleado.Actualizar(idActualizar);
 						  
 						  break;
 					  case 4:
@@ -98,7 +99,8 @@ public class Main {
 					  case 5:
 						  
 						  System.out.println("Elegiste la opcion de eliminar empleados!");
-						  ejecutarMetodosEmpleado.Eliminar(ejecutarMetodosEmpleado);
+      					int idEliminar = scanner.nextInt(); 
+      					ejecutarMetodosEmpleado.Eliminar(idEliminar);
 						  
 						  break;
 				      case 6:
@@ -193,7 +195,9 @@ public class Main {
 			 case 3:
 				 
 				  System.out.println("Elegiste la opcion de actualizar empleados!");
-				  ejecutarMetodosProveedor.Actualizar(ejecutarMetodosProveedor);
+      			System.out.println("Ingrese el id del Proveedor:");
+      			int idActualizar = scanner.nextInt(); 
+      			ejecutarMetodosProveedor.Actualizar(idActualizar);
 				  
 				 break;
 			 case 4:
@@ -204,8 +208,10 @@ public class Main {
 				 break;
 			 case 5:
 				 
-				  System.out.println("Elegiste la opcion de eliminar proveedores!");
-				  ejecutarMetodosProveedor.Eliminar(ejecutarMetodosProveedor);
+	       			System.out.println("Elegiste la opcion de eliminar proveedores!");
+        			System.out.println("Ingrese el id del Proveedor:");
+        			int idEliminar = scanner.nextInt(); 
+        			ejecutarMetodosProveedor.Eliminar(idEliminar);
 				  
 				 break;
 			default:
@@ -255,8 +261,9 @@ public class Main {
 					  break;
 				  case 3:
 					  
-					  System.out.println("Elegiste la opcion de actualizar producto!");
-					  ejecutarMetodosProductos.Actualizar(ejecutarMetodosProductos);
+	        			System.out.println("Elegiste la opcion de actualizar producto!");
+	        			int idActualizar = scanner.nextInt(); 
+	        			ejecutarMetodosProductos.Actualizar(idActualizar);
 					  
 					  break;
 				  case 4:
@@ -267,8 +274,9 @@ public class Main {
 					  break;
 				  case 5:
 					  
-					  System.out.println("Elegiste la opcion de eliminar producto!");
-					  ejecutarMetodosProductos.Eliminar(ejecutarMetodosProductos);
+	        			System.out.println("Elegiste la opcion de eliminar producto!");
+	        			int idEliminar = scanner.nextInt(); 
+	        			ejecutarMetodosProductos.Eliminar(idEliminar);
 					  
 					  break;
 				  case 6:

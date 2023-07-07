@@ -291,7 +291,7 @@ public class main2 {
 			  
         			System.out.println("Elegiste la opcion de eliminar producto!");
         			int idEliminar = scanner.nextInt(); 
-        			ejecutarMetodosProveedor.Eliminar(idEliminar);
+        			ejecutarMetodosProductos.Eliminar(idEliminar);
 			  
         			break;
         		case 6:
