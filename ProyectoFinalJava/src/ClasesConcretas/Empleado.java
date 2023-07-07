@@ -8,7 +8,6 @@ import Interfaces.GestionDeDatos;
 public class Empleado extends Personas implements GestionDeDatos<Empleado>{
 
 	//ATRIBUTOS
-	
 	private int id;
 	private int horasMensuales;
 	private int sueldo;
@@ -18,10 +17,15 @@ public class Empleado extends Personas implements GestionDeDatos<Empleado>{
 	private boolean activo;
 	private LocalDate fechaDeInicio;
 	
+	//ATRIBUTOS PARA CONEXION
+	Conexion conexion = new Conexion();
+	private Connection cn = null;
+	
+	//SCANNER
+	Scanner scanner = new Scanner (System.in);
+	
 	
 	//CONSTRUCTOR
-	
-
 	public Empleado(String nombre, String apellido, int dni, int teléfono, String email, int edad, int fechaDeRegistro, int id,
 			int horasMensuales, int sueldo, int ventasMensuales, String turno, String puesto, boolean activo) {
 		super(nombre, apellido, dni, teléfono, email, edad);
@@ -34,10 +38,48 @@ public class Empleado extends Personas implements GestionDeDatos<Empleado>{
 		this.activo = activo;
 	}
 	
+	
+	//METODOS
+	
+	public void calcularSalario(){	
+	}
+	
+	public void calcularDesempeño(){	
+	}
+	
+	
+	//OVERRIDES
+	
+	@Override
+	public void Ver() {
+		System.out.println("Eligió la opcion de ver empleado!");
+		System.out.println("Ingrese los datos del empleado:");
+	}
+	
+	@Override
+	public void Agregar() {
+		System.out.println("Eligió la opcion de agregar empleado!");
+		System.out.println("Ingrese los datos del empleado:");
+	}
+	
+	@Override
+	public void Buscar(int id) {
+	}
+	
+	@Override
+	public void Actualizar(Empleado empleado) {
+	}
+	
+	@Override
+	public void Eliminar(Empleado empleado) {
+	}
+	
+	
+	//TO STRING
 	@Override
 	public String toString() {
-		return "Empleado [id=" + id + ", horasMensuales=" + horasMensuales + ", sueldo=" + sueldo + ", ventasMensuales="
-				+ ventasMensuales + ", turno=" + turno + ", puesto=" + puesto + ", activo=" + activo + "]";
+		return "Empleado: id=" + id + ", horasMensuales=" + horasMensuales + ", sueldo=" + sueldo + ", ventasMensuales="
+				+ ventasMensuales + ", turno=" + turno + ", puesto=" + puesto + ", activo=" + activo;
 	}
 
 	
@@ -48,7 +90,7 @@ public class Empleado extends Personas implements GestionDeDatos<Empleado>{
 	}
 
 	public void setID(int id) {
-		id = id;
+		this.id = id;
 	}
 
 	public int getHorasMensuales() {
@@ -105,25 +147,5 @@ public class Empleado extends Personas implements GestionDeDatos<Empleado>{
 
 	public void setFechaDeInicio(LocalDate fechaDeInicio) {
 		this.fechaDeInicio = fechaDeInicio;
-	}
-	
-
-	
-	//OVERRIDES
-	
-	@Override
-	public void Agregar(Empleado empleado) {
-	}
-	
-	@Override
-	public void Buscar(int id) {
-	}
-	
-	@Override
-	public void Actualizar(Empleado empleado) {
-	}
-	
-	@Override
-	public void Eliminar(Empleado empleado) {
 	}
 }
