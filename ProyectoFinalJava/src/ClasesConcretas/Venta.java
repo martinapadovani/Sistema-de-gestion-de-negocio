@@ -90,7 +90,7 @@ public class Venta extends Transaccion implements GestionDeFacturas<Venta>{
 			 * para que se pueda registrar en la DB. */
 			LocalDate fecha = LocalDate.now();
 			Date fechaSQL = Date.valueOf(fecha);
-			Empleado ejecutarMetodosEmpleado = new Empleado(null, null, 0, 0, null, 0, 0, 0, 0, 0, 0, null, null, false);
+			Empleado ejecutarMetodosEmpleado = new Empleado();
 
 			
 			System.out.println("Seleccione el empleado que realizó la venta: ");
