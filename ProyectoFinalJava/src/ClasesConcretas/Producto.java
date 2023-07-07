@@ -22,9 +22,11 @@ public class Producto implements GestionDeDatos<Producto>{
 	//ATRIBUTOS PARA CONEXION
 	Conexion conexion = new Conexion();
 	private Connection cn = null;
-	private PreparedStatement ps = null;
-	private ResultSet rs = null;
+	
+	//SCANNER
+	Scanner scanner = new Scanner (System.in);
 
+	//CONSTRUCTOR
 
 	public Producto(int id, String nombreProducto, String categoriaProducto, int stockDisponible,
 			Proveedor proveedorDelProducto, int precio) {
@@ -35,88 +37,143 @@ public class Producto implements GestionDeDatos<Producto>{
 		this.proveedorDelProducto = proveedorDelProducto;
 		this.precio = precio;
 	}
-
-
-	@Override
-	public String toString() {
-		return "Producto [nombreProducto=" + nombreProducto + ", categoríaProducto=" + categoriaProducto
-				+ ", stockDisponible=" + stockDisponible + ", proveedorDelProducto=" + proveedorDelProducto.getNombreProveedor()
-				+ ", precio=" + precio + "]";
-	}
-
 	
 	//METODOS
 	
-	public void verStockDeProducto(Producto producto) {
+	public void verStock(Producto producto) {
 		
 		try{
 			cn = conexion.conectar();
-	
 			
-			String nombreProducto = producto.getNombreProducto();
+			String query = "SELECT stockDisponible FROM producto";
 			
-			ps = cn.prepareStatement("SELECT stockDisponible FROM producto WHERE nombreProducto =" + nombreProducto );
+			Statement declaracion = cn.createStatement();
+			ResultSet resultados = declaracion.executeQuery(query);
 			
-			rs = ps.executeQuery();
-			
-			while(rs.next()) {
-				 stockDisponible += rs.getInt("stockDisponible");	
+			while(resultados.next()) { //mientras haya datos por leer
+				System.out.println(resultados.getInt("stockDisponible"));
 			}
 			
-			System.out.println("El stock de" + nombreProducto + "es de: " + stockDisponible);
-
 		} catch(SQLException e){
 			e.printStackTrace();
-		}
-
+		} 
 	}
-
-	public void calcularStock(Producto producto) {
 	
+	public void calcularStock(Producto producto) {
+		
 	}
+	
 
 	//OVERRIDE
 	
 	@Override
-	public void Agregar(Producto producto) {
+	public void Ver(){
+		
 		try{
-			
 			cn = conexion.conectar();
-			/* No se agrega el dato "id" ya que es auto_incremental directamente del workbench. 
-			 * Tampoco se agrega el dato proveedorDelProducto ya que traducido a MySQL este será una llave foranea que contendrá
-			 * el id de ese proveedor. */
-			String query = "INSERT INTO producto (nombreProducto, categoria, stockDisponible, precioxUnidad) VALUES (?, ?, ?, ?)";
-			ps = cn.prepareStatement(query);
 			
-			ps.setString(1, producto.getNombreProducto());
-			ps.setString(2, producto.getCategoríaProducto());
-			ps.setInt(3, producto.getStockDisponible());
-			ps.setInt(4, producto.getPrecio());
+			String query = "SELECT * FROM producto";
 			
-			ps.executeUpdate();
+			Statement declaracion = cn.createStatement();
+			ResultSet resultados = declaracion.executeQuery(query);
 			
-			System.out.println("Se han insertado los datos correctamente");
-			
+			while(resultados.next()) { //mientras haya datos por leer
+				System.out.println(
+						"ID: " + resultados.getInt("idProducto") + ". Nombre: " +resultados.getString("nombreProducto") + 
+						". Categoria: " + resultados.getString("categoria") + ". Stock: " + resultados.getInt("stockDisponible") + 
+						". Precio: " + resultados.getInt("precioxUnidad") + ". Id Proveedor: " +  resultados.getInt("proveedor_id"));
+			}
 			
 		} catch(SQLException e){
 			e.printStackTrace();
-		}
-			
-	}	
-
+		} 
+	}
+	
 	@Override
-	public void Buscar(int ID) {
+	public void Buscar(int id) {
+		
+		try{
+			cn = conexion.conectar();
+			
+			String query = "SELECT * FROM producto WHERE  idProducto = ?";
+			
+			PreparedStatement declaracion  = cn.prepareStatement(query);
+			
+				declaracion.setInt(1, id);
+				ResultSet resultados = declaracion.executeQuery();
+				
+			while(resultados.next()) { //mientras haya datos por leer
+					System.out.println(
+							"ID: " + resultados.getInt("idProducto") + ". Nombre: " +resultados.getString("nombreProducto") + 
+							". Categoria: " + resultados.getString("categoria") + ". Stock: " + resultados.getInt("stockDisponible") + 
+							". Precio: " + resultados.getInt("precioxUnidad") + ". Id Proveedor: " +  resultados.getInt("proveedor_id"));
+			}
+			
+		} catch(SQLException e){
+			e.printStackTrace();
+		} 
 	}
 
+	
 	@Override
 	public void Actualizar(Producto producto) {
 	}
+	
+	
+	@Override
+	public void Agregar() {
+		
+		System.out.println("Por favor, ingrese los datos correspondientes");
+		System.out.println("Nombre: ");
+		String nombreProducto = (scanner.nextLine()).trim().replace(" ", "_");
+		// .trim para eliminar los espacios en blanco al principio y al final de un String
+		//.replace, para reemplazar los espacios blancos por _, y que no rechace con un error el ingreso de espacios
+		System.out.println("Categoria: ");
+		String categoria = (scanner.nextLine()).trim().replace(" ", "_") ;
+		System.out.println("Stock: ");
+		int stockDisponible = scanner.nextInt();
+		System.out.println("Precio (x unidad): ");
+		int precioxUnidad = scanner.nextInt();
+		System.out.println("ID del Proveedor: ");
+		int proveedor_id = scanner.nextInt();
+		
+		try{
+			cn = conexion.conectar();
+			
+			String query = "INSERT INTO producto (nombreProducto, categoria, stockDisponible, precioxUnidad, proveedor_id) VALUES (?, ?, ?, ?, ?)";
+			//excluyo el id ya que es autoincremental
+			
+			PreparedStatement declaracion  = cn.prepareStatement(query);
+			
+				declaracion.setString(1, nombreProducto);
+				declaracion.setString(2, categoria);
+				declaracion.setInt(3, stockDisponible);
+				declaracion.setInt(4, precioxUnidad);
+				declaracion.setInt(5, proveedor_id);
+				
+				declaracion.executeUpdate();
+				
+				System.out.println("Datos cargados exitosamente!");
+			
+		} catch(SQLException e){
+			e.printStackTrace();
+		} 
+	}
+	
 
 	@Override
 	public void Eliminar(Producto producto){
 	}
 	
 	
+	
+	//TO STRING
+	@Override
+	public String toString() {
+		return "Producto [nombreProducto=" + nombreProducto + ", categoríaProducto=" + categoriaProducto
+				+ ", stockDisponible=" + stockDisponible + ", proveedorDelProducto=" + proveedorDelProducto.getNombreProveedor()
+				+ ", precio=" + precio + "]";
+	}
 
 	//GETTERS-SETTERS
 	
