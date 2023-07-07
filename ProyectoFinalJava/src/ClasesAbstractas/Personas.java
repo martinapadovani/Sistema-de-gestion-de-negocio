@@ -1,6 +1,17 @@
 package ClasesAbstractas;
 
-public abstract class Personas {
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Scanner;
+
+import ClasesConcretas.Empleado;
+import ConexionDB.Conexion;
+import Interfaces.GestionDeDatos;
+
+public class Personas implements GestionDeDatos<Empleado>{
 	
 	//ATRIBUTOS
 	
@@ -10,6 +21,13 @@ public abstract class Personas {
 	private int teléfono;
 	private String email;
 	private int edad;
+	
+	//ATRIBUTOS PARA CONEXION
+	Conexion conexion = new Conexion();
+	private Connection cn = null;
+	
+	//SCANNER
+	Scanner scanner = new Scanner (System.in);
 	
 	//CONSTRUCTOR
 	
@@ -24,7 +42,71 @@ public abstract class Personas {
 
 	// METODOS
 	
-
+   //OVERRIDE
+	
+	@Override
+	public void Ver() {
+		
+		try{
+			cn = conexion.conectar();
+			
+			String query = "SELECT * FROM persona";
+			
+			Statement declaracion = cn.createStatement();
+			ResultSet resultados = declaracion.executeQuery(query);
+			
+			while(resultados.next()) { //mientras haya datos por leer
+				System.out.println(
+						"ID: " + resultados.getInt("idPersona") + ". DNI: " +resultados.getInt("dni") + 
+						". Telefono: " + resultados.getBigDecimal("telefonoPersona") + ". Nombre: " + resultados.getBigDecimal("nombrePersona") + 
+						". Apellido: " + resultados.getString("apellidoPersona") + ". Edad: " +  resultados.getString("edad") + 
+						". Email: " +  resultados.getBoolean("email"));
+			}
+			
+		} catch(SQLException e){
+			e.printStackTrace();
+		} 
+		
+	}
+	
+	@Override
+	public void Buscar(int id) {
+		
+		try{
+			cn = conexion.conectar();
+			
+			String query = "SELECT * FROM empleado WHERE  idEmpleado = ?";
+			
+			PreparedStatement declaracion  = cn.prepareStatement(query);
+			
+				declaracion.setInt(1, id);
+				ResultSet resultados = declaracion.executeQuery();
+				
+			while(resultados.next()) { //mientras haya datos por leer
+					System.out.println(
+							"ID: " + resultados.getInt("idPersona") + ". DNI: " +resultados.getInt("dni") + 
+							". Telefono: " + resultados.getBigDecimal("telefonoPersona") + ". Nombre: " + resultados.getBigDecimal("nombrePersona") + 
+							". Apellido: " + resultados.getString("apellidoPersona") + ". Edad: " +  resultados.getString("edad") + 
+							". Email: " +  resultados.getBoolean("email"));
+			}
+			
+		} catch(SQLException e){
+			e.printStackTrace();
+		} 
+		
+	}
+	
+	@Override
+	public void Actualizar(int id) {
+		
+	}
+	
+	@Override
+	public void Eliminar(int id) {
+		
+	}
+	
+	//TO STRING
 	
 	@Override
 	public String toString() {
@@ -35,9 +117,6 @@ public abstract class Personas {
 
 
 	//GETTERS-SETTERS
-	
-	
-
 	public String getNombre() {
 		return nombre;
 	}

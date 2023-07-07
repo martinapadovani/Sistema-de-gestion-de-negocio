@@ -81,7 +81,7 @@ public class Proveedor implements GestionDeDatos<Proveedor>{
 	}
 	
 	@Override
-	public void Actualizar(Proveedor proveedor) {
+	public void Actualizar(int id) {
 	}
 	
 	@Override
@@ -114,7 +114,7 @@ public class Proveedor implements GestionDeDatos<Proveedor>{
 	}
 	
 	@Override
-	public void Eliminar(Proveedor proveedor) {
+	public void Eliminar(int id) {
 	}
 	
 	
