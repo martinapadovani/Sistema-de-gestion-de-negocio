@@ -1,9 +1,11 @@
 package ClasesConcretas;
+import java.sql.*;
 
 import java.util.ArrayList;
 
 import Interfaces.GestionDeDatos;
-
+import ConexionDB.Conexion;
+import java.util.Scanner;
 public class Proveedor implements GestionDeDatos<Proveedor>{
 
 	//ATRIBUTOS

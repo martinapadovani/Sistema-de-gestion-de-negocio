@@ -2,7 +2,8 @@ import ConexionDB.*;
 import ClasesConcretas.*;
 import ConexionDB.Conexion;
 import ClasesAbstractas.*;
-
+import java.util.Scanner;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import ClasesConcretas.*;
@@ -44,77 +45,123 @@ public class Main {
 			
 			   
 			switch(sector) {
-			
+
 			case 1 : //EMPLEADOS
-				  
 				  System.out.println("Bienvenido al sector de Empleados!");	
 				  System.out.println("Seleccione según corresponda:");
-				  System.out.println("1. Ver empleados");
-				  System.out.println("2. Buscar empleado");
-				  System.out.println("3. Actualizar empleado");
-				  System.out.println("4. Agregar nuevo empleado");
-				  System.out.println("5. Eliminar empleado del sistema");
-				  System.out.println("6. Calcular salario");
-				  System.out.println("7. Calcular desempeño");
+				  System.out.println("1. Datos personales");
+				  System.out.println("2. Datos laborales");
 				  
-				  scanner.nextLine(); /* adicional, para consumir el salto de línea pendiente, que queda en el búfer de entrada.
-				   Prepara correctamente el búfer de entrada para que la siguiente llamado, evitando que el nextLine() del titulo, 
-				   lea ese salto de línea (y devuelva una cadena vacía) en lugar de la línea ingresada por el usuario (el título) */
+				  int opcionEmpleados = scanner.nextInt();
 
-				  
-				  Empleado ejecutarMetodosEmpleado = new Empleado(null, null, 0, 0, null, 0, 0, 0, 0, 0, 0, null, null, false);
-				  int opcionEmpleados = scanner.nextInt(); 
-				  
-			 switch (opcionEmpleados) {
-				 
-				  case 1:
+			switch (opcionEmpleados) {
+				
+				case 1://DATOS LABORALES
+					
+					  System.out.println("Eligio la opcion datos laborales");	
+					  System.out.println("Seleccione según corresponda:");
+					  System.out.println("1. Ver empleados");
+					  System.out.println("2. Buscar empleado");
+					  System.out.println("3. Actualizar empleado");
+					  System.out.println("4. Agregar nuevo empleado");
+					  System.out.println("5. Eliminar empleado del sistema");
+					  System.out.println("6. Calcular salario");
+					  System.out.println("7. Calcular desempeño");
 					  
-					  System.out.println("Elegiste la opcion de ver empleados!");
-					  ejecutarMetodosEmpleado.Ver();
+					  scanner.nextLine(); // adicional
+
+					  
+					  Empleado ejecutarMetodosEmpleado = new Empleado(null, null, 0, 0, null, 0, 0, 0, 0, 0, 0, null, null, false);
+					  int opcionDatosLaborales = scanner.nextInt(); 
+					  
+				 switch (opcionDatosLaborales) {
+					 
+					  case 1:
+						  
+						  System.out.println("Elegiste la opcion de ver empleados!");
+						  ejecutarMetodosEmpleado.Ver();
+						  
+						  break;
+					  case 2:
+						  
+						  System.out.println("Elegiste la opcion de buscar empleados!");
+						  
+						  System.out.println("Ingrese el id del Empleado:");
+						  int id = scanner.nextInt(); 
+						  ejecutarMetodosEmpleado.Buscar(id);
+						  
+						  break;
+					  case 3:
+						  
+						  System.out.println("Elegiste la opcion de actualizar empleados!");
+						  ejecutarMetodosEmpleado.Actualizar(ejecutarMetodosEmpleado);
+						  
+						  break;
+					  case 4:
+						  
+						  System.out.println("Elegiste la opcion de agregar empleados!");
+						  ejecutarMetodosEmpleado.Agregar();
+						  
+						  break;
+					  case 5:
+						  
+						  System.out.println("Elegiste la opcion de eliminar empleados!");
+						  ejecutarMetodosEmpleado.Eliminar(ejecutarMetodosEmpleado);
+						  
+						  break;
+				      case 6:
+						  
+						  System.out.println("Elegiste la opcion de calcular salario!");
+						  ejecutarMetodosEmpleado.calcularSalario();
+						  
+						  break;  
+				     case 7:
+					  
+					      System.out.println("Elegiste la opcion de calcular desempeño!");
+					      ejecutarMetodosEmpleado.calcularDesempeño();
 					  
 					  break;
-				  case 2:
+						default:
+							
+							System.out.println("Opcion inválida! Vuelva a intentarlo");
+							salir.set(false);
+					 }
+					
+					break;
+					
+				case 2://DATOS PERSONALES
+					
+					  System.out.println("Eligio la opcion de datos personales!");	
+					  System.out.println("Seleccione según corresponda:");
+					  System.out.println("1. Ver Datos personales");
+					  System.out.println("2. Buscar Empleado");
+					  System.out.println("3. Actualizar Datos personales");
+					  System.out.println("5. Eliminar Datos personales");
 					  
-					  System.out.println("Elegiste la opcion de buscar empleados!");
+				scanner.nextLine(); // adicional
+
+					  int opcionDatosPersonales = scanner.nextInt(); 
 					  
-					  System.out.println("Ingrese el id del Empleado:");
-					  int id = scanner.nextInt(); 
-					  ejecutarMetodosEmpleado.Buscar(id);
-					  
-					  break;
-				  case 3:
-					  
-					  System.out.println("Elegiste la opcion de actualizar empleados!");
-					  ejecutarMetodosEmpleado.Actualizar(ejecutarMetodosEmpleado);
-					  
-					  break;
-				  case 4:
-					  
-					  System.out.println("Elegiste la opcion de agregar empleados!");
-					  ejecutarMetodosEmpleado.Agregar();
-					  
-					  break;
-				  case 5:
-					  
-					  System.out.println("Elegiste la opcion de eliminar empleados!");
-					  ejecutarMetodosEmpleado.Eliminar(ejecutarMetodosEmpleado);
-					  
-					  break;
-			      case 6:
-					  
-					  System.out.println("Elegiste la opcion de calcular salario!");
-					  ejecutarMetodosEmpleado.calcularSalario();
-					  
-					  break;  
-			     case 7:
-				  
-				      System.out.println("Elegiste la opcion de calcular desempeño!");
-				      ejecutarMetodosEmpleado.calcularDesempeño();
-				  
-				  break;
+				 switch (opcionDatosPersonales) {
+					 
+					  case 1:
+						  System.out.println("Elegiste la opcion de ver datos personales!");
+						  break;  
+						  
+						default:
+							
+							System.out.println("Opcion inválida! Vuelva a intentarlo");
+							salir.set(false);
+							
 				 }
+					break;//Brek switch opcion datos laborales/personales
+				default:
+					
+					System.out.println("Opcion inválida! Vuelva a intentarlo");
+					salir.set(false);
+				}
 			  volverAlMenu(salir);
-			break;	
+			break;	//Brek switch opcion Empleados
 				
 			case 2://PROVEEDORES
 				
@@ -169,6 +216,10 @@ public class Main {
 				  ejecutarMetodosProveedor.Eliminar(ejecutarMetodosProveedor);
 				  
 				 break;
+			default:
+					
+					System.out.println("Opcion inválida! Vuelva a intentarlo");
+					salir.set(false);
 			 }
 			  volverAlMenu(salir);
 			   break;
@@ -240,6 +291,11 @@ public class Main {
 					  ejecutarMetodosProductos.calcularStock(ejecutarMetodosProductos);
 					  
 					  break;
+					  
+				default:
+						
+						System.out.println("Opcion inválida! Vuelva a intentarlo");
+						salir.set(false);
 			 }
 			  volverAlMenu(salir);
 			   break;

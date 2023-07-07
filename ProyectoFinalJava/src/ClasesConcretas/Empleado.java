@@ -1,6 +1,9 @@
 package ClasesConcretas;
+import java.sql.Connection;
+import java.sql.*;
 import java.time.LocalDate;
-
+import ConexionDB.Conexion;
+import java.util.Scanner;
 import ClasesAbstractas.Personas;
 import Interfaces.GestionDeDatos;
 
@@ -58,8 +61,53 @@ public class Empleado extends Personas implements GestionDeDatos<Empleado>{
 	
 	@Override
 	public void Agregar() {
-		System.out.println("Eligió la opcion de agregar empleado!");
-		System.out.println("Ingrese los datos del empleado:");
+		
+	
+		System.out.println("Por favor, ingrese los datos correspondientes");
+		System.out.println("Horas mensuales: ");
+		int horasMensuales = scanner.nextInt();
+		System.out.println("Sueldo: ");
+		double sueldo = scanner.nextDouble();
+		System.out.println("Ventas Mensuales: ");
+		int ventasMensuales = scanner.nextInt();
+		System.out.println("Turno: ");
+		String turno = (scanner.nextLine()).trim().replace(" ", "_");
+		System.out.println("Puesto: ");
+		String puesto = (scanner.nextLine()).trim().replace(" ", "_");
+		System.out.println("Activo (si/no): ");
+		Boolean activo = scanner.nextBoolean();
+		
+		System.out.println("Fecha de Inicio");
+		
+		try{
+			cn = conexion.conectar();
+			
+			String query = "INSERT INTO empleado (horasMensuales, sueldo, ventasMensuales, turno, puesto, activo, fechaDeInicio) VALUES (?, ?, ?, ?, ?, ?, ?)";
+			//excluyo el id ya que es autoincremental
+			
+            LocalDate fechaPredeterminada = LocalDate.now();
+            // .now() de la clase LocalDate, para obtener la fecha actual.
+            Date fechaDeInicio = Date.valueOf(fechaPredeterminada);
+            /* .valueOf(fechaPredeterminada) para convertir fechaPredeterminada de tipo LocalDate 
+                a java.sql.Date, para luego establecer su valor  en la consulta de inserción */
+			
+			PreparedStatement declaracion  = cn.prepareStatement(query);
+			
+				declaracion.setInt(1, horasMensuales);
+				declaracion.setDouble(2, sueldo);
+				declaracion.setInt(3, ventasMensuales);
+				declaracion.setString(4, turno);
+				declaracion.setString(5, puesto);
+				declaracion.setBoolean(6, activo);
+				declaracion.setDate(7, fechaDeInicio);
+				
+				declaracion.executeUpdate();
+				
+				System.out.println("Datos cargados exitosamente!");
+			
+		} catch(SQLException e){
+			e.printStackTrace();
+		}
 	}
 	
 	@Override
