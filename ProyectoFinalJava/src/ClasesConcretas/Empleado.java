@@ -58,7 +58,7 @@ public class Empleado extends Personas implements GestionDeDatos<Empleado>{
 		try{
 			cn = conexion.conectar();
 			
-			String query = "SELECT * FROM persona";
+			String query = "SELECT * FROM empleado";
 			
 			Statement declaracion = cn.createStatement();
 			ResultSet resultados = declaracion.executeQuery(query);
@@ -195,11 +195,11 @@ public class Empleado extends Personas implements GestionDeDatos<Empleado>{
 	}
 	
 	@Override
-	public void Actualizar(Empleado empleado) {
+	public void Actualizar(int id) {
 	}
 	
 	@Override
-	public void Eliminar(Empleado empleado) {
+	public void Eliminar(int id) {
 	}
 	
 	

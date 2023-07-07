@@ -6,7 +6,7 @@ public interface GestionDeDatos <T> {
 	
 	abstract void Ver();
 	abstract void Buscar(int ID);
-	abstract void Actualizar(T objeto);
+	abstract void Actualizar(int id);
 	abstract void Agregar();
-	abstract void Eliminar(T objeto);
+	abstract void Eliminar(int id);
 }

@@ -117,7 +117,7 @@ public class Producto implements GestionDeDatos<Producto>{
 
 	
 	@Override
-	public void Actualizar(Producto producto) {
+	public void Actualizar(int id) {
 	}
 	
 	
@@ -163,7 +163,7 @@ public class Producto implements GestionDeDatos<Producto>{
 	
 
 	@Override
-	public void Eliminar(Producto producto){
+	public void Eliminar(int id){
 	}
 	
 	
