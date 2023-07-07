@@ -1,4 +1,6 @@
 import ConexionDB.*;
+import ClasesAbstractas.*;
+import ClasesConcretas.*;
 import ClasesConcretas.*;
 import ConexionDB.Conexion;
 import ClasesAbstractas.*;
@@ -6,8 +8,6 @@ import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import ClasesConcretas.*;
-import ClasesAbstractas.*;
 public class Main {
 
 	public static void main(String[] args) {
@@ -304,8 +304,8 @@ public class Main {
 				  scanner.nextLine();
 				  
 				  Empleado ejecutarMetodosEmpleado = new Empleado(null, null, 0, 0, null, 0, 0, 0, 0, 0, 0, null, null, false);
-				  ArrayList<ProductoVentas> arrayProductoVentas = null;
-				  Venta ejecutarMetodosVenta = new Venta(null, 0, ejecutarMetodosEmpleado, arrayProductoVentas);
+				  ArrayList<ProductoVentas> rellenarObjetoVenta = null;
+				  Venta ejecutarMetodosVenta = new Venta(null, 0, ejecutarMetodosEmpleado, rellenarObjetoVenta);
 				  
 				  int opcionVenta = scanner.nextInt();
 				  

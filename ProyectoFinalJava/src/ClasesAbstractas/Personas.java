@@ -176,6 +176,12 @@ public class Personas implements GestionDeDatos<Empleado>{
 		this.email = email;
 	}
 
+	@Override
+	public void Agregar() {
+		// TODO Auto-generated method stub
+		
+	}
+
 
 
 
