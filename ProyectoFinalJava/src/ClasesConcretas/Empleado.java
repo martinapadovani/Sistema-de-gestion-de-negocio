@@ -9,15 +9,6 @@ import Interfaces.GestionDeDatos;
 
 public class Empleado extends Personas implements GestionDeDatos<Empleado>{
 
-	//ATRIBUTOS
-	private int id;
-	private int horasMensuales;
-	private int sueldo;
-	private int ventasMensuales;	
-	private String turno;
-	private String puesto;
-	private boolean activo;
-	private LocalDate fechaDeInicio;
 	
 	//ATRIBUTOS PARA CONEXION
 	Conexion conexion = new Conexion();
@@ -26,29 +17,17 @@ public class Empleado extends Personas implements GestionDeDatos<Empleado>{
 	//SCANNER
 	Scanner scanner = new Scanner (System.in);
 	
-	
 	//CONSTRUCTOR
-	public Empleado(String nombre, String apellido, int dni, int teléfono, String email, int edad, int fechaDeRegistro, int id,
-			int horasMensuales, int sueldo, int ventasMensuales, String turno, String puesto, boolean activo) {
-		super(nombre, apellido, dni, teléfono, email, edad);
-		this.id = id;
-		this.horasMensuales = horasMensuales;
-		this.sueldo = sueldo;
-		this.ventasMensuales = ventasMensuales;
-		this.turno = turno;
-		this.puesto = puesto;
-		this.activo = activo;
+	public Empleado() {
 	}
-	
 	
 	//METODOS
 	
-	public void calcularSalario(){	
+	public void calcularSalario(int id){	
 	}
 	
-	public void calcularDesempeño(){	
+	public void calcularDesempeño(int id){	
 	}
-	
 	
 	//OVERRIDES
 	
@@ -71,7 +50,6 @@ public class Empleado extends Personas implements GestionDeDatos<Empleado>{
 						". Activo: " +  resultados.getBoolean("activo") + ". Fecha de Inicio: " +  resultados.getDate("fechaDeInicio") +
 						". Id Persona: " +  resultados.getInt("persona_id"));
 			}
-			
 		} catch(SQLException e){
 			e.printStackTrace();
 		} 
@@ -79,7 +57,6 @@ public class Empleado extends Personas implements GestionDeDatos<Empleado>{
 	
 	@Override
 	public void Agregar() {
-		
 	
 	    // Obtener los datos personales
 	    System.out.println("DNI: ");
@@ -180,13 +157,15 @@ public class Empleado extends Personas implements GestionDeDatos<Empleado>{
 				declaracion.setInt(1, id);
 				ResultSet resultados = declaracion.executeQuery();
 				
-			while(resultados.next()) { //mientras haya datos por leer
+			if(resultados.next()) { //mientras haya datos por leer
 					System.out.println(
 							"ID: " + resultados.getInt("idEmpleado") + ". Horas mensuales: " +resultados.getInt("horasMensuales") + 
 							". Sueldo: " + resultados.getBigDecimal("sueldo") + ". Ventas mensuales: " + resultados.getBigDecimal("ventasMensuales") + 
 							". Turno: " + resultados.getString("turno") + ". Puesto: " +  resultados.getString("puesto") + 
 							". Activo: " +  resultados.getBoolean("activo") + ". Fecha de Inicio: " +  resultados.getDate("fechaDeInicio") +
 							". Id Persona: " +  resultados.getInt("persona_id"));
+			}else {
+				System.out.println("ID inválido! Vuelva a intentarlo.");
 			}
 			
 		} catch(SQLException e){
@@ -196,60 +175,65 @@ public class Empleado extends Personas implements GestionDeDatos<Empleado>{
 	
 	@Override
 	public void Actualizar(int id) {
-		
-	    // Obtener los datos laborales
-	    System.out.println("Horas mensuales: ");
-	    int horasMensuales = scanner.nextInt();
-	    System.out.println("Sueldo: ");
-	    double sueldo = scanner.nextDouble();
-	    System.out.println("Ventas Mensuales: ");
-	    int ventasMensuales = scanner.nextInt();
-	    System.out.println("Turno: ");
-	    String turno = scanner.next().trim().replace(" ", "_");
-	    System.out.println("Puesto: ");
-	    String puesto = scanner.next().trim().replace(" ", "_");
-	    System.out.println("Activo (true/false): ");
-	    boolean activo = scanner.nextBoolean();
-		
+	
 		try{
 			cn = conexion.conectar();
 			
-			//ACTUALIZACION
+			String querySelectEmpleado = "SELECT * FROM empleado WHERE  idEmpleado = ?";
 			
-			String queryUpdate = "UPDATE empleado SET horasMensuales = ?, sueldo = ?, ventasMensuales = ?, turno = ?, puesto = ?, activo = ? WHERE  idEmpleado = ?";
-			
-			PreparedStatement declaracionUpdate  = cn.prepareStatement(queryUpdate);
+			PreparedStatement declaracionSelectEmpleado  = cn.prepareStatement(querySelectEmpleado);
 		
-			declaracionUpdate.setInt(1, horasMensuales);
-			declaracionUpdate.setDouble(2, sueldo);
-			declaracionUpdate.setInt(3, ventasMensuales);
-			declaracionUpdate.setString(4, turno);
-			declaracionUpdate.setString(5, puesto);
-			declaracionUpdate.setBoolean(6, activo);
+			declaracionSelectEmpleado.setInt(1, id);
+			ResultSet resultadosEmpleado = declaracionSelectEmpleado.executeQuery();
 			
-			declaracionUpdate.setInt(7, id);
+			if(resultadosEmpleado.next()) {
 				
-			declaracionUpdate.executeUpdate();
+			    // Obtener los datos laborales
+			    System.out.println("Horas mensuales: ");
+			    int horasMensuales = scanner.nextInt();
+			    System.out.println("Sueldo: ");
+			    double sueldo = scanner.nextDouble();
+			    System.out.println("Ventas Mensuales: ");
+			    int ventasMensuales = scanner.nextInt();
+			    System.out.println("Turno: ");
+			    String turno = scanner.next().trim().replace(" ", "_");
+			    System.out.println("Puesto: ");
+			    String puesto = scanner.next().trim().replace(" ", "_");
+			    System.out.println("Activo (true/false): ");
+			    boolean activo = scanner.nextBoolean();
+			    
+				
+				//ACTUALIZACION
+				
+				String queryUpdate = "UPDATE empleado SET horasMensuales = ?, sueldo = ?, ventasMensuales = ?, turno = ?, puesto = ?, activo = ? WHERE  idEmpleado = ?";
+				
+				PreparedStatement declaracionUpdate  = cn.prepareStatement(queryUpdate);
 			
-			//VER DATOS
+				declaracionUpdate.setInt(1, horasMensuales);
+				declaracionUpdate.setDouble(2, sueldo);
+				declaracionUpdate.setInt(3, ventasMensuales);
+				declaracionUpdate.setString(4, turno);
+				declaracionUpdate.setString(5, puesto);
+				declaracionUpdate.setBoolean(6, activo);
 				
-				String querySelect = "SELECT * FROM empleado WHERE  idEmpleado = ?";
+				declaracionUpdate.setInt(7, id);
+					
+				declaracionUpdate.executeUpdate();
 				
-				PreparedStatement declaracionSelect  = cn.prepareStatement(querySelect);
-			
-				declaracionSelect.setInt(1, id);
-				ResultSet resultados = declaracionSelect.executeQuery();
-				
-			while(resultados.next()) { //mientras haya datos por leer
-				System.out.println("Proceso exitoso! Datos actualizados: ");
-					System.out.println(
-							"ID: " + resultados.getInt("idEmpleado") + ". Horas mensuales: " +resultados.getInt("horasMensuales") + 
-							". Sueldo: " + resultados.getBigDecimal("sueldo") + ". Ventas mensuales: " + resultados.getBigDecimal("ventasMensuales") + 
-							". Turno: " + resultados.getString("turno") + ". Puesto: " +  resultados.getString("puesto") + 
-							". Activo: " +  resultados.getBoolean("activo") + ". Fecha de Inicio: " +  resultados.getDate("fechaDeInicio") +
-							". Id Persona: " +  resultados.getInt("persona_id"));
+				//VER DATOS
+					
+				while(resultadosEmpleado.next()) { //mientras haya datos por leer
+					System.out.println("Proceso exitoso! Datos actualizados: ");
+						System.out.println(
+								"ID: " + resultadosEmpleado.getInt("idEmpleado") + ". Horas mensuales: " +resultadosEmpleado.getInt("horasMensuales") + 
+								". Sueldo: " + resultadosEmpleado.getBigDecimal("sueldo") + ". Ventas mensuales: " + resultadosEmpleado.getBigDecimal("ventasMensuales") + 
+								". Turno: " + resultadosEmpleado.getString("turno") + ". Puesto: " +  resultadosEmpleado.getString("puesto") + 
+								". Activo: " +  resultadosEmpleado.getBoolean("activo") + ". Fecha de Inicio: " +  resultadosEmpleado.getDate("fechaDeInicio") +
+								". Id Persona: " +  resultadosEmpleado.getInt("persona_id") );
+				}
+			}else {
+				System.out.println("ID inválido! Vuelva a intentarlo.");
 			}
-			
 		} catch(SQLException e){
 			e.printStackTrace();
 		} 
@@ -257,80 +241,70 @@ public class Empleado extends Personas implements GestionDeDatos<Empleado>{
 	
 	@Override
 	public void Eliminar(int id) {
-	}
-	
-	
-	//TO STRING
-	@Override
-	public String toString() {
-		return "Empleado: id=" + id + ", horasMensuales=" + horasMensuales + ", sueldo=" + sueldo + ", ventasMensuales="
-				+ ventasMensuales + ", turno=" + turno + ", puesto=" + puesto + ", activo=" + activo;
-	}
-
-	
-	//GETTERS-SETTERS
-
-	public int getID() {
-		return id;
-	}
-
-	public void setID(int id) {
-		this.id = id;
-	}
-
-	public int getHorasMensuales() {
-		return horasMensuales;
-	}
-
-	public void setHorasMensuales(int horasMensuales) {
-		this.horasMensuales = horasMensuales;
-	}
-
-	public int getSueldo() {
-		return sueldo;
-	}
-
-	public void setSueldo(int sueldo) {
-		this.sueldo = sueldo;
-	}
-
-	public int getVentasMensuales() {
-		return ventasMensuales;
-	}
-
-	public void setVentasMensuales(int ventasMensuales) {
-		this.ventasMensuales = ventasMensuales;
-	}
-
-	public String getTurno() {
-		return turno;
-	}
-
-	public void setTurno(String turno) {
-		this.turno = turno;
-	}
-
-	public String getPuesto() {
-		return puesto;
-	}
-
-	public void setPuesto(String puesto) {
-		this.puesto = puesto;
-	}
-
-	public boolean isActivo() {
-		return activo;
-	}
-
-	public void setActivo(boolean activo) {
-		this.activo = activo;
-	}
-	
-	public LocalDate getFechaDeInicio() {
-		return fechaDeInicio;
-	}
-
-	public void setFechaDeInicio(LocalDate fechaDeInicio) {
-		this.fechaDeInicio = fechaDeInicio;
+		
+		try{
+			
+			cn = conexion.conectar();
+			
+			String querySelectEmpleado = "SELECT * FROM empleado WHERE  idEmpleado = ?";
+			
+			PreparedStatement declaracionSelectEmpleado  = cn.prepareStatement(querySelectEmpleado);
+		
+			declaracionSelectEmpleado.setInt(1, id);
+			ResultSet resultadosEmpleado = declaracionSelectEmpleado.executeQuery();
+			
+			String querySelectPersona = "SELECT * FROM persona WHERE  idPersona = ?";
+			
+			PreparedStatement declaracionSelectPersona  = cn.prepareStatement(querySelectPersona);
+		
+			declaracionSelectPersona.setInt(1, id);
+			ResultSet resultadosPersona = declaracionSelectPersona.executeQuery();
+			
+			
+			
+			if(resultadosEmpleado.next() && resultadosPersona.next()) { //mientras haya datos por leer
+				
+				System.out.println("Seguro que desea eliminar el empleado: ");
+				System.out.println(
+						"ID: " + resultadosPersona.getInt("idPersona") + ". DNI: " +resultadosPersona.getInt("dni") + 
+						". Telefono: " + resultadosPersona.getInt("telefonoPersona") + ". Nombre: " + resultadosPersona.getString("nombrePersona") + 
+						". Apellido: " + resultadosPersona.getString("apellidoPersona") + ". Edad: " +  resultadosPersona.getInt("edad") + 
+						". Email: " +  resultadosPersona.getString("email") + "ID: " + resultadosEmpleado.getInt("idEmpleado") + ". Horas mensuales: " +resultadosEmpleado.getInt("horasMensuales") + 
+						". Sueldo: " + resultadosEmpleado.getBigDecimal("sueldo") + ". Ventas mensuales: " + resultadosEmpleado.getBigDecimal("ventasMensuales") + 
+						". Turno: " + resultadosEmpleado.getString("turno") + ". Puesto: " +  resultadosEmpleado.getString("puesto") + 
+						". Activo: " +  resultadosEmpleado.getBoolean("activo") + ". Fecha de Inicio: " +  resultadosEmpleado.getDate("fechaDeInicio") +
+						". Id Persona: " +  resultadosEmpleado.getInt("persona_id") );
+				System.out.println("Ingrese si/no segun desee.");
+				String confirmacion = scanner.nextLine();
+				
+				 if(confirmacion.equalsIgnoreCase("si")) {
+					 
+					 try{
+						 cn = conexion.conectar();
+					
+						 String queryDelete = "DELETE FROM empleado WHERE idEmpleado = ?";
+						 //excluyo el id ya que es autoincremental
+					
+							PreparedStatement declaracionDelete  = cn.prepareStatement(queryDelete);
+							
+							declaracionDelete.setInt(1, id);
+							declaracionDelete.executeUpdate();
+						
+						 	System.out.println("Empleado eliminado del sistema!");
+					
+					 } catch(SQLException e){
+						 e.printStackTrace();
+					 }
+					 
+				  }else {
+					  System.out.println("Perfecto! El empleado no será eliminado");
+				  }
+			}else {
+				System.out.println("ID inválido! Vuelva a intentarlo.");
+			}
+		
+		}catch(SQLException e){
+				e.printStackTrace();
+			} 
 	}
 }

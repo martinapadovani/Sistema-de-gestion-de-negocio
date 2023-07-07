@@ -8,13 +8,7 @@ import ConexionDB.Conexion;
 import java.util.Scanner;
 public class Proveedor implements GestionDeDatos<Proveedor>{
 
-	//ATRIBUTOS
-	private int id;
-	private String nombreProveedor;
-	private int telefono;
-	//private ArrayList<Producto>productosProveedor;
-	//El dato de a que proveedor corresponde cada producto va a ser indicado y subido a al DB desde la clase de productos, con la llave foranea
-	
+
 	//ATRIBUTOS PARA CONEXION
 	Conexion conexion = new Conexion();
 	private Connection cn = null;
@@ -23,12 +17,7 @@ public class Proveedor implements GestionDeDatos<Proveedor>{
 	Scanner scanner = new Scanner (System.in);
 	
 	//CONSTRUCTOR
-	public Proveedor(int id, String nombreProveedor, int telefono, ArrayList<Producto>productosProveedor) {
-		super();
-		this.id = id;
-		this.nombreProveedor = nombreProveedor;
-		this.telefono = telefono;
-	//	this.productosProveedor = productosProveedor;
+	public Proveedor() {
 	}
 	
 	
@@ -59,65 +48,77 @@ public class Proveedor implements GestionDeDatos<Proveedor>{
 	@Override
 	public void Buscar(int ID) {
 		
-		try{
-			cn = conexion.conectar();
-			
-			String query = "SELECT * FROM proveedor WHERE  idProveedor = ?";
-			
-			PreparedStatement declaracion  = cn.prepareStatement(query);
 		
-				declaracion.setInt(1, ID);
-				ResultSet resultados = declaracion.executeQuery();
-				
-			while(resultados.next()) { //mientras haya datos por leer
-					System.out.println(
-								"ID: " + resultados.getInt("idProveedor") + ". Nombre: " +resultados.getString("nombreProveedor") + 
-								 ". Telefono: " + resultados.getInt("telefonoProveedor"));
-			}
 			
-		} catch(SQLException e){
-			e.printStackTrace();
-		} 
+			try{
+				cn = conexion.conectar();
+				
+				String query = "SELECT * FROM proveedor WHERE  idProveedor = ?";
+				
+				PreparedStatement declaracion  = cn.prepareStatement(query);
+			
+					declaracion.setInt(1, ID);
+					ResultSet resultados = declaracion.executeQuery();
+					
+				
+					
+				if(resultados.next()) { //mientras haya datos por leer
+						System.out.println(
+									"ID: " + resultados.getInt("idProveedor") + ". Nombre: " +resultados.getString("nombreProveedor") + 
+									 ". Telefono: " + resultados.getInt("telefonoProveedor"));
+				}else {
+					System.out.println("ID inválido! Vuelva a intentarlo.");
+				}
+				
+			} catch(SQLException e){
+				e.printStackTrace();
+			} 
 	}
 	
 	@Override
 	public void Actualizar(int id) {
 		
-		System.out.println("Por favor, ingrese los datos correspondientes");
-		System.out.println("Nombre: ");
-		String nombreProveedor = (scanner.nextLine()).trim().replace(" ", "_");
-		System.out.println("Telefono: ");
-		int telefono = scanner.nextInt();
-		
 		try{
 			cn = conexion.conectar();
 			
-			//ACTUALIZACION
+			String querySelect = "SELECT * FROM proveedor WHERE  idProveedor = ?";
 			
-			String queryUpdate = "UPDATE proveedor SET nombreProveedor = ?, telefonoProveedor = ? WHERE  idProveedor = ?";
-			
-			PreparedStatement declaracionUpdate  = cn.prepareStatement(queryUpdate);
+			PreparedStatement declaracionSelect  = cn.prepareStatement(querySelect);
 		
-			declaracionUpdate.setString(1, nombreProveedor);
-			declaracionUpdate.setInt(2, telefono);
-			declaracionUpdate.setInt(3, id);
-				
-			declaracionUpdate.executeUpdate();
+			declaracionSelect.setInt(1, id);
+			ResultSet resultados = declaracionSelect.executeQuery();
 			
-			//VER DATOS
+			if(resultados.next()) {
 				
-				String querySelect = "SELECT * FROM proveedor WHERE  idProveedor = ?";
+				System.out.println("Por favor, ingrese los datos correspondientes");
+				System.out.println("Nombre: ");
+				String nombreProveedor = (scanner.nextLine()).trim().replace(" ", "_");
+				System.out.println("Telefono: ");
+				int telefono = scanner.nextInt();
 				
-				PreparedStatement declaracionSelect  = cn.prepareStatement(querySelect);
+				//ACTUALIZACION
+				
+				String queryUpdate = "UPDATE proveedor SET nombreProveedor = ?, telefonoProveedor = ? WHERE  idProveedor = ?";
+				
+				PreparedStatement declaracionUpdate  = cn.prepareStatement(queryUpdate);
 			
-				declaracionSelect.setInt(1, id);
-				ResultSet resultados = declaracionSelect.executeQuery();
+				declaracionUpdate.setString(1, nombreProveedor);
+				declaracionUpdate.setInt(2, telefono);
+				declaracionUpdate.setInt(3, id);
+					
+				declaracionUpdate.executeUpdate();
 				
-			while(resultados.next()) { //mientras haya datos por leer
-				System.out.println("Proceso exitoso! Datos actualizados: ");
-					System.out.println(
-								"ID: " + resultados.getInt("idProveedor") + ". Nombre: " +resultados.getString("nombreProveedor") + 
-								 ". Telefono: " + resultados.getInt("telefonoProveedor"));
+				//VER DATOS
+				
+				while(resultados.next()) { //mientras haya datos por leer
+					System.out.println("Proceso exitoso! Datos actualizados: ");
+						System.out.println(
+									"ID: " + resultados.getInt("idProveedor") + ". Nombre: " +resultados.getString("nombreProveedor") + 
+									 ". Telefono: " + resultados.getInt("telefonoProveedor"));
+				}
+				
+			}else {
+				System.out.println("ID inválido! Vuelva a intentarlo.");
 			}
 			
 		} catch(SQLException e){
@@ -167,77 +168,42 @@ public class Proveedor implements GestionDeDatos<Proveedor>{
 			declaracionSelect.setInt(1, id);
 			ResultSet resultados = declaracionSelect.executeQuery();
 				
-			while(resultados.next()) { //mientras haya datos por leer
+			if(resultados.next()) { //mientras haya datos por leer
 				System.out.println("Seguro que desea eliminar el proveedor: ");
 					System.out.println(
 								"ID: " + resultados.getInt("idProveedor") + ". Nombre: " +resultados.getString("nombreProveedor") + 
 								 ". Telefono: " + resultados.getInt("telefonoProveedor"));
 					System.out.println("Si eliminas el proveedor, ten en cuenta que tambien seran eliminados todos los productos que provee");
 					System.out.println("Ingrese si/no segun desee.");
+					String confirmacion = scanner.nextLine();
+					
+					 if(confirmacion.equalsIgnoreCase("si")) {
+						 
+						 try{
+							 cn = conexion.conectar();
+						
+							 String queryDelete = "DELETE FROM proveedor WHERE idProveedor = ?";
+							 //excluyo el id ya que es autoincremental
+						
+								PreparedStatement declaracionDelete  = cn.prepareStatement(queryDelete);
+								
+								declaracionDelete.setInt(1, id);
+								declaracionDelete.executeUpdate();
+							
+							 	System.out.println("Proveedor eliminado del sistema!");
+						
+						 } catch(SQLException e){
+							 e.printStackTrace();
+						 }
+						 
+					  }else {
+						  System.out.println("Perfecto! El proveedor no será eliminado");
+					  }
+			}else {
+				System.out.println("ID inválido! Vuelva a intentarlo.");
 			}
 		}catch(SQLException e){
 				e.printStackTrace();
 			} 
-		
-		String confirmacion = scanner.nextLine();
-		
-		 if(confirmacion.equalsIgnoreCase("si")) {
-			 
-			 try{
-				 cn = conexion.conectar();
-			
-				 String queryDelete = "DELETE FROM proveedor WHERE idProveedor = ?";
-				 //excluyo el id ya que es autoincremental
-			
-					PreparedStatement declaracionDelete  = cn.prepareStatement(queryDelete);
-					
-					declaracionDelete.setInt(1, id);
-					declaracionDelete.executeUpdate();
-				
-				 	System.out.println("Proveedor eliminado del sistema!");
-			
-			 } catch(SQLException e){
-				 e.printStackTrace();
-			 }
-			 
-		  }else {
-			  System.out.println("Perfecto! El proveedor no será eliminado");
-		  }
 	}
-	
-	
-	//TO STRING
-	@Override
-	public String toString() {
-		return "Proveedor: id=" + id + ", nombreProveedor=" + nombreProveedor + ", telefono=" + telefono
-				+ ", productosProveedor=";
-	}
-
-	// GETTERS-SETTERS: 
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public String getNombreProveedor() {
-		return nombreProveedor;
-	}
-
-	public void setNombreProveedor(String nombreProveedor) {
-		this.nombreProveedor = nombreProveedor;
-	}
-
-	public int getTelefono() {
-		return telefono;
-	}
-
-	public void setTelefono(int telefono) {
-		this.telefono = telefono;
-	}
-
-	
-	
 }
