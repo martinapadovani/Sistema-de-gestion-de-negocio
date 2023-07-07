@@ -17,8 +17,6 @@ public class Conexion {
 		try {
 			Class.forName(CONTROLADOR);
 			
-			System.out.println("CONNECTED");
-			
 		} catch (ClassNotFoundException e) {
 			System.out.println("Error al cargar el controlador");
 			e.printStackTrace();
@@ -30,7 +28,7 @@ public class Conexion {
 		Connection conexion = null;
 		
 		try {
-			conexion = DriverManager.getConnection(URL, USER, PASSWORDM);
+			conexion = DriverManager.getConnection(URL, USER, PASSWORD);
 			
 		} catch (SQLException e) {
 			System.out.println("Error en la conexión");

@@ -165,8 +165,8 @@ public class Gasto extends Transaccion implements GestionDeFacturas<Gasto>{
 		
 	}
 	
-	/* Método axuliar para mostrarFacturas (se puede utilizar sólo o reutilizar en los métodos en donde se precise)*/
-	public ArrayList<String> mostrarFacturas() {
+	/* Método axuliar para mostrarGastos (se puede utilizar sólo o reutilizar en los métodos en donde se precise)*/
+	public ArrayList<String> mostrarGastos() {
 		/* Creo un ArrayList en donde se registrarán todos los Gastos existentes en la DB. */
 		ArrayList<String>datos = new ArrayList<>();
 		
@@ -213,6 +213,7 @@ public class Gasto extends Transaccion implements GestionDeFacturas<Gasto>{
 			}
 			
 			/* Muestro en pantalla los datos obtenidos desde la base de datos. */
+			System.out.println("Gastos registrados en el sistema: ");
 			for (String dato : datos) {
 				System.out.println(dato);
 			}
@@ -227,16 +228,17 @@ public class Gasto extends Transaccion implements GestionDeFacturas<Gasto>{
 
 	/* Este método muestra los datos existentes y nos da la opción de seleccionar por ID. */
 	@Override
-	public void eliminarFactura(Gasto gasto) {
+	public void eliminarFactura() {
 		try {
 			/* MOSTRAR DATOS */
-			ArrayList<String> datos = mostrarFacturas();
-			
-			int idSeleccionador = 0;
-			
+
 			cn = conexion.conectar();
+
 			/* Creo un ArrayList en donde se registrarán todos los Gastos existentes en la DB. */
 			
+			ArrayList<String> datos = mostrarGastos();
+			
+			int idSeleccionador = 0;
 			
 			/* BORRAR DATOS (esto se puede hacer en un método aparte en donde llamemos un método para mostrar los datos. */
 			
@@ -247,19 +249,19 @@ public class Gasto extends Transaccion implements GestionDeFacturas<Gasto>{
 				/* Creamos dos QUERY, uno para borrar en primera instancia los datos contenidos en "gastos". En segunda instancia
 				 * borramos los datos en "transaccion". Esto se hace ya que no se puede borrar la "transaccion" primero debido a que 
 				 * tiene una llave foranea de la cual depende "gastos". Hacer esto es un modo de simular el borrado simultáneo. */
-				String query2 = "DELETE from gastos WHERE transaccion_id ="+idSeleccionador;
-				String query3 = "DELETE from transaccion WHERE idTransaccion="+idSeleccionador;
+				String query1 = "DELETE from gastos WHERE transaccion_id ="+idSeleccionador;
+				String query2 = "DELETE from transaccion WHERE idTransaccion="+idSeleccionador;
+				
+				ps = cn.prepareStatement(query1);
+				ps.executeUpdate();
 				
 				ps = cn.prepareStatement(query2);
 				ps.executeUpdate();
 				
-				ps = cn.prepareStatement(query3);
-				ps.executeUpdate();
-				
-				System.out.println("La transaccion seleccionada ha sido eliminada con éxito!");
+				System.out.println("El gasto seleccionado ha sido eliminada con éxito!");
 				
 			} else {
-				System.out.println("No hay transacciones disponibles.");
+				System.out.println("No hay gatos disponibles.");
 				
 				/* Si no hay ningún dato dentro de la base de datos, lo que hacen los siguientes QUERIES es
 				 * actualizar la el incremento del ID. Sin esto, los id's de los siguientes registros empezarán

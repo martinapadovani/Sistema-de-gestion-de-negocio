@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import ClasesAbstractas.Transaccion;
 import ConexionDB.Conexion;
@@ -28,6 +29,7 @@ public class Venta extends Transaccion implements GestionDeFacturas<Venta>{
 	private ResultSet rs3 = null;
 	
 	//VARIABLES AUXILIARES. 
+	Scanner sc = new Scanner(System.in);
 	int idTransaccion = 0;
 	Date fechaDeTransaccion = null;
 	String medioDePago = null;
@@ -142,20 +144,101 @@ public class Venta extends Transaccion implements GestionDeFacturas<Venta>{
 
 
 	@Override
-	public void eliminarFactura(Venta venta) {
+	public void eliminarFactura() {
 		
+		try {
+			
+			cn = conexion.conectar();
+			
+			ArrayList<String> datos = mostrarVentas();
+			int idSeleccionador = 0;
+			
+			if(datos.isEmpty() == false) {
+				System.out.println("Seleccione la factura a eliminar por su ID:");
+				System.out.print("Su opcion: ");
+				idSeleccionador = sc.nextInt();
+				
+				String query1 = "DELETE from ventas WHERE transaccion_id = "+idSeleccionador;
+				String query2 = "DELETE from transaccion WHERE idTransaccion ="+idSeleccionador;
+				
+				ps = cn.prepareStatement(query1);
+				ps.executeUpdate();
+				
+				ps = cn.prepareStatement(query2);
+				ps.executeUpdate();
+				
+				System.out.println("La venta seleccionada ha sido eliminada con éxito!");
+			} else {
+				System.out.println("No hay ventas disponibles!");
+				
+				String actualizarIDQuery1 = "ALTER TABLE transaccion AUTO_INCREMENT = 1";
+				String actualizarIDQuery2 = "ALTER TABLE ventas AUTO_INCREMENT = 1";
+				
+				ps = cn.prepareStatement(actualizarIDQuery1);
+				ps.executeUpdate();
+				ps = cn.prepareStatement(actualizarIDQuery2);
+				ps.executeUpdate();
+			}
+			
+			
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
 		
 	}
 
 
 	@Override
 	public void buscarFactura(int id) {
-		// TODO Auto-generated method stub
+		
+		try {
+			cn = conexion.conectar();
+			
+			String query = "SELECT transaccion.idTransaccion,"
+					+ "transaccion.fechaDeTransaccion,"
+					+ "transaccion.medioDePago,"
+					+ "transaccion.montoTotal,"
+					+ "ventas.idVentas,"
+					+ "ventas.empleado_id,"
+					+ "ventas.transaccion_id "
+					+ "FROM transaccion "
+					+ "INNER JOIN ventas "
+					+ "ON transaccion.idTransaccion = ventas.transaccion_id "
+					+ "INNER JOIN empleado "
+					+ "ON ventas.empleado_id = empleado.idEmpleado "
+					+ "WHERE transaccion.idTransaccion = " + id;
+
+			ps = cn.prepareStatement(query);
+			ps.executeQuery();
+			
+			rs = ps.executeQuery(query);
+			/* Obtenemos los datos desde la DB y los almacenamos en sus correspondientes variables.*/
+			while(rs.next()) {
+				idTransaccion = rs.getInt("idTransaccion");
+				fechaDeTransaccion = rs.getDate("fechaDeTransaccion");
+				idVentas = rs.getInt("idVentas");
+				idEmpleado = rs.getInt("empleado_id");
+				montoTotal = rs.getFloat("montoTotal");
+				medioDePago = rs.getString("medioDePago");
+			}
+			
+			System.out.println("Datos de la transaccion:\n" 
+			+ "ID transaccion: " + idTransaccion + "\n" 
+			+ "ID venta: " + idVentas + "\n" 
+			+ "ID empleado: " + idEmpleado + "\n" 
+			+ "Monto total: " + montoTotal + "\n" 
+			+ "Medio de pago: " + medioDePago + "\n" 
+			+ "Fecha de transaccion: " + fechaDeTransaccion);
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
 		
 	}
 	
-	/* Método axuliar para mostrarFacturas (se puede utilizar sólo o reutilizar en los métodos en donde se precise)*/
-	public ArrayList<String> mostrarFacturas() {
+	/* Método axuliar para mostrarVentas (se puede utilizar sólo o reutilizar en los métodos en donde se precise)*/
+	public ArrayList<String> mostrarVentas() {
 		/* Creo un ArrayList en donde se registrarán todos los Gastos existentes en la DB. */
 		ArrayList<String>datos = new ArrayList<>();
 		
@@ -223,7 +306,7 @@ public class Venta extends Transaccion implements GestionDeFacturas<Venta>{
 					
 				
 				/* Registro los datos en una variable de tipo String para despuyés insertarla en el ArrayList de tipo String.*/
-				String cadenaDeDatos = "Sus datos: [ID transaccion=" + idTransaccion 
+				String cadenaDeDatos = "[ID transaccion=" + idTransaccion 
 						+ ", ID venta= " + idVentas 
 						+ ", ID empleado=" + idEmpleado
 						+ ", ID persona=" + idPersona 
@@ -239,6 +322,7 @@ public class Venta extends Transaccion implements GestionDeFacturas<Venta>{
 			}
 			
 			/* Muestro en pantalla los datos obtenidos desde la base de datos. */
+			System.out.println("Ventas registradas en el sistema: ");
 			for (String dato : datos) {
 				System.out.println(dato);
 			}
