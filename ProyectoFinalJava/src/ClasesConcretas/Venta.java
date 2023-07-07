@@ -18,7 +18,6 @@ public class Venta extends Transaccion implements GestionDeFacturas<Venta>{
 	// ATRIBUTOS:
 	private Empleado empleado;
 	private ArrayList<ProductoVentas>productos;
-	
 	//ATRIBUTOS PARA LA CONEXIÓN: 
 	Conexion conexion = new Conexion();
 	private Connection cn = null;
@@ -40,6 +39,7 @@ public class Venta extends Transaccion implements GestionDeFacturas<Venta>{
 	int idPersona = 0;
 	String nombrePersona = null;
 	String apellidoPersona = null;
+
 
 
 	// CONSTRUCTOR:
@@ -137,7 +137,8 @@ public class Venta extends Transaccion implements GestionDeFacturas<Venta>{
 
 			
 			System.out.println("Se han insertado los datos correctamente");
-
+			
+	
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -173,7 +174,6 @@ public class Venta extends Transaccion implements GestionDeFacturas<Venta>{
 				
 				System.out.println("La venta seleccionada ha sido eliminada con éxito!");
 			} else {
-				System.out.println("No hay ventas disponibles!");
 				
 				String actualizarIDQuery1 = "ALTER TABLE transaccion AUTO_INCREMENT = 1";
 				String actualizarIDQuery2 = "ALTER TABLE ventas AUTO_INCREMENT = 1";
@@ -193,66 +193,73 @@ public class Venta extends Transaccion implements GestionDeFacturas<Venta>{
 
 
 	@Override
-	public void buscarFactura(int id) {
+	public void buscarFactura() {
+		
+		ArrayList<String> datos = mostrarVentas();
 		
 		try {
 			cn = conexion.conectar();
 			
-			String query = "SELECT transaccion.idTransaccion,"
-					+ "transaccion.fechaDeTransaccion,"
-					+ "transaccion.medioDePago,"
-					+ "transaccion.montoTotal,"
-					+ "ventas.idVentas,"
-					+ "ventas.empleado_id,"
-					+ "ventas.transaccion_id "
-					+ "FROM transaccion "
-					+ "INNER JOIN ventas "
-					+ "ON transaccion.idTransaccion = ventas.transaccion_id "
-					+ "INNER JOIN empleado "
-					+ "ON ventas.empleado_id = empleado.idEmpleado "
-					+ "WHERE transaccion.idTransaccion = " + id;
+			if(datos.isEmpty() == false) {
+				System.out.println("Ingrese el id de la venta que desea buscar: ");
+				int id = sc.nextInt();
+				
+				String query = "SELECT transaccion.idTransaccion,"
+						+ "transaccion.fechaDeTransaccion,"
+						+ "transaccion.medioDePago,"
+						+ "transaccion.montoTotal,"
+						+ "ventas.idVentas,"
+						+ "ventas.empleado_id,"
+						+ "ventas.transaccion_id "
+						+ "FROM transaccion "
+						+ "INNER JOIN ventas "
+						+ "ON transaccion.idTransaccion = ventas.transaccion_id "
+						+ "INNER JOIN empleado "
+						+ "ON ventas.empleado_id = empleado.idEmpleado "
+						+ "WHERE transaccion.idTransaccion = " + id;
 
-			ps = cn.prepareStatement(query);
-			ps.executeQuery();
-			
-			rs = ps.executeQuery(query);
-			/* Obtenemos los datos desde la DB y los almacenamos en sus correspondientes variables.*/
-			while(rs.next()) {
-				idTransaccion = rs.getInt("idTransaccion");
-				fechaDeTransaccion = rs.getDate("fechaDeTransaccion");
-				idVentas = rs.getInt("idVentas");
-				idEmpleado = rs.getInt("empleado_id");
-				montoTotal = rs.getFloat("montoTotal");
-				medioDePago = rs.getString("medioDePago");
-			}
-			
-			System.out.println("Datos de la transaccion:\n" 
-			+ "ID transaccion: " + idTransaccion + "\n" 
-			+ "ID venta: " + idVentas + "\n" 
-			+ "ID empleado: " + idEmpleado + "\n" 
-			+ "Monto total: " + montoTotal + "\n" 
-			+ "Medio de pago: " + medioDePago + "\n" 
-			+ "Fecha de transaccion: " + fechaDeTransaccion);
+				ps = cn.prepareStatement(query);
+				ps.executeQuery();
+				
+				rs = ps.executeQuery(query);
+				/* Obtenemos los datos desde la DB y los almacenamos en sus correspondientes variables.*/
+				while(rs.next()) {
+					idTransaccion = rs.getInt("idTransaccion");
+					fechaDeTransaccion = rs.getDate("fechaDeTransaccion");
+					idVentas = rs.getInt("idVentas");
+					idEmpleado = rs.getInt("empleado_id");
+					montoTotal = rs.getFloat("montoTotal");
+					medioDePago = rs.getString("medioDePago");
+				}
+				
+				System.out.println("Datos de la transaccion:\n" 
+				+ "ID transaccion: " + idTransaccion + "\n" 
+				+ "ID venta: " + idVentas + "\n" 
+				+ "ID empleado: " + idEmpleado + "\n" 
+				+ "Monto total: " + montoTotal + "\n" 
+				+ "Medio de pago: " + medioDePago + "\n" 
+				+ "Fecha de transaccion: " + fechaDeTransaccion);
+				
+			} 
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		
+	
 		
 	}
 	
-	/* Método axuliar para mostrarVentas (se puede utilizar sólo o reutilizar en los métodos en donde se precise)*/
+	/* Método axuliar para mostrarVentas*/
 	public ArrayList<String> mostrarVentas() {
-		/* Creo un ArrayList en donde se registrarán todos los Gastos existentes en la DB. */
+		/* Creo un ArrayList en donde se registrarán todos las Ventas existentes en la DB. */
 		ArrayList<String>datos = new ArrayList<>();
 		
 		try {
 			/* MOSTRAR DATOS */
-			
 			cn = conexion.conectar();
-
 			
-			/* Llamo a los datos de los Gastos.*/
+			/* Llamo a los datos de las Ventas.*/
 			String query1 = "SELECT transaccion.idTransaccion,"
 					+ "transaccion.fechaDeTransaccion,"
 					+ "transaccion.medioDePago,"
@@ -322,22 +329,25 @@ public class Venta extends Transaccion implements GestionDeFacturas<Venta>{
 				
 				/* Inserto en el ArrayList los datos que se obtuvieron de la base de datos. */
 					datos.add(cadenaDeDatos);
-				
-			}
+					
+					}
 			
-			/* Muestro en pantalla los datos obtenidos desde la base de datos. */
-			System.out.println("Ventas registradas en el sistema: ");
-			for (String dato : datos) {
-				System.out.println(dato);
-			}
+				if(datos.isEmpty() == false) {
+					/* Muestro en pantalla los datos obtenidos desde la base de datos. */
+					System.out.println("Ventas registradas en el sistema: ");
+					
+					for (String dato : datos) {
+						System.out.println(dato);
+					}
+				} else {
+					System.out.println("No hay ventas registradas en el sistema!");
+				}
 
+				
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return datos;
-		
+		return datos;	
 	}
-	
-	
-	
+
 }

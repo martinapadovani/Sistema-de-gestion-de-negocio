@@ -324,16 +324,11 @@ public class Main {
 					  
 					  break;
 				  case 2:
-					  ejecutarMetodosVenta.mostrarVentas();
-					  
-					  System.out.println("Ingrese el ID de la transaccion que desea ver: ");
-					  int id = scanner.nextInt();
-					  
-					  ejecutarMetodosVenta.buscarFactura(id);
+						  
+					  ejecutarMetodosVenta.buscarFactura();  
 					  
 					  break;
 				  case 3:
-					  int idEmpleado = 0;
 					  System.out.println("Ingrese los datos de la venta:");
 
 					  ejecutarMetodosVenta.generarFactura(); 
@@ -376,7 +371,7 @@ public class Main {
 					  System.out.println("Ingrese el ID del gasto que desea ver: ");
 					  int id = scanner.nextInt();
 					  
-					  ejecutarMetodosGastos.buscarFactura(id);
+					  ejecutarMetodosGastos.buscarFactura();
 					  
 					  break;
 				  case 3:

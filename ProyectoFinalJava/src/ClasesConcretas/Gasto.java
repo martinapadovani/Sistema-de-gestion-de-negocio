@@ -126,10 +126,13 @@ public class Gasto extends Transaccion implements GestionDeFacturas<Gasto>{
 	}
 	
 	@Override 
-	public void buscarFactura(int id) {		
+	public void buscarFactura() {		
 		try {
 			
 			cn = conexion.conectar();
+			
+			System.out.println("Ingrese el id del gasto que desea ver: ");
+			int id = sc.nextInt();
 			
 			/* Con el siguiente QUERY llamamos a la tabla de transaccion y la tabla de gastos correspondiente al id ingresado. El id ingresado será el id
 			 * perteneciente a la transaccion, el cual a su vez es el "transaccion_id" correspondiente al gasto. */

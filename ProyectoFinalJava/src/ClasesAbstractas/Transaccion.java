@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 import ConexionDB.Conexion;
 import Interfaces.GestionDeFacturas;
@@ -89,6 +90,8 @@ public abstract class Transaccion{
 	public void setMontoTotal(int montoTotal) {
 		this.montoTotal = montoTotal;
 	}
+
+	
 
 	
 	
