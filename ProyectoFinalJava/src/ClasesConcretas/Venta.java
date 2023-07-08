@@ -86,14 +86,17 @@ public class Venta extends Transaccion implements GestionDeFacturas<Venta>{
 			// Establecemos conexion con la base de datos.
 			cn = conexion.conectar();
 			
+			
 			/* Pasamos la fecha que se registro al momento de instanciar el objeto a uno de tipo Date 
 			 * para que se pueda registrar en la DB. */
 			LocalDate fecha = LocalDate.now();
 			Date fechaSQL = Date.valueOf(fecha);
 			Empleado ejecutarMetodosEmpleado = new Empleado();
-
 			
-			System.out.println("Seleccione el empleado que realizó la venta: ");
+			System.out.println("Ingrese los datos de la venta:");
+			
+			System.out.println("Seleccione el ID del empleado que realizó la venta: ");
+			System.out.println("Empleados registrados: ");
 			ejecutarMetodosEmpleado.Ver();
 			idEmpleado = sc.nextInt();
 			
@@ -173,17 +176,19 @@ public class Venta extends Transaccion implements GestionDeFacturas<Venta>{
 				ps.executeUpdate();
 				
 				System.out.println("La venta seleccionada ha sido eliminada con éxito!");
-			} else {
 				
-				String actualizarIDQuery1 = "ALTER TABLE transaccion AUTO_INCREMENT = 1";
-				String actualizarIDQuery2 = "ALTER TABLE ventas AUTO_INCREMENT = 1";
-				
-				ps = cn.prepareStatement(actualizarIDQuery1);
-				ps.executeUpdate();
-				ps = cn.prepareStatement(actualizarIDQuery2);
-				ps.executeUpdate();
-			}
-			
+				if(datos.isEmpty()) {
+					datos.clear();
+					
+					String actualizarIDQuery1 = "ALTER TABLE transaccion AUTO_INCREMENT = 1";
+					String actualizarIDQuery2 = "ALTER TABLE gastos AUTO_INCREMENT = 1";
+					
+					ps = cn.prepareStatement(actualizarIDQuery1);
+					ps.executeUpdate();
+					ps = cn.prepareStatement(actualizarIDQuery2);
+					ps.executeUpdate();
+				}
+			}	
 			
 		} catch(SQLException e) {
 			e.printStackTrace();
@@ -232,7 +237,7 @@ public class Venta extends Transaccion implements GestionDeFacturas<Venta>{
 					medioDePago = rs.getString("medioDePago");
 				}
 				
-				System.out.println("Datos de la transaccion:\n" 
+				System.out.println("Datos de la venta:\n" 
 				+ "ID transaccion: " + idTransaccion + "\n" 
 				+ "ID venta: " + idVentas + "\n" 
 				+ "ID empleado: " + idEmpleado + "\n" 
@@ -250,9 +255,9 @@ public class Venta extends Transaccion implements GestionDeFacturas<Venta>{
 		
 	}
 	
-	/* Método axuliar para mostrarVentas*/
+	/* Método para mostrar las ventas en el sistema. */
 	public ArrayList<String> mostrarVentas() {
-		/* Creo un ArrayList en donde se registrarán todos las Ventas existentes en la DB. */
+		/* Creo un ArrayList en donde se registrarán todos las Ventas existentes en la DB, para luego reutilizarlos. */
 		ArrayList<String>datos = new ArrayList<>();
 		
 		try {
@@ -333,7 +338,7 @@ public class Venta extends Transaccion implements GestionDeFacturas<Venta>{
 					}
 			
 				if(datos.isEmpty() == false) {
-					/* Muestro en pantalla los datos obtenidos desde la base de datos. */
+					/* Si hay datos disponibles en la DB, muestro en pantalla los datos obtenidos.*/
 					System.out.println("Ventas registradas en el sistema: ");
 					
 					for (String dato : datos) {
@@ -341,6 +346,16 @@ public class Venta extends Transaccion implements GestionDeFacturas<Venta>{
 					}
 				} else {
 					System.out.println("No hay ventas registradas en el sistema!");
+					
+					datos.clear();
+										
+					String actualizarIDQuery1 = "ALTER TABLE transaccion AUTO_INCREMENT = 1";
+					String actualizarIDQuery2 = "ALTER TABLE gastos AUTO_INCREMENT = 1";
+					
+					ps = cn.prepareStatement(actualizarIDQuery1);
+					ps.executeUpdate();
+					ps = cn.prepareStatement(actualizarIDQuery2);
+					ps.executeUpdate();
 				}
 
 				

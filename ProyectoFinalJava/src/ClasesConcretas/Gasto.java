@@ -84,6 +84,7 @@ public class Gasto extends Transaccion implements GestionDeFacturas<Gasto>{
 			medioDePago = sc.nextLine();
 			System.out.println("Ingrese el monto total: ");
 			montoTotal = sc.nextFloat();
+			sc.nextLine();
 			System.out.println("Ingrese el destino: ");
 			destino = sc.nextLine();
 
@@ -131,6 +132,11 @@ public class Gasto extends Transaccion implements GestionDeFacturas<Gasto>{
 			
 			cn = conexion.conectar();
 			
+			/* Obtengo el ArrayList que retorna el método mostrarGastos, para comprobar si tiene contenido o no. */
+			ArrayList<String> datos = mostrarGastos();
+
+			
+			if(datos.isEmpty() == false) {
 			System.out.println("Ingrese el id del gasto que desea ver: ");
 			int id = sc.nextInt();
 			
@@ -167,7 +173,7 @@ public class Gasto extends Transaccion implements GestionDeFacturas<Gasto>{
 					+ ", medio de pago= " + medioDePago 
 					+ ", monto total= " + montoTotal 
 					+ ", destino= " + destino + "]");
-			
+			}
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -175,7 +181,7 @@ public class Gasto extends Transaccion implements GestionDeFacturas<Gasto>{
 		
 	}
 	
-	/* Método axuliar para mostrarGastos (se puede utilizar sólo o reutilizar en los métodos en donde se precise)*/
+	/* Método axuliar para mostrar Gastos. */
 	public ArrayList<String> mostrarGastos() {
 		/* Creo un ArrayList en donde se registrarán todos los Gastos existentes en la DB. */
 		ArrayList<String>datos = new ArrayList<>();
@@ -223,9 +229,26 @@ public class Gasto extends Transaccion implements GestionDeFacturas<Gasto>{
 			}
 			
 			/* Muestro en pantalla los datos obtenidos desde la base de datos. */
-			System.out.println("Gastos registrados en el sistema: ");
-			for (String dato : datos) {
-				System.out.println(dato);
+			if(datos.isEmpty() == false) {
+				System.out.println("Gastos registrados en el sistema: ");
+				for (String dato : datos) {
+					System.out.println(dato);
+				}
+			} else {
+				
+				datos.clear();
+				
+				System.out.println("No hay gastos registrados en el sistema!");
+				
+				String actualizarIDQuery1 = "ALTER TABLE transaccion AUTO_INCREMENT = 1";
+				String actualizarIDQuery2 = "ALTER TABLE gastos AUTO_INCREMENT = 1";
+				
+				ps = cn.prepareStatement(actualizarIDQuery1);
+				ps.executeUpdate();
+				ps = cn.prepareStatement(actualizarIDQuery2);
+				ps.executeUpdate();
+				
+				
 			}
 
 		} catch (SQLException e) {
@@ -270,13 +293,26 @@ public class Gasto extends Transaccion implements GestionDeFacturas<Gasto>{
 				
 				System.out.println("El gasto seleccionado ha sido eliminada con éxito!");
 				
-			} else {
-				System.out.println("No hay gatos disponibles.");
-				
 				/* Si no hay ningún dato dentro de la base de datos, lo que hacen los siguientes QUERIES es
-				 * actualizar la el incremento del ID. Sin esto, los id's de los siguientes registros empezarán
-				 * con después del último id borrado. Ahora, los id's, al no tener contenido la tabla, comenzarán 
+				 * actualizar el incremento del ID. Sin esto, los id's de los siguientes registros empezarán
+				 * con el número siguiente al último id borrado. Ahora, los id's, al no tener contenido la tabla, comenzarán 
 				 * su auto-incremento desde cero nuevamente. */
+
+				if(datos.isEmpty()) {
+					datos.clear();
+					
+					String actualizarIDQuery1 = "ALTER TABLE transaccion AUTO_INCREMENT = 1";
+					String actualizarIDQuery2 = "ALTER TABLE gastos AUTO_INCREMENT = 1";
+					
+					ps = cn.prepareStatement(actualizarIDQuery1);
+					ps.executeUpdate();
+					ps = cn.prepareStatement(actualizarIDQuery2);
+					ps.executeUpdate();
+				}
+	
+				
+			} else {
+				
 				String actualizarIDQuery1 = "ALTER TABLE transaccion AUTO_INCREMENT = 1";
 				String actualizarIDQuery2 = "ALTER TABLE gastos AUTO_INCREMENT = 1";
 				

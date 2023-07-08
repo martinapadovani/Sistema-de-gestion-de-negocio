@@ -22,13 +22,15 @@ public class Main {
 		AtomicBoolean salir = new AtomicBoolean(false);
 	/*La clase AtomicBoolean proporciona métodos para manipular el valor booleano de manera mutable*/
 		
+		AtomicBoolean volverHaciaAtras = new AtomicBoolean(false);
+	/*AtomicBoolean bandera para volver solamente una sección hacia atrás. */
+		
 		while (!salir.get()) {	
 			System.out.println("Bienvenido! Ingrese el sector al que desea acceder:");
 			System.out.println("1. Empleados");
 			System.out.println("2. Proveedores	");
 			System.out.println("3. Productos");
-			System.out.println("4. Ventas");
-			System.out.println("5. Gastos");
+			System.out.println("4. Transacciones");
 			System.out.println("0. Salir");
 			
 			int sector = scanner.nextInt(); 
@@ -339,94 +341,176 @@ public class Main {
 			 }
 			  volverAlMenu(salir);
 			   break;
-			
-			case 4://VENTAS
+			  
+			case 4://TRANSACCIONES 
+				
+				/* El while(!volverHaciaAtras.get()) indica que se deben ejecutar los CASES de TRANSACCION, GASTOS Y VENTAS hasta que el valor 
+				 * de "volverHaciaAtras" cambie.*/
+				/* En caso de que se elija la opcion 4 (desde el menú principal), se resetea el valor de "volverHaciaAtras" ya que nunca cambiaría si es que 
+				 * no se sale del ciclo principal "while(!salir.get()), como es en este caso.*/
+				volverHaciaAtras.set(false);
+				while(!volverHaciaAtras.get()) {
 
-				  System.out.println("Bienvenido al sector de ventas!");	
-				  System.out.println("Seleccione según corresponda:");
-				  System.out.println("1. Ver ventas");
-				  System.out.println("2. Buscar ventas");
-				  System.out.println("3. Agregar nueva venta");
-				  System.out.println("4. Eliminar venta del sistema");
-				  
-				  scanner.nextLine();
-				  
-				  Empleado ejecutarMetodosEmpleado = new Empleado();
-				  ArrayList<ProductoVentas> rellenarObjetoVenta = null;
-				  Venta ejecutarMetodosVenta = new Venta(null, 0, ejecutarMetodosEmpleado, rellenarObjetoVenta);
-				  
-				  int opcionVenta = scanner.nextInt();
-				  
-				  switch(opcionVenta) {
-				  case 1:
+				System.out.println("Qué acción desea realizar?");
+				System.out.println("1. Ver todas las transacciones.");
+				System.out.println("2. Acceder a sección ventas.");
+				System.out.println("3. Acceder a sección gastos.");
+				System.out.println("0. Volver al menú principal. ");
+				System.out.print("Su opción: ");
+				int opcion = scanner.nextInt();
+				
+				Transaccion ejecutarMetodosTransaccion = new Transaccion();
+				switch(opcion) {
+				case 1://VER TODAS LAS TRANSACCIONES REGISTRADAS.
+					
+					ejecutarMetodosTransaccion.mostrarTransacciones();
+					
+					System.out.println("Que accion desea realizar?");
+					System.out.println("1. Volver una sección.");
+					System.out.println("0. Volver al menú principal. ");
+					System.out.print("Su opción: ");
+					int opcionTransaccion = scanner.nextInt();
+	
+					switch(opcionTransaccion) {
+					case 1:
+						volverUnaSeccionAtras(volverHaciaAtras);
+						break;
+					case 0: 
+						volverHaciaAtras.set(true);
+						break;
+					default:
+						System.out.println("Opcion inválida. Vuelva a intentarlo!");
+						volverHaciaAtras.set(false);
+						break;	
+					}
+					
+					break;
+					
+				case 2://VENTAS
+					  System.out.println("Bienvenido al sector de ventas!");	
+					  System.out.println("Seleccione según corresponda:");
+					  System.out.println("1. Ver ventas");
+					  System.out.println("2. Buscar ventas");
+					  System.out.println("3. Agregar nueva venta");
+					  System.out.println("4. Eliminar venta del sistema");
+					  System.out.println("5. Volver una sección atrás");
+					  System.out.println("0. Volver al menú principal");
 					  
-					  ejecutarMetodosVenta.mostrarVentas();
+					  scanner.nextLine();
 					  
-					  break;
-				  case 2:
+					  Empleado ejecutarMetodosEmpleado = new Empleado();
+					  ArrayList<ProductoVentas> rellenarObjetoVenta = null;
+					  Venta ejecutarMetodosVenta = new Venta(null, 0, ejecutarMetodosEmpleado, rellenarObjetoVenta);
+					  
+					  System.out.print("Su opción: ");
+					  int opcionVenta = scanner.nextInt();
+					  
+					  switch(opcionVenta) {
+					  case 1:
 						  
-					  ejecutarMetodosVenta.buscarFactura();  
-					  
-					  break;
-				  case 3:
-					  System.out.println("Ingrese los datos de la venta:");
+						  ejecutarMetodosVenta.mostrarVentas();
+						  
+						  break;
+					  case 2:
+							  
+						  ejecutarMetodosVenta.buscarFactura();  
+						  
+						  break;
+					  case 3:
 
-					  ejecutarMetodosVenta.generarFactura(); 
+						  ejecutarMetodosVenta.generarFactura(); 
 
-					  break;
-					  
-				  case 4:
-					  
-					  ejecutarMetodosVenta.eliminarFactura();
-					  
-					  break;
-				  }
-				  
-				
+						  break;
+						  
+					  case 4:
+						  
+						  ejecutarMetodosVenta.eliminarFactura();
+						  
+						  break;
+					  case 5:
+						  
+						  volverUnaSeccionAtras(volverHaciaAtras);
+
+						  break;
+					  case 0:
+							volverHaciaAtras.set(true);
+						  break;
+
+					  default:
+						  System.out.println("Opcion inválida. Vuelva a intentarlo!");
+						  break;
+					  }
+					break;
+					
+				case 3://GASTOS
+					
+						  System.out.println("Bienvenido al sector de gastos!");	
+						  System.out.println("Seleccione según corresponda:");
+						  System.out.println("1. Ver gastos");
+						  System.out.println("2. Buscar gastos");
+						  System.out.println("3. Agregar nueva gasto");
+						  System.out.println("4. Eliminar gasto del sistema");
+						  System.out.println("5. Volver una sección atrás");
+						  System.out.println("0. Volver al menú principal");
+						  
+						  
+						  scanner.nextLine();
+						  
+						  Gasto ejecutarMetodosGastos = new Gasto(null, 0, null);
+						  
+						  System.out.print("Su opción: ");
+						  int opcionGastos = scanner.nextInt();
+						
+						  switch(opcionGastos) {
+						  case 1:
+							  
+							  ejecutarMetodosGastos.mostrarGastos();
+							  	
+							  break;
+						  case 2:
+							  
+							  ejecutarMetodosGastos.buscarFactura();
+							  
+							  break;
+						  case 3:
+							  
+							  ejecutarMetodosGastos.generarFactura();
+							  
+							  break;
+						  case 4:
+							  
+							  ejecutarMetodosGastos.eliminarFactura();
+							  
+							  break;
+							  
+						  case 5:
+							  
+							  volverUnaSeccionAtras(volverHaciaAtras);
+							  
+							  break;
+							  
+						  case 0:
+								volverHaciaAtras.set(true);
+							  break;
+						default:
+							System.out.println("Opcion inválida. Vuelva a intentarlo!");
+							break;
+						  }		
+					break;
+				case 0:
+					/* En caso de elegir esta opción, cambiamos el valor del AtomicBoolean a true, por lo que se saldra del ciclo secundario
+					 * y se volverá al menú principal.*/
+					volverHaciaAtras.set(true);
+					break;
+					
+				default: 
+					System.out.println("Opcion inválida! Vuelva a intentarlo");
+					break;
+				}
+				}
+			
 				break;
-				
-			case 5://GASTOS
-				
-				  System.out.println("Bienvenido al sector de gastos!");	
-				  System.out.println("Seleccione según corresponda:");
-				  System.out.println("1. Ver gastos");
-				  System.out.println("2. Buscar gastos");
-				  System.out.println("3. Agregar nueva gasto");
-				  System.out.println("4. Eliminar gasto del sistema");
-				  
-				  scanner.nextLine();
-				  
-				  Gasto ejecutarMetodosGastos = new Gasto(null, 0, null);
-				  
-				  int opcionGastos = scanner.nextInt();
-				
-				  switch(opcionGastos) {
-				  case 1:
-					  
-					  	ejecutarMetodosGastos.mostrarGastos();
-					  	
-					  break;
-				  case 2:
-					  
-					  System.out.println("Ingrese el ID del gasto que desea ver: ");
-					  int id = scanner.nextInt();
-					  
-					  ejecutarMetodosGastos.buscarFactura();
-					  
-					  break;
-				  case 3:
-					  
-					  ejecutarMetodosGastos.generarFactura();
-					  
-					  break;
-				  case 4:
-					  
-					  ejecutarMetodosGastos.eliminarFactura();
-					  break;
-				  }
-				
-				break;
-				
+		
 			case 0: //Salir
 	
 				System.out.println("Hasta Pronto!");	
@@ -458,5 +542,9 @@ public class Main {
 			  salir.set(true);
 		  }
 	}
+		/* Como en la funcion volverAlMenu, utilizamos el AtomicBoolean con el mismo sentido.*/
+		public static void volverUnaSeccionAtras(AtomicBoolean volverHaciaAtras) {			
+			volverHaciaAtras.set(false);
+		}
 
 }
