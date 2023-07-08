@@ -24,6 +24,31 @@ public class Empleado extends Personas implements GestionDeDatos<Empleado>{
 	//METODOS
 	
 	public void calcularSalario(int id){	
+		
+		try{
+			cn = conexion.conectar();
+			
+			String query = "SELECT * FROM empleado WHERE  idEmpleado = ?";
+			
+			PreparedStatement declaracion  = cn.prepareStatement(query);
+			
+				declaracion.setInt(1, id);
+				ResultSet resultados = declaracion.executeQuery();
+				
+			if(resultados.next()) { //mientras haya datos por leer
+					System.out.println(
+							"ID: " + resultados.getInt("idEmpleado") + ". Horas mensuales: " +resultados.getInt("horasMensuales") + 
+							". Sueldo: " + resultados.getBigDecimal("sueldo") + ". Ventas mensuales: " + resultados.getBigDecimal("ventasMensuales") + 
+							". Turno: " + resultados.getString("turno") + ". Puesto: " +  resultados.getString("puesto") + 
+							". Activo: " +  resultados.getBoolean("activo") + ". Fecha de Inicio: " +  resultados.getDate("fechaDeInicio") +
+							". Id Persona: " +  resultados.getInt("persona_id"));
+			}else {
+				System.out.println("ID inválido! Vuelva a intentarlo.");
+			}
+			
+		} catch(SQLException e){
+			e.printStackTrace();
+		} 
 	}
 	
 	public void calcularDesempeño(int id){	
