@@ -12,13 +12,7 @@ import Interfaces.GestionDeDatos;
 
 public class Producto implements GestionDeDatos<Producto>{
 	
-	//ATRIBUTOS DE CLASE
-	private String nombreProducto;
-	private String categoriaProducto;
-	private int stockDisponible;
-	private Proveedor proveedorDelProducto;
-	private int precio;
-	private int id; 
+
 	
 	//ATRIBUTOS PARA CONEXION
 	Conexion conexion = new Conexion();
@@ -29,14 +23,8 @@ public class Producto implements GestionDeDatos<Producto>{
 
 	//CONSTRUCTOR
 
-	public Producto(int id, String nombreProducto, String categoriaProducto, int stockDisponible,
-			Proveedor proveedorDelProducto, int precio) {
-		this.id = id;
-		this.nombreProducto = nombreProducto;
-		this.categoriaProducto = categoriaProducto;
-		this.stockDisponible = stockDisponible;
-		this.proveedorDelProducto = proveedorDelProducto;
-		this.precio = precio;
+	public Producto() {
+
 	}
 	
 	//METODOS
@@ -103,11 +91,13 @@ public class Producto implements GestionDeDatos<Producto>{
 				declaracion.setInt(1, id);
 				ResultSet resultados = declaracion.executeQuery();
 				
-			while(resultados.next()) { //mientras haya datos por leer
+			if(resultados.next()) { //mientras haya datos por leer
 					System.out.println(
 							"ID: " + resultados.getInt("idProducto") + ". Nombre: " +resultados.getString("nombreProducto") + 
 							". Categoria: " + resultados.getString("categoria") + ". Stock: " + resultados.getInt("stockDisponible") + 
 							". Precio: " + resultados.getInt("precioxUnidad") + ". Id Proveedor: " +  resultados.getInt("proveedor_id"));
+			}else {
+				System.out.println("ID inválido! Vuelva a intentarlo.");
 			}
 			
 		} catch(SQLException e){
@@ -119,61 +109,64 @@ public class Producto implements GestionDeDatos<Producto>{
 	@Override
 	public void Actualizar(int id) {
 		
-		System.out.println("Por favor, ingrese los datos correspondientes");
-		System.out.println("Nombre: ");
-		String nombreProducto = (scanner.nextLine()).trim().replace(" ", "_");
-		// .trim para eliminar los espacios en blanco al principio y al final de un String
-		//.replace, para reemplazar los espacios blancos por _, y que no rechace con un error el ingreso de espacios
-		System.out.println("Categoria: ");
-		String categoria = (scanner.nextLine()).trim().replace(" ", "_") ;
-		System.out.println("Stock: ");
-		int stockDisponible = scanner.nextInt();
-		System.out.println("Precio (x unidad): ");
-		int precioxUnidad = scanner.nextInt();
-		System.out.println("ID del Proveedor: ");
-		int proveedor_id = scanner.nextInt();
-		
 		try{
 			cn = conexion.conectar();
 			
-			//ACTUALIZACION
+			String querySelect = "SELECT * FROM producto WHERE  idProducto = ?";
 			
-			String queryUpdate = "UPDATE producto SET nombreProducto = ?, categoria = ?, stockDisponible = ?, precioxUnidad = ?, proveedor_id = ? WHERE  idProducto = ?";
-			
-			PreparedStatement declaracionUpdate  = cn.prepareStatement(queryUpdate);
+			PreparedStatement declaracionSelect  = cn.prepareStatement(querySelect);
 		
-			declaracionUpdate.setString(1, nombreProducto);
-			declaracionUpdate.setString(2, categoria);
-			declaracionUpdate.setInt(3, stockDisponible);
-			declaracionUpdate.setInt(4, precioxUnidad);
-			declaracionUpdate.setInt(5, proveedor_id);
+			declaracionSelect.setInt(1, id);
+			ResultSet resultados = declaracionSelect.executeQuery();
 			
-			declaracionUpdate.setInt(6, id);
+			if(resultados.next()) {
 				
-			declaracionUpdate.executeUpdate();
+				System.out.println("Por favor, ingrese los datos correspondientes");
+				System.out.println("Nombre: ");
+				String nombreProducto = (scanner.nextLine()).trim().replace(" ", "_");
+				// .trim para eliminar los espacios en blanco al principio y al final de un String
+				//.replace, para reemplazar los espacios blancos por _, y que no rechace con un error el ingreso de espacios
+				System.out.println("Categoria: ");
+				String categoria = (scanner.nextLine()).trim().replace(" ", "_") ;
+				System.out.println("Stock: ");
+				int stockDisponible = scanner.nextInt();
+				System.out.println("Precio (x unidad): ");
+				int precioxUnidad = scanner.nextInt();
+				System.out.println("ID del Proveedor: ");
+				int proveedor_id = scanner.nextInt();
+				
+				//ACTUALIZACION
+				
+				String queryUpdate = "UPDATE producto SET nombreProducto = ?, categoria = ?, stockDisponible = ?, precioxUnidad = ?, proveedor_id = ? WHERE  idProducto = ?";
+				
+				PreparedStatement declaracionUpdate  = cn.prepareStatement(queryUpdate);
 			
-			//VER DATOS
+				declaracionUpdate.setString(1, nombreProducto);
+				declaracionUpdate.setString(2, categoria);
+				declaracionUpdate.setInt(3, stockDisponible);
+				declaracionUpdate.setInt(4, precioxUnidad);
+				declaracionUpdate.setInt(5, proveedor_id);
 				
-				String querySelect = "SELECT * FROM producto WHERE  idProducto = ?";
+				declaracionUpdate.setInt(6, id);
+					
+				declaracionUpdate.executeUpdate();
 				
-				PreparedStatement declaracionSelect  = cn.prepareStatement(querySelect);
-			
-				declaracionSelect.setInt(1, id);
-				ResultSet resultados = declaracionSelect.executeQuery();
+				//VER DATOS
 				
-			while(resultados.next()) { //mientras haya datos por leer
-				System.out.println("Proceso exitoso! Datos actualizados: ");
-					System.out.println(
-							"ID: " + resultados.getInt("idProducto") + ". Nombre: " +resultados.getString("nombreProducto") + 
-							". Categoria: " + resultados.getString("categoria") + ". Stock: " + resultados.getInt("stockDisponible") + 
-							". Precio: " + resultados.getInt("precioxUnidad") + ". Id Proveedor: " +  resultados.getInt("proveedor_id"));
-			}
-			
+				while(resultados.next()) { //mientras haya datos por leer
+					System.out.println("Proceso exitoso! Datos actualizados: ");
+						System.out.println(
+								"ID: " + resultados.getInt("idProducto") + ". Nombre: " +resultados.getString("nombreProducto") + 
+								". Categoria: " + resultados.getString("categoria") + ". Stock: " + resultados.getInt("stockDisponible") + 
+								". Precio: " + resultados.getInt("precioxUnidad") + ". Id Proveedor: " +  resultados.getInt("proveedor_id"));
+				}
+			}else {
+				System.out.println("ID inválido! Vuelva a intentarlo.");
+			}	
 		} catch(SQLException e){
 			e.printStackTrace();
 		} 
 	}
-	
 	
 	@Override
 	public void Agregar() {
@@ -218,62 +211,54 @@ public class Producto implements GestionDeDatos<Producto>{
 
 	@Override
 	public void Eliminar(int id){
+		
+		try{
+			cn = conexion.conectar();
+			
+			String querySelect = "SELECT * FROM producto WHERE  idProducto = ?";
+			
+			PreparedStatement declaracionSelect  = cn.prepareStatement(querySelect);
+		
+			declaracionSelect.setInt(1, id);
+			ResultSet resultados = declaracionSelect.executeQuery();
+				
+			if(resultados.next()) { //mientras haya datos por leer
+				System.out.println("Seguro que desea eliminar el producto: ");
+					System.out.println(
+							"ID: " + resultados.getInt("idProducto") + ". Nombre: " +resultados.getString("nombreProducto") + 
+							". Categoria: " + resultados.getString("categoria") + ". Stock: " + resultados.getInt("stockDisponible") + 
+							". Precio: " + resultados.getInt("precioxUnidad") + ". Id Proveedor: " +  resultados.getInt("proveedor_id"));
+					System.out.println("Ingrese si/no segun desee.");
+					
+					String confirmacion = scanner.nextLine();
+					
+					 if(confirmacion.equalsIgnoreCase("si")) {
+						 
+						 try{
+							 cn = conexion.conectar();
+						
+							 String queryDelete = "DELETE FROM producto WHERE idProducto = ?";
+							 //excluyo el id ya que es autoincremental
+						
+								PreparedStatement declaracionDelete  = cn.prepareStatement(queryDelete);
+								
+								declaracionDelete.setInt(1, id);
+								declaracionDelete.executeUpdate();
+							
+							 	System.out.println("Producto eliminado del sistema!");
+						
+						 } catch(SQLException e){
+							 e.printStackTrace();
+						 }
+						 
+					  }else {
+						  System.out.println("Perfecto! El producto no será eliminado");
+					  }
+			}else {
+				System.out.println("ID inválido! Vuelva a intentarlo.");
+			}
+		}catch(SQLException e){
+				e.printStackTrace();
+			} 
 	}
-	
-	
-	
-	//TO STRING
-	@Override
-	public String toString() {
-		return "Producto [nombreProducto=" + nombreProducto + ", categoríaProducto=" + categoriaProducto
-				+ ", stockDisponible=" + stockDisponible + ", proveedorDelProducto=" + proveedorDelProducto.getNombreProveedor()
-				+ ", precio=" + precio + "]";
-	}
-
-	//GETTERS-SETTERS
-	
-	public String getNombreProducto() {
-		return nombreProducto;
-	}
-	
-	public void setNombreProducto(String nombreProducto) {
-		this.nombreProducto = nombreProducto;
-	}
-	
-	public String getCategoríaProducto() {
-		return categoriaProducto;
-	}
-	
-	public void setCategoríaProducto(String categoriaProducto) {
-		this.categoriaProducto = categoriaProducto;
-	}
-	
-	public int getStockDisponible() {
-		return stockDisponible;
-	}
-	
-	public void setStockDisponible(int stockDisponible) {
-		this.stockDisponible = stockDisponible;
-	}
-	
-	public Proveedor getProveedorDelProducto() {
-		return proveedorDelProducto;
-	}
-	
-	public void setProveedorDelProducto(Proveedor proveedorDelProducto) {
-		this.proveedorDelProducto = proveedorDelProducto;
-	}
-	
-	public int getPrecio() {
-		return precio;
-	}
-	
-	public void setPrecio(int precio) {
-		this.precio = precio;
-	}
-
-
-
-
-
 }

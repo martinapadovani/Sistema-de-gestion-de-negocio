@@ -6,7 +6,7 @@ public class ProductoVentas extends Producto{
 
 	public ProductoVentas(int id, String nombreProducto, String categoriaProducto, int stockDisponible,
 			Proveedor proveedorDelProducto, int precio, int cantidad) {
-		super(id, nombreProducto, categoriaProducto, stockDisponible, proveedorDelProducto, precio);
+		super();
 		this.cantidad = cantidad;
 	}
 
