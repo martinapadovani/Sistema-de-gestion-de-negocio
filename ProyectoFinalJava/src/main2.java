@@ -325,13 +325,13 @@ public class main2 {
 				  case 6:
 					  
 					  System.out.println("Elegiste la opcion de ver stock!");
-					  ejecutarMetodosProductos.verStock(ejecutarMetodosProductos);
+					  //ejecutarMetodosProductos.verStock(ejecutarMetodosProductos);
 					  
 					  break;
 				  case 7:
 					  
 					  System.out.println("Elegiste la opcion de calcular stock!");
-					  ejecutarMetodosProductos.calcularStock(ejecutarMetodosProductos);
+					  //ejecutarMetodosProductos.calcularStock(ejecutarMetodosProductos);
 					  
 					  break;
 					  
@@ -356,7 +356,7 @@ public class main2 {
 				  
 				  Empleado ejecutarMetodosEmpleado = new Empleado();
 				  ArrayList<ProductoVentas> rellenarObjetoVenta = null;
-				  Venta ejecutarMetodosVenta = new Venta(null, 0, ejecutarMetodosEmpleado, rellenarObjetoVenta);
+				  Venta ejecutarMetodosVenta = new Venta(null, 0, ejecutarMetodosEmpleado, null);
 				  
 				  int opcionVenta = scanner.nextInt();
 				  

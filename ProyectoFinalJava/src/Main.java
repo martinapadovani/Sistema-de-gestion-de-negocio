@@ -413,6 +413,7 @@ public class Main {
 					System.out.println("1. Volver una sección.");
 					System.out.println("0. Volver al menú principal. ");
 					System.out.print("Su opción: ");
+					
 					int opcionTransaccion = scanner.nextInt();
 	
 					switch(opcionTransaccion) {
@@ -434,17 +435,17 @@ public class Main {
 					  System.out.println("Bienvenido al sector de ventas!");	
 					  System.out.println("Seleccione según corresponda:");
 					  System.out.println("1. Ver ventas");
-					  System.out.println("2. Buscar ventas");
-					  System.out.println("3. Agregar nueva venta");
-					  System.out.println("4. Eliminar venta del sistema");
-					  System.out.println("5. Volver una sección atrás");
+					  System.out.println("2. Ver productos enlazados a la venta.");
+					  System.out.println("3. Buscar ventas");
+					  System.out.println("4. Agregar nueva venta");
+					  System.out.println("5. Eliminar venta del sistema");
+					  System.out.println("6. Volver una sección atrás");
 					  System.out.println("0. Volver al menú principal");
 					  
 					  scanner.nextLine();
 					  
 					  Empleado ejecutarMetodosEmpleado = new Empleado();
-					  ArrayList<ProductoVentas> rellenarObjetoVenta = null;
-					  Venta ejecutarMetodosVenta = new Venta(null, 0, ejecutarMetodosEmpleado, rellenarObjetoVenta);
+					  Venta ejecutarMetodosVenta = new Venta(null, 0, ejecutarMetodosEmpleado, null);
 					  
 					  System.out.print("Su opción: ");
 					  int opcionVenta = scanner.nextInt();
@@ -455,30 +456,39 @@ public class Main {
 						  ejecutarMetodosVenta.mostrarVentas();
 						  
 						  break;
-					  case 2:
+						  
+					  case 2: 
+						  
+						  ejecutarMetodosVenta.mostrarProductosEnlazadosAUnaVenta();
+
+						  
+						  break;
+					  case 3:
 							  
 						  ejecutarMetodosVenta.buscarFactura();  
 						  
 						  break;
-					  case 3:
+					  case 4:
 
 						  ejecutarMetodosVenta.generarFactura(); 
 
 						  break;
 						  
-					  case 4:
+					  case 5:
 						  
 						  ejecutarMetodosVenta.eliminarFactura();
 						  
 						  break;
-					  case 5:
+					  case 6:
 						  
 						  volverUnaSeccionAtras(volverHaciaAtras);
 
 						  break;
+
 					  case 0:
 							volverHaciaAtras.set(true);
 						  break;
+
 
 					  default:
 						  System.out.println("Opcion inválida. Vuelva a intentarlo!");

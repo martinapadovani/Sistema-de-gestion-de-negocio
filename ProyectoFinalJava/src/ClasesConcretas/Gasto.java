@@ -276,7 +276,7 @@ public class Gasto extends Transaccion implements GestionDeFacturas<Gasto>{
 			/* BORRAR DATOS (esto se puede hacer en un método aparte en donde llamemos un método para mostrar los datos. */
 			
 			if(datos.isEmpty() == false) {
-				System.out.println("Seleccione la factura a eliminar por su ID: ");
+				System.out.println("Seleccione la factura a eliminar por su ID de transaccion: ");
 				idSeleccionador = sc.nextInt();
 				
 				/* Creamos dos QUERY, uno para borrar en primera instancia los datos contenidos en "gastos". En segunda instancia

@@ -1,5 +1,4 @@
 package ClasesConcretas;
-import ClasesAbstractas.*;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -7,7 +6,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import ClasesAbstractas.Transaccion;
 import ConexionDB.Conexion;
@@ -17,7 +19,7 @@ public class Venta extends Transaccion implements GestionDeFacturas<Venta>{
 
 	// ATRIBUTOS:
 	private Empleado empleado;
-	private ArrayList<ProductoVentas>productos;
+	ArrayList<String>productos = new ArrayList<>();
 	//ATRIBUTOS PARA LA CONEXIÓN: 
 	Conexion conexion = new Conexion();
 	private Connection cn = null;
@@ -39,11 +41,22 @@ public class Venta extends Transaccion implements GestionDeFacturas<Venta>{
 	int idPersona = 0;
 	String nombrePersona = null;
 	String apellidoPersona = null;
+	int producto = 0;
 
+	// Variables auxiliares para productosVentas:
+	int idProducto = 0;
+	String nombreProducto = null;
+	int stockDisponible = 0;
+	int precioxUnidad = 0;
+	AtomicBoolean flag = new AtomicBoolean(true);
+	int opcion = 0;
+	int idProductoAEnlazar = 0;
+	int ventaId = 0;
+	int productoIdEnlazado = 0;
 
 
 	// CONSTRUCTOR:
-	public Venta(String medioDePago, int montoTotal, Empleado empleado, ArrayList<ProductoVentas>productos){
+	public Venta(String medioDePago, int montoTotal, Empleado empleado, ArrayList<String>productos){
 		super(medioDePago, montoTotal);
 		this.empleado = empleado;
 		this.productos = productos;
@@ -69,12 +82,12 @@ public class Venta extends Transaccion implements GestionDeFacturas<Venta>{
 	}
 
 
-	public ArrayList<ProductoVentas> getProducto() {
+	public ArrayList<String> getProducto() {
 		return productos;
 	}
 
 
-	public void setProducto(ArrayList<ProductoVentas>productos) {
+	public void setProducto(ArrayList<String>productos) {
 		this.productos = productos;
 	}
 
@@ -137,6 +150,78 @@ public class Venta extends Transaccion implements GestionDeFacturas<Venta>{
 			ps.setInt(1, idEmpleado);
 			ps.setInt(2, idTransaccion);
 			ps.executeUpdate();
+			
+			
+			String query5 = "SELECT idVentas from ventas";
+			
+			int idVentas = 0;
+			rs = ps.executeQuery(query5);
+			while(rs.next()) {
+				idVentas = rs.getInt(1);
+			}
+			
+			/* Enlazar los productos */ 
+			
+			/* Primero, creamos llamado a la tabla de "producto" para obtener los datos que contiene.*/
+			System.out.println("Productos de la venta: ");
+			String queryProductos = "SELECT * FROM producto"; 
+			rs = ps.executeQuery(queryProductos);
+			
+			/* Creamos un nuevo array en donde se ingresaran los datos provenientes de la DB de forma local para 
+			 * poder mostrarlos más adelante. */
+			ArrayList<String>productos = new ArrayList<>();
+			
+			flag.set(true);
+			
+			while(flag.get()) {
+				
+			while(rs.next()) {
+				idProducto = rs.getInt("idProducto");
+				nombreProducto = rs.getString("nombreProducto");
+				stockDisponible = rs.getInt("stockDisponible");
+				precioxUnidad = rs.getInt("precioxUnidad");
+				
+				String agregarProductoALista = "[ID producto= " + idProducto 
+						+ ", nombre producto= " + nombreProducto 
+						+ ", stock disponible= " + stockDisponible 
+						+ ", precio X unidad= " + precioxUnidad;
+				
+				/* Insertamos los productos dentro de un ArrayList, para luego poder mostrarlos al usuario. */
+				productos.add(agregarProductoALista);
+			}
+			
+			/* Mostramos los productos disponibles con sus atributos, con la finalidad de que el usuario pueda elegir por id
+			 * los productos que el empleado desea agregar a la venta. */
+			for(String producto : productos) {
+				System.out.println(producto);
+			}
+			
+			/* Reseteamos el valor del AtomicBoolean para que el ciclo, en el próximo llamado que se haga, comience
+			 * correctamente. */
+		
+				
+				System.out.println("Seleccione el ID del producto que desea enlazar a la venta: ");
+				idProductoAEnlazar = sc.nextInt();
+				
+				String query6 = "INSERT INTO productoVenta(venta_id, producto_id) VALUES (?, ?)";
+				ps = cn.prepareStatement(query6);
+				ps.setInt(1, idVentas);
+				ps.setInt(2, idProductoAEnlazar);
+				ps.executeUpdate();
+				
+				System.out.println("Desea agregar otro producto a la venta?");
+				System.out.println("1. SI");
+				System.out.println("0. NO");
+				opcion = sc.nextInt();
+				
+				if(opcion == 1) {
+					flag.set(true);
+				} else if(opcion == 0) {
+					flag.set(false);
+				}
+				
+			}
+			
 
 			
 			System.out.println("Se han insertado los datos correctamente");
@@ -162,7 +247,7 @@ public class Venta extends Transaccion implements GestionDeFacturas<Venta>{
 			int idSeleccionador = 0;
 			
 			if(datos.isEmpty() == false) {
-				System.out.println("Seleccione la factura a eliminar por su ID:");
+				System.out.println("Seleccione la factura a eliminar por su ID de transaccion:");
 				System.out.print("Su opcion: ");
 				idSeleccionador = sc.nextInt();
 				
@@ -320,7 +405,8 @@ public class Venta extends Transaccion implements GestionDeFacturas<Venta>{
 						
 					}
 					
-				
+					
+					
 				/* Registro los datos en una variable de tipo String para despuyés insertarla en el ArrayList de tipo String.*/
 				String cadenaDeDatos = "[ID transaccion=" + idTransaccion 
 						+ ", ID venta= " + idVentas 
@@ -329,7 +415,8 @@ public class Venta extends Transaccion implements GestionDeFacturas<Venta>{
 						+ ", nombre completo= " + nombrePersona + " " + apellidoPersona
 						+ ", fecha de transaccion =" + fechaDeTransaccion 
 						+ ", medioDePago=" + medioDePago 
-						+ ", montoTotal=" + montoTotal;
+						+ ", montoTotal=" + montoTotal
+						+ ", idProducto= " + idProducto;
 						
 				
 				/* Inserto en el ArrayList los datos que se obtuvieron de la base de datos. */
@@ -363,6 +450,71 @@ public class Venta extends Transaccion implements GestionDeFacturas<Venta>{
 			e.printStackTrace();
 		}
 		return datos;	
+	}
+	
+	public void mostrarProductosEnlazadosAUnaVenta() {
+		try {
+			cn = conexion.conectar();
+			
+			ArrayList<String>datosProductoVenta = new ArrayList<>();
+			
+			/* Declaramos un HashMap, que es una estructura de datos que permite almacenar pares clave valor, donde cada
+			 * clave es única y se utiliza para acceder a su valor correspondiente de manera más eficiente. 
+			 * En este caso, se utiliza para asociar cada "ventaId" con una lista de productos enlazados a esa venta.
+			 * En este caso, Integer hace referencia a que la clave "ventaId" es de tipo Integer y el valor asociado será una lista
+			 * de enteros que contiene los "productoIdEnlazado".*/
+			HashMap<Integer, ArrayList<Integer>> productosPorVenta = new HashMap<>();
+			
+			
+			String query = "SELECT * FROM productoVenta";
+			
+			ps = cn.prepareStatement(query);
+			rs = ps.executeQuery(query);
+			
+			while(rs.next()) {
+				ventaId = rs.getInt("venta_id");
+				productoIdEnlazado = rs.getInt("producto_id");
+				
+				/* Primero verificamos si el "ventaId" actual ya está presente como una clave en el HashMap. Si no está presente
+				 * agregamos una nueva entrada al 'HashMap' con el 'ventaId' como clave y una nueva lista vacía como valor.
+				 * Luego, agregamos el 'productoIdEnlazado' a la lista correspondiente utilizando el método 'get()' y 'add()' */
+				if(!productosPorVenta.containsKey(ventaId)) {
+					productosPorVenta.put(ventaId, new ArrayList<>());
+				}
+				
+				productosPorVenta.get(ventaId).add(productoIdEnlazado);
+			}
+			
+			String datos = null;
+			
+			
+			/*  Cuando se utiliza el método entrySet() en un HashMap nos devuelve un conjunto de entradas(claves y valores) en el HashMap. Cada entrada
+			 * es representada por la interfaz 'Map.Entry<K, V>', donde 'K' es el tipo de dato de la clave y 'V' es el tipo de dato del valor asociado. 
+			 * Cada entrada puede ser accedida utilizando métodos como 'getKey()' para obtener la clave y 'getValue()' para obtener el valor asociado. 
+			 * 
+			 * En este caso, se utiliza el método 'entrySet()' para recorrer todas las entradas del 'HashMap' 'productosPorVenta' dentro del bucle 'for'. 
+			 * Al utilizar el bucle, en combinación con entrySet() se puede iterar sobre todas las entradas del 'HashMap' y acceder a la clave ('ventaId') 
+			 * y al valor ('ArrayList<Integer>' de productos enlazados) de cada entrada.*/
+			for(Map.Entry<Integer, ArrayList<Integer>> entry : productosPorVenta.entrySet()) {
+				int ventaId = entry.getKey();
+				ArrayList<Integer> productosEnlazados = entry.getValue();
+				
+				/* Construimos el String dato con los datos. */
+				datos = "ID venta= " + ventaId + ", producto enlazados= " + productosEnlazados.toString();
+				
+				/* Agregamos los datos. */
+				datosProductoVenta.add(datos);
+				
+			}
+			
+			for (String dato : datosProductoVenta) {
+				System.out.println(dato);
+			}
+			
+			
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 }
