@@ -48,8 +48,6 @@ public class Proveedor implements GestionDeDatos<Proveedor>{
 	@Override
 	public void Buscar(int ID) {
 		
-		
-			
 			try{
 				cn = conexion.conectar();
 				
@@ -59,8 +57,6 @@ public class Proveedor implements GestionDeDatos<Proveedor>{
 			
 					declaracion.setInt(1, ID);
 					ResultSet resultados = declaracion.executeQuery();
-					
-				
 					
 				if(resultados.next()) { //mientras haya datos por leer
 						System.out.println(
@@ -108,19 +104,20 @@ public class Proveedor implements GestionDeDatos<Proveedor>{
 					
 				declaracionUpdate.executeUpdate();
 				
-				//VER DATOS
+				//VER DATOS ACTUALIZADOS
 				
-				while(resultados.next()) { //mientras haya datos por leer
+				ResultSet resultados2 = declaracionSelect.executeQuery();
+				
+				while(resultados2.next()) { //mientras haya datos por leer
 					System.out.println("Proceso exitoso! Datos actualizados: ");
 						System.out.println(
-									"ID: " + resultados.getInt("idProveedor") + ". Nombre: " +resultados.getString("nombreProveedor") + 
-									 ". Telefono: " + resultados.getInt("telefonoProveedor"));
+									"ID: " + resultados2.getInt("idProveedor") + ". Nombre: " +resultados2.getString("nombreProveedor") + 
+									 ". Telefono: " + resultados2.getInt("telefonoProveedor"));
 				}
 				
 			}else {
 				System.out.println("ID inválido! Vuelva a intentarlo.");
 			}
-			
 		} catch(SQLException e){
 			e.printStackTrace();
 		} 

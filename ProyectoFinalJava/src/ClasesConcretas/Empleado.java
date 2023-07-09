@@ -28,7 +28,7 @@ public class Empleado extends Personas implements GestionDeDatos<Empleado>{
 		try{
 			cn = conexion.conectar();
 			
-			String query = "SELECT * FROM empleado WHERE  idEmpleado = ?";
+			String query = "SELECT * FROM empleado WHERE idEmpleado = ?";
 			
 			PreparedStatement declaracion  = cn.prepareStatement(query);
 			
@@ -36,22 +36,45 @@ public class Empleado extends Personas implements GestionDeDatos<Empleado>{
 				ResultSet resultados = declaracion.executeQuery();
 				
 			if(resultados.next()) { //mientras haya datos por leer
-					System.out.println(
-							"ID: " + resultados.getInt("idEmpleado") + ". Horas mensuales: " +resultados.getInt("horasMensuales") + 
-							". Sueldo: " + resultados.getBigDecimal("sueldo") + ". Ventas mensuales: " + resultados.getBigDecimal("ventasMensuales") + 
-							". Turno: " + resultados.getString("turno") + ". Puesto: " +  resultados.getString("puesto") + 
-							". Activo: " +  resultados.getBoolean("activo") + ". Fecha de Inicio: " +  resultados.getDate("fechaDeInicio") +
-							". Id Persona: " +  resultados.getInt("persona_id"));
+				
+				System.out.println("Ingrese el valor x hora del usuario ingresado:");
+					
+					int valorxHora = scanner.nextInt();
+					int horasMensuales = resultados.getInt("horasMensuales");
+					double salario = valorxHora*horasMensuales;
+					
+					System.out.println("El salario del empleado de ID: " + resultados.getInt("idEmpleado") +  " es: " + salario);
+					
+					scanner.nextLine(); // adicional
+					System.out.println("Desea actualizar el salario del empleado con este valor? (si/no)");
+					String actualizar = scanner.nextLine();
+					
+					if(actualizar.equalsIgnoreCase("si")) {
+						
+						String queryUpdate = "UPDATE empleado SET sueldo = ? WHERE  idEmpleado = ?";
+						
+						PreparedStatement declaracionUpdate  = cn.prepareStatement(queryUpdate);
+					
+						declaracionUpdate.setDouble(1, salario);
+						declaracionUpdate.setInt(2, id);
+						
+						declaracionUpdate.executeUpdate();
+						
+						System.out.println("Salario actualizado correctamente!");
+					
+					}else {
+						System.out.println("El salario se mantendrá en: " + resultados.getBigDecimal("sueldo"));
+					}
 			}else {
 				System.out.println("ID inválido! Vuelva a intentarlo.");
 			}
-			
 		} catch(SQLException e){
 			e.printStackTrace();
 		} 
 	}
 	
 	public void calcularDesempeño(int id){	
+		
 	}
 	
 	//OVERRIDES
@@ -246,15 +269,17 @@ public class Empleado extends Personas implements GestionDeDatos<Empleado>{
 				declaracionUpdate.executeUpdate();
 				
 				//VER DATOS
+				
+				ResultSet resultados2 = declaracionSelectEmpleado.executeQuery();
 					
-				while(resultadosEmpleado.next()) { //mientras haya datos por leer
+				while(resultados2.next()) { //mientras haya datos por leer
 					System.out.println("Proceso exitoso! Datos actualizados: ");
 						System.out.println(
-								"ID: " + resultadosEmpleado.getInt("idEmpleado") + ". Horas mensuales: " +resultadosEmpleado.getInt("horasMensuales") + 
-								". Sueldo: " + resultadosEmpleado.getBigDecimal("sueldo") + ". Ventas mensuales: " + resultadosEmpleado.getBigDecimal("ventasMensuales") + 
-								". Turno: " + resultadosEmpleado.getString("turno") + ". Puesto: " +  resultadosEmpleado.getString("puesto") + 
-								". Activo: " +  resultadosEmpleado.getBoolean("activo") + ". Fecha de Inicio: " +  resultadosEmpleado.getDate("fechaDeInicio") +
-								". Id Persona: " +  resultadosEmpleado.getInt("persona_id") );
+								"ID: " + resultados2.getInt("idEmpleado") + ". Horas mensuales: " +resultados2.getInt("horasMensuales") + 
+								". Sueldo: " + resultados2.getBigDecimal("sueldo") + ". Ventas mensuales: " + resultados2.getBigDecimal("ventasMensuales") + 
+								". Turno: " + resultados2.getString("turno") + ". Puesto: " +  resultados2.getString("puesto") + 
+								". Activo: " +  resultados2.getBoolean("activo") + ". Fecha de Inicio: " +  resultados2.getDate("fechaDeInicio") +
+								". Id Persona: " +  resultados2.getInt("persona_id") );
 				}
 			}else {
 				System.out.println("ID inválido! Vuelva a intentarlo.");

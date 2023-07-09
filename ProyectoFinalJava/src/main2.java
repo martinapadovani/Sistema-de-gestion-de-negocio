@@ -462,7 +462,7 @@ public class main2 {
 		  salir.set(false);
 		  
 	  }else {
-		  System.out.println("Hasta pronto!");
+		  System.out.println("¡Hasta pronto!");
 		  salir.set(true);
 	  }
 }

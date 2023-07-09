@@ -93,7 +93,7 @@ public class Personas{
 			declaracionSelect.setInt(1, id);
 			ResultSet resultados = declaracionSelect.executeQuery();
 			
-			if(resultados.next()) { //mientras haya datos por leer
+			if(resultados.next()) { //mientras haya datos por leer, es dcir, existe una persona con ese ID
 				
 				System.out.println("Por favor, ingrese los datos correspondientes");
 				System.out.println("DNI: ");
@@ -127,15 +127,20 @@ public class Personas{
 				declaracionUpdate.executeUpdate();
 				
 				//VER DATOS
+				
+				ResultSet resultados2 = declaracionSelect.executeQuery();
 					
-				while(resultados.next()) { //mientras haya datos por leer
+				while(resultados2.next()) { //mientras haya datos por leer
 					System.out.println("Proceso exitoso! Datos actualizados: ");
 						System.out.println(
-								"ID: " + resultados.getInt("idPersona") + ". DNI: " +resultados.getInt("dni") + 
-								". Telefono: " + resultados.getInt("telefonoPersona") + ". Nombre: " + resultados.getString("nombrePersona") + 
-								". Apellido: " + resultados.getString("apellidoPersona") + ". Edad: " +  resultados.getInt("edad") + 
-								". Email: " +  resultados.getString("email"));
+								"ID: " + resultados2.getInt("idPersona") + ". DNI: " +resultados2.getInt("dni") + 
+								". Telefono: " + resultados2.getInt("telefonoPersona") + ". Nombre: " + resultados2.getString("nombrePersona") + 
+								". Apellido: " + resultados2.getString("apellidoPersona") + ". Edad: " +  resultados2.getInt("edad") + 
+								". Email: " +  resultados2.getString("email"));
 								}
+				
+			}else {
+				System.out.println("ID inválido! Vuelva a intentarlo.");
 			}
 		} catch(SQLException e){
 			e.printStackTrace();

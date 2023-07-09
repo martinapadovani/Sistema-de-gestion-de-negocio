@@ -1,10 +1,6 @@
 package ClasesConcretas;
 import java.util.Scanner;
 import java.sql.*;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.logging.Logger;
 
 import ConexionDB.Conexion;
@@ -29,18 +25,23 @@ public class Producto implements GestionDeDatos<Producto>{
 	
 	//METODOS
 	
-	public void verStock(Producto producto) {
+	public void verStock(int id) {
 		
 		try{
 			cn = conexion.conectar();
 			
-			String query = "SELECT stockDisponible FROM producto";
+			String query = "SELECT stockDisponible FROM producto WHERE idProducto = ?";
 			
-			Statement declaracion = cn.createStatement();
-			ResultSet resultados = declaracion.executeQuery(query);
+			PreparedStatement declaracion  = cn.prepareStatement(query);
 			
-			while(resultados.next()) { //mientras haya datos por leer
-				System.out.println(resultados.getInt("stockDisponible"));
+			declaracion.setInt(1, id);
+			ResultSet resultados = declaracion.executeQuery();
+			
+			if(resultados.next()) { //mientras haya datos por leer
+				System.out.println(
+						"Stock: " + resultados.getInt("stockDisponible"));
+			}else {
+				System.out.println("ID inválido! Vuelva a intentarlo.");
 			}
 			
 		} catch(SQLException e){
@@ -48,34 +49,122 @@ public class Producto implements GestionDeDatos<Producto>{
 		} 
 	}
 	
-	public void calcularStock(Producto producto) {
+	public void calcularStock(int id) {
 		
 	}
 	
+	public void modificarStock(int id) {
+		
+		try{
+			cn = conexion.conectar();
+			
+			String querySelect = "SELECT * FROM producto WHERE  idProducto = ?";
+			
+			PreparedStatement declaracionSelect  = cn.prepareStatement(querySelect);
+		
+			declaracionSelect.setInt(1, id);
+			ResultSet resultados = declaracionSelect.executeQuery();
+			
+			if(resultados.next()) {
+				
+				System.out.println("Por favor, ingrese el stock actualizado:");
+				int stockDisponible = scanner.nextInt();
+				
+				//ACTUALIZACION
+				String queryUpdate = "UPDATE producto SET stockDisponible = ? WHERE  idProducto = ?";
+				
+				PreparedStatement declaracionUpdate  = cn.prepareStatement(queryUpdate);
+			
+				declaracionUpdate.setInt(1, stockDisponible);
+				declaracionUpdate.setInt(2, id);
+					
+				declaracionUpdate.executeUpdate();
+				
+				//VER DATOS
+				while(resultados.next()) { //mientras haya datos por leer
+					System.out.println("Proceso exitoso! Datos actualizados: ");
+						System.out.println(
+								"ID: " + resultados.getInt("idProducto") + ". Nombre: " +resultados.getString("nombreProducto") + 
+								". Categoria: " + resultados.getString("categoria") + ". Stock: " + resultados.getInt("stockDisponible") + 
+								". Precio: " + resultados.getInt("precioxUnidad") + ". Id Proveedor: " +  resultados.getInt("proveedor_id"));
+				}
+			}else {
+				System.out.println("ID inválido! Vuelva a intentarlo.");
+			}	
+		} catch(SQLException e){
+			e.printStackTrace();
+		} 
+	}
 
 	//OVERRIDE
 	
 	@Override
 	public void Ver(){
 		
-		try{
-			cn = conexion.conectar();
+		System.out.println("Seleccione segun corresponda:");
+		System.out.println("1. Ver todos los productos");
+		System.out.println("1. Ver productos por categoria");
+		int opcion = scanner.nextInt();
+		
+		switch(opcion) {
+		case 1:
 			
-			String query = "SELECT * FROM producto";
+			try{
+				cn = conexion.conectar();
+				
+				String query = "SELECT * FROM producto";
+				
+				Statement declaracion = cn.createStatement();
+				ResultSet resultados = declaracion.executeQuery(query);
+				
+				while(resultados.next()) { //mientras haya datos por leer
+					System.out.println(
+							"ID: " + resultados.getInt("idProducto") + ". Nombre: " +resultados.getString("nombreProducto") + 
+							". Categoria: " + resultados.getString("categoria") + ". Stock: " + resultados.getInt("stockDisponible") + 
+							". Precio: " + resultados.getInt("precioxUnidad") + ". Id Proveedor: " +  resultados.getInt("proveedor_id"));
+				}
+				
+			} catch(SQLException e){
+				e.printStackTrace();
+			} 
 			
-			Statement declaracion = cn.createStatement();
-			ResultSet resultados = declaracion.executeQuery(query);
+			break;
+		case 2:
 			
-			while(resultados.next()) { //mientras haya datos por leer
-				System.out.println(
-						"ID: " + resultados.getInt("idProducto") + ". Nombre: " +resultados.getString("nombreProducto") + 
-						". Categoria: " + resultados.getString("categoria") + ". Stock: " + resultados.getInt("stockDisponible") + 
-						". Precio: " + resultados.getInt("precioxUnidad") + ". Id Proveedor: " +  resultados.getInt("proveedor_id"));
-			}
+			scanner.nextLine(); // adicional
+			System.out.println("Ingrese la categoria:");
+			String categoria = scanner.nextLine();
 			
-		} catch(SQLException e){
-			e.printStackTrace();
-		} 
+			try{
+				cn = conexion.conectar();
+				
+				String query = "SELECT * FROM producto WHERE categoria =  ?";
+				
+				PreparedStatement declaracion  = cn.prepareStatement(query);
+				
+				declaracion.setString(1, categoria);
+				ResultSet resultados = declaracion.executeQuery();
+				
+				while(resultados.next()) { //mientras haya datos por leer
+					System.out.println(
+							"ID: " + resultados.getInt("idProducto") + ". Nombre: " +resultados.getString("nombreProducto") + 
+							". Categoria: " + resultados.getString("categoria") + ". Stock: " + resultados.getInt("stockDisponible") + 
+							". Precio: " + resultados.getInt("precioxUnidad") + ". Id Proveedor: " +  resultados.getInt("proveedor_id"));
+				}
+				
+			} catch(SQLException e){
+				e.printStackTrace();
+			} 
+			
+		break;
+		default:
+			
+			System.out.println("Opcion inválida! Vuelva a intentarlo");
+			break;
+		
+		}
+		
+
 	}
 	
 	@Override
@@ -152,17 +241,20 @@ public class Producto implements GestionDeDatos<Producto>{
 				declaracionUpdate.executeUpdate();
 				
 				//VER DATOS
+
+				ResultSet resultados2 = declaracionSelect.executeQuery();
 				
-				while(resultados.next()) { //mientras haya datos por leer
+				while(resultados2.next()) { //mientras haya datos por leer
 					System.out.println("Proceso exitoso! Datos actualizados: ");
 						System.out.println(
-								"ID: " + resultados.getInt("idProducto") + ". Nombre: " +resultados.getString("nombreProducto") + 
-								". Categoria: " + resultados.getString("categoria") + ". Stock: " + resultados.getInt("stockDisponible") + 
-								". Precio: " + resultados.getInt("precioxUnidad") + ". Id Proveedor: " +  resultados.getInt("proveedor_id"));
+								"ID: " + resultados2.getInt("idProducto") + ". Nombre: " +resultados2.getString("nombreProducto") + 
+								". Categoria: " + resultados2.getString("categoria") + ". Stock: " + resultados2.getInt("stockDisponible") + 
+								". Precio: " + resultados2.getInt("precioxUnidad") + ". Id Proveedor: " +  resultados2.getInt("proveedor_id"));
 				}
 			}else {
 				System.out.println("ID inválido! Vuelva a intentarlo.");
 			}	
+			
 		} catch(SQLException e){
 			e.printStackTrace();
 		} 
@@ -185,23 +277,47 @@ public class Producto implements GestionDeDatos<Producto>{
 		System.out.println("ID del Proveedor: ");
 		int proveedor_id = scanner.nextInt();
 		
+		//Comprobar que haya un proveedor con tal ID
+		
 		try{
+			
 			cn = conexion.conectar();
 			
-			String query = "INSERT INTO producto (nombreProducto, categoria, stockDisponible, precioxUnidad, proveedor_id) VALUES (?, ?, ?, ?, ?)";
-			//excluyo el id ya que es autoincremental
+			String queryProveedor = "SELECT * FROM proveedor WHERE  idProveedor = ?";
 			
-			PreparedStatement declaracion  = cn.prepareStatement(query);
-			
-				declaracion.setString(1, nombreProducto);
-				declaracion.setString(2, categoria);
-				declaracion.setInt(3, stockDisponible);
-				declaracion.setInt(4, precioxUnidad);
-				declaracion.setInt(5, proveedor_id);
+			PreparedStatement declaracionProveedor  = cn.prepareStatement(queryProveedor);
+		
+			declaracionProveedor.setInt(1, proveedor_id);
+				ResultSet resultados = declaracionProveedor.executeQuery();
 				
-				declaracion.executeUpdate();
+			if(resultados.next()) { //mientras haya datos por leer, es decir, existe proveedor con ese ID
+		
+				try{
+					cn = conexion.conectar();
+					
+					String query = "INSERT INTO producto (nombreProducto, categoria, stockDisponible, precioxUnidad, proveedor_id) VALUES (?, ?, ?, ?, ?)";
+					//excluyo el id ya que es autoincremental
+					
+					PreparedStatement declaracion  = cn.prepareStatement(query);
+					
+						declaracion.setString(1, nombreProducto);
+						declaracion.setString(2, categoria);
+						declaracion.setInt(3, stockDisponible);
+						declaracion.setInt(4, precioxUnidad);
+						declaracion.setInt(5, proveedor_id);
+						
+						declaracion.executeUpdate();
+						
+						System.out.println("Datos cargados exitosamente!");
+					
+				} catch(SQLException e){
+					e.printStackTrace();
+				} 
 				
-				System.out.println("Datos cargados exitosamente!");
+				
+			}else {
+				System.out.println("ID de proveedor inválido! Vuelva a intentarlo.");
+			}
 			
 		} catch(SQLException e){
 			e.printStackTrace();
@@ -260,5 +376,5 @@ public class Producto implements GestionDeDatos<Producto>{
 		}catch(SQLException e){
 				e.printStackTrace();
 			} 
-	}
+	}	
 }
