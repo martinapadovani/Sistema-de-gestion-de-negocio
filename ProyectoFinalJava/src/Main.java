@@ -1,13 +1,15 @@
-import ConexionDB.*;
-import ClasesAbstractas.*;
-import ClasesConcretas.*;
-import ClasesConcretas.*;
-import ConexionDB.Conexion;
-import ClasesAbstractas.*;
 import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.time.LocalDate;
-import java.util.ArrayList;
+
+import ClasesAbstractas.Personas;
+import ClasesAbstractas.Transaccion;
+import ClasesConcretas.Empleado;
+import ClasesConcretas.Gasto;
+import ClasesConcretas.Producto;
+import ClasesConcretas.ProductoVentas;
+import ClasesConcretas.Proveedor;
+import ClasesConcretas.Venta;
+import ManejoDeArchivos.ManejoDeArchivos;
 public class Main {
 
 	public static void main(String[] args) {
@@ -427,6 +429,7 @@ public class Main {
 				System.out.println("1. Ver todas las transacciones.");
 				System.out.println("2. Acceder a sección ventas.");
 				System.out.println("3. Acceder a sección gastos.");
+				System.out.println("4. Gestionar facturas.");
 				System.out.println("0. Volver al menú principal. ");
 				System.out.print("Su opción: ");
 				int opcion = scanner.nextInt();
@@ -523,6 +526,7 @@ public class Main {
 						  System.out.println("Opcion inválida. Vuelva a intentarlo!");
 						  break;
 					  }
+			
 					break;
 					
 				case 3://GASTOS
@@ -578,7 +582,49 @@ public class Main {
 						default:
 							System.out.println("Opcion inválida. Vuelva a intentarlo!");
 							break;
-						  }		
+						  }	
+						  
+				case 4://GESTIONAR FACTURAS.
+					System.out.println("Bienvenido a la sección de gestion de facturas!");
+					System.out.println("Seleccione según corresponda: ");
+					System.out.println("1. Generar factura.");
+					System.out.println("2. Actualizar facturas.");
+					System.out.println("3. Ver facturas.");
+					System.out.println("4. Eliminar facturas.");
+					System.out.println("5. Volver una sección atrás.");
+					System.out.println("0. Volver al menú.");
+					int opcionFacturas = scanner.nextInt();
+					
+					ManejoDeArchivos ejecutarMetodosManejoDeArchivos = new ManejoDeArchivos();
+					
+					switch(opcionFacturas) {
+						case 1:
+							ejecutarMetodosManejoDeArchivos.crearYEscribirArchivo();
+							break;
+						case 2:
+							break;
+						case 3: 
+							ejecutarMetodosManejoDeArchivos.leerArchivo();
+							break;
+						case 4:
+							break;
+						case 5: 
+							
+							volverUnaSeccionAtras(volverHaciaAtras);
+							 
+							break;
+						case 0: 
+							
+							volverHaciaAtras.set(true);
+							
+							break;
+							
+						default: 
+							System.out.println("Opción inválida!");
+							break;
+					
+					}
+					
 					break;
 				case 0:
 					/* En caso de elegir esta opción, cambiamos el valor del AtomicBoolean a true, por lo que se saldra del ciclo secundario
