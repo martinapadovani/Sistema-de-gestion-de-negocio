@@ -95,15 +95,17 @@ public class Producto implements GestionDeDatos<Producto>{
 			e.printStackTrace();
 		} 
 	}
-
+	
+	
 	//OVERRIDE
 	
 	@Override
 	public void Ver(){
 		
 		System.out.println("Seleccione segun corresponda:");
-		System.out.println("1. Ver todos los productos");
-		System.out.println("1. Ver productos por categoria");
+		System.out.println("1. Ver todos los productos.");
+		System.out.println("2. Ver productos por categoria.");
+		System.out.println("3. Ver productos por proveedor.");
 		int opcion = scanner.nextInt();
 		
 		switch(opcion) {
@@ -157,6 +159,41 @@ public class Producto implements GestionDeDatos<Producto>{
 			} 
 			
 		break;
+		
+		case 3:
+			System.out.println("Ingrese el ID del proveedor:");
+			int idProveedor = scanner.nextInt();
+			
+		try{		
+			cn = conexion.conectar();
+			
+			String query = "SELECT *, proveedor.idProveedor, proveedor.nombreProveedor, proveedor.telefonoProveedor FROM producto INNER JOIN proveedor ON producto.proveedor_id = proveedor.idProveedor WHERE proveedor.idProveedor = ?";
+			
+			PreparedStatement declaracion  = cn.prepareStatement(query);
+			declaracion.setInt(1, idProveedor);
+			ResultSet resultados = declaracion.executeQuery();
+			
+			boolean proveedorEncontrado = false;
+				
+				while(resultados.next()) {
+				 // Necesito reemplazar el if por un while, ya que este recorrerá todos los registros devueltos, y no solo el primero
+					
+					proveedorEncontrado = true;//si hubo resultados por recorrer quiere decir que hay un proveedor para ese ID
+					
+				System.out.println(
+						"ID: " + resultados.getInt("idProducto") + ". Nombre: " +resultados.getString("nombreProducto") + 
+						". Categoria: " + resultados.getString("categoria") + ". Stock: " + resultados.getInt("stockDisponible") + 
+						". Precio: " + resultados.getInt("precioxUnidad"));
+				}
+				
+				if (!proveedorEncontrado) { //si no se encontro proveedor con ese id, entonces la variable booleana se mantendra falsa
+				    System.out.println("ID inválido! Vuelva a intentarlo.");
+				}
+			
+			}catch(SQLException e){
+			e.printStackTrace();
+		}
+			break;
 		default:
 			
 			System.out.println("Opcion inválida! Vuelva a intentarlo");

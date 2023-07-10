@@ -21,6 +21,39 @@ public class Proveedor implements GestionDeDatos<Proveedor>{
 	}
 	
 	
+	public void verProductos (int id) {
+	
+	try{	
+		cn = conexion.conectar();
+		
+		String query = "SELECT *, proveedor.idProveedor, proveedor.nombreProveedor, proveedor.telefonoProveedor FROM producto INNER JOIN proveedor ON producto.proveedor_id = proveedor.idProveedor WHERE proveedor.idProveedor = ?";
+		
+		PreparedStatement declaracion  = cn.prepareStatement(query);
+		declaracion.setInt(1, id);
+		ResultSet resultados = declaracion.executeQuery();
+		
+		boolean proveedorEncontrado = false;
+			
+			while(resultados.next()) {
+			 // Necesito reemplazar el if por un while, ya que este recorrerá todos los registros devueltos, y no solo el primero
+				
+				proveedorEncontrado = true;//si hubo resultados por recorrer quiere decir que hay un proveedor para ese ID
+				
+			System.out.println(
+					"ID: " + resultados.getInt("idProducto") + ". Nombre: " +resultados.getString("nombreProducto") + 
+					". Categoria: " + resultados.getString("categoria") + ". Stock: " + resultados.getInt("stockDisponible") + 
+					". Precio: " + resultados.getInt("precioxUnidad"));
+			}
+			
+			if (!proveedorEncontrado) { //si no se encontro proveedor con ese id, entonces la variable booleana se mantendra falsa
+			    System.out.println("ID inválido! Vuelva a intentarlo.");
+			}
+		
+		}catch(SQLException e){
+		e.printStackTrace();
+	}
+	}
+	
 
 	//OVERRIDES
 	
@@ -59,6 +92,7 @@ public class Proveedor implements GestionDeDatos<Proveedor>{
 					ResultSet resultados = declaracion.executeQuery();
 					
 				if(resultados.next()) { //mientras haya datos por leer
+					//Puede ser in if ya que solo se va a leer un registro
 						System.out.println(
 									"ID: " + resultados.getInt("idProveedor") + ". Nombre: " +resultados.getString("nombreProveedor") + 
 									 ". Telefono: " + resultados.getInt("telefonoProveedor"));

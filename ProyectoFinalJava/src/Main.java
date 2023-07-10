@@ -46,8 +46,7 @@ public class Main {
 				  System.out.println("1. Datos laborales.");
 				  System.out.println("2. Datos personales.");
 				  System.out.println("3. General.");
-				  System.out.println("01. Atras.");
-				  System.out.println("0. Volver al menú.");
+				  System.out.println("0. Menu Principal.");
 				  
 				  int opcionEmpleados = scanner.nextInt();
 
@@ -60,6 +59,7 @@ public class Main {
 					  System.out.println("1. Ver datos laborales de empleados.");
 					  System.out.println("2. Buscar empleado por ID.");
 					  System.out.println("3. Actualizar datos laborales.");
+					  System.out.println("0. Menu Principal.");
 					  
 					  scanner.nextLine(); // adicional
 					  
@@ -76,21 +76,24 @@ public class Main {
 						  break;
 					  case 2:
 						  
-						  System.out.println("Elegiste la opcion de buscar empleados!");
+						  System.out.println("Elegiste la opcion de buscar empleado!");
 						  
-						  System.out.println("Ingrese el id del Empleado:");
+						  System.out.println("Ingrese el ID del empleado:");
 						  int id = scanner.nextInt(); 
 						  ejecutarMetodosEmpleado.Buscar(id);
 						  
 						  break;
 					  case 3:
 						  
-						  System.out.println("Elegiste la opcion de actualizar empleados!");
+						  System.out.println("Elegiste la opcion de actualizar datos laborales!");
 						  
-						  System.out.println("Ingrese el id del Empleado:");
+						  System.out.println("Ingrese el ID del empleado:");
       					int idActualizar = scanner.nextInt(); 
       					ejecutarMetodosEmpleado.Actualizar(idActualizar);
 						  
+						  break;
+					  case 0:
+						  salir.set(false);
 						  break;
 						  
 					default:
@@ -108,6 +111,7 @@ public class Main {
 					  System.out.println("1. Ver datos personales de empleados.");
 					  System.out.println("2. Buscar Empleado por ID.");
 					  System.out.println("3. Actualizar Datos personales.");
+					  System.out.println("0. Menu Principal.");
 					  
 					  scanner.nextLine(); // adicional
 					  
@@ -122,21 +126,24 @@ public class Main {
 				  		
 				  		break;  
 				  	case 2:
-				  		System.out.println("Elegiste la opcion de Buscar empleado");
+				  		System.out.println("Elegiste la opcion de buscar empleado!");
 				  		
-						System.out.println("Ingrese el id del Empleado:");
+						System.out.println("Ingrese el ID del empleado:");
 						int idBuscar = scanner.nextInt(); 
 				  		ejecutarMetodosPersonales.Buscar(idBuscar);
 				  		
 				  		break;
 				  	case 3:
-				  		System.out.println("Elegiste la opcion de actualizar datos personales");
+				  		System.out.println("Elegiste la opcion de actualizar datos personales!");
 				  		
-						System.out.println("Ingrese el id del Empleado:");
+						System.out.println("Ingrese el ID del Empleado:");
 						int idActualizar = scanner.nextInt(); 
 				  		ejecutarMetodosPersonales.Actualizar(idActualizar);
 				  		
 				  		break;
+					  case 0:
+						  salir.set(false);
+						  break;
 				  	default:
 						
 						System.out.println("Opcion inválida! Vuelva a intentarlo.");
@@ -146,12 +153,13 @@ public class Main {
 					
 				case 3:
 					
-					  System.out.println("Eligio la opcion para gestiones generales");	
+					  System.out.println("Eligio la opcion para gestiones generales.");	
 					  System.out.println("Seleccione según corresponda:");
 					  System.out.println("1. Agregar nuevo empleado al sistema.");
 					  System.out.println("2. Eliminar empleado del sistema.");
 					  System.out.println("3. Calcular salario de empleado.");
 					  System.out.println("4. Calcular desempeño de empleado.");
+					  System.out.println("0. Menu Principal.");
 					  
 					  scanner.nextLine(); // adicional
 					  
@@ -161,15 +169,15 @@ public class Main {
 					switch(opcionMetodosGenerales) {
 					  case 1:
 						  
-						  System.out.println("Elegiste la opcion para agregar empleados al sistema!");
+						  System.out.println("Elegiste la opcion de agregar un empleado al sistema!");
 						  ejecutarMetodosGenerales.Agregar();
 						  
 						  break;
 					  case 2:
 						  
-						  System.out.println("Elegiste la opcion para eliminar empleados del sistema!");
+						  System.out.println("Elegiste la opcion de eliminar un empleado del sistema!");
 						  
-						  System.out.println("Ingrese el id del Empleado:");
+						  System.out.println("Ingrese el ID del empleado:");
       					int idEliminar = scanner.nextInt(); 
       					ejecutarMetodosGenerales.Eliminar(idEliminar);
 						  
@@ -177,7 +185,7 @@ public class Main {
 				      case 3:
 						  
 						  System.out.println("Elegiste la opcion de calcular salario!");
-						  System.out.println("Ingrese el id del Empleado:");
+						  System.out.println("Ingrese el ID del empleado:");
 	      					int idSalario = scanner.nextInt();
 						  ejecutarMetodosGenerales.calcularSalario(idSalario);
 						  
@@ -185,11 +193,14 @@ public class Main {
 				     case 4:
 					  
 					      System.out.println("Elegiste la opcion de calcular desempeño!");
-						  System.out.println("Ingrese el id del Empleado:");
+						  System.out.println("Ingrese el ID del empleado:");
 	      					int idDesempeño = scanner.nextInt();
 					      ejecutarMetodosGenerales.calcularDesempeño(idDesempeño);
 					  
 					  break;
+					  case 0:
+						  salir.set(false);
+						  break;
 						default:
 							
 							System.out.println("Opcion inválida! Vuelva a intentarlo.");
@@ -213,11 +224,12 @@ public class Main {
 				  System.out.println("Bienvenido al sector de proveedores!");	
 				  System.out.println("Seleccione segun corresponda:");
 				  System.out.println("1. Ver proveedores.");
-				  System.out.println("2. Buscar proveedor por ID.");
-				  System.out.println("3. Actualizar proveedor.");
-				  System.out.println("4. Agregar nuevo proveedor.");
-				  System.out.println("5. Eliminar proveedor del sistema.");
-				  System.out.println("0. Atras.");
+				  System.out.println("2. Ver productos.");
+				  System.out.println("3. Buscar proveedor por ID.");
+				  System.out.println("4. Actualizar proveedor.");
+				  System.out.println("5. Agregar nuevo proveedor.");
+				  System.out.println("6. Eliminar proveedor del sistema.");
+				  System.out.println("0. Menu Principal.");
 				  
 				  scanner.nextLine(); // adicional
 				  
@@ -234,32 +246,43 @@ public class Main {
 				 break;
 			 case 2:
 				 
-				  System.out.println("Elegiste la opcion de buscar proveedores!");
+				  System.out.println("Elegiste la opcion de ver productos!");
 				  
-				  System.out.println("Ingrese el ID del Proveedor:");
+				  System.out.println("Ingrese el ID del proveedor:");
 				  int id = scanner.nextInt(); 
 				  
-				  ejecutarMetodosProveedor.Buscar(id);
+				  ejecutarMetodosProveedor.verProductos(id);
 				  
 				 break;
+				 
 			 case 3:
 				 
+				  System.out.println("Elegiste la opcion de buscar proveedores!");
+				  
+				  System.out.println("Ingrese el ID del proveedor:");
+				  int idBuscar = scanner.nextInt(); 
+				  
+				  ejecutarMetodosProveedor.Buscar(idBuscar);
+				  
+				 break;
+			 case 4:
+				 
 				  System.out.println("Elegiste la opcion de actualizar proveedor!");
-      			System.out.println("Ingrese el ID del Proveedor:");
+      			System.out.println("Ingrese el ID del proveedor:");
       			int idActualizar = scanner.nextInt(); 
       			ejecutarMetodosProveedor.Actualizar(idActualizar);
 				  
 				 break;
-			 case 4:
+			 case 5:
 				 
 				  System.out.println("Elegiste la opcion para agregar un proveedor al sistema!");
 				  ejecutarMetodosProveedor.Agregar();
 				  
 				 break;
-			 case 5:
+			 case 6:
 				 
 	       			System.out.println("Elegiste la opcion para eliminar un proveedor del sistema!");
-        			System.out.println("Ingrese el ID del Proveedor:");
+        			System.out.println("Ingrese el ID del proveedor:");
         			int idEliminar = scanner.nextInt(); 
         			ejecutarMetodosProveedor.Eliminar(idEliminar);
 				  
@@ -285,7 +308,7 @@ public class Main {
 				  System.out.println("4. Agregar nuevo producto.");
 				  System.out.println("5. Eliminar producto del sistema.");
 				  System.out.println("6. Gestion de Stock.");
-				  System.out.println("0. Atras.");
+				  System.out.println("0. Menu Principal.");
 				  
 				  scanner.nextLine(); /* adicional */
 
@@ -304,15 +327,16 @@ public class Main {
 					  
 					  System.out.println("Elegiste la opcion de buscar producto!");
 					  
-					  System.out.println("Ingrese el id del Producto:");
+					  System.out.println("Ingrese el ID del producto:");
 					  int id = scanner.nextInt(); 
 					  ejecutarMetodosProductos.Buscar(id);
 					  
 					  break;
+
 				  case 3:
 					  
 	        			System.out.println("Elegiste la opcion de actualizar producto!");
-	        			System.out.println("Ingrese el id del Producto:");
+	        			System.out.println("Ingrese el ID del producto:");
 	        			int idActualizar = scanner.nextInt(); 
 	        			ejecutarMetodosProductos.Actualizar(idActualizar);
 					  
@@ -326,7 +350,7 @@ public class Main {
 				  case 5:
 					  
 	        			System.out.println("Elegiste la opcion para eliminar producto del sistema!");
-	        			System.out.println("Ingrese el id del Producto:");
+	        			System.out.println("Ingrese el ID del producto:");
 	        			int idEliminar = scanner.nextInt(); 
 	        			ejecutarMetodosProductos.Eliminar(idEliminar);
 					  
@@ -338,6 +362,7 @@ public class Main {
 					  System.out.println("1. Ver stock.");
 					  System.out.println("2. Calcular stock.");
 					  System.out.println("3. Modificar stock.");
+					  System.out.println("0. Menu Principal");
 					  
 					  int opcionStock = scanner.nextInt();
 					  
@@ -346,7 +371,7 @@ public class Main {
 					  case 1:
 						  
 						  System.out.println("Elegiste la opcion de ver stock!");
-		        			System.out.println("Ingrese el id del Producto:");
+		        			System.out.println("Ingrese el ID del producto:");
 		        			int idVerStock = scanner.nextInt(); 
 		        			ejecutarMetodosProductos.verStock(idVerStock);
 						  
@@ -354,7 +379,7 @@ public class Main {
 					  case 2:
 						  
 						  System.out.println("Elegiste la opcion de calcular stock!");  
-		        			System.out.println("Ingrese el id del Producto:");
+		        			System.out.println("Ingrese el ID del producto:");
 		        			int idCalcularStock = scanner.nextInt(); 
 		        			ejecutarMetodosProductos.calcularStock(idCalcularStock);;
 		        			
@@ -362,10 +387,13 @@ public class Main {
 					  case 3:
 						  
 						  System.out.println("Elegiste la opcion de modificar stock!");
-		        			System.out.println("Ingrese el id del Producto:");
+		        			System.out.println("Ingrese el ID del producto:");
 		        			int idModificarStock = scanner.nextInt(); 
 		        			ejecutarMetodosProductos.modificarStock(idModificarStock);
 						  
+						  break;
+					  case 0:
+						  salir.set(false);
 						  break;
 						  
 					default:
@@ -377,7 +405,7 @@ public class Main {
 					  
 				 case 0:
 					  salir.set(false);
-					  break;
+					  break;//Finaliza switch gestion de stock
 				default:
 						
 						System.out.println("Opcion inválida! Vuelva a intentarlo.");
