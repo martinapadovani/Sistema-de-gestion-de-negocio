@@ -104,7 +104,7 @@ public class ProductoVentas extends Producto{
 				StringBuilder datos = new StringBuilder();
 				
 				/* Construimos el String dato con los datos. */
-				datos.append("ID venta= ").append(ventaId).append(", productos enlazados= [");
+				datos.append("ID VENTA= ").append(ventaId).append(", PRODUCTOS VENDIDOS= [");
 				
 				/* Creamos un booleano bandera para que controle si es la primera iteracion del bucle. Al principio, establecemos 'primeraIteracion' como true. Dentro del bucle
 				 * antes de agregar cada paréntesis, verificamos si 'primeraIteración' es true. Si es 'true', no agregamos una coma. Si no lo es, agregamos una coma luego de cada 
@@ -122,7 +122,7 @@ public class ProductoVentas extends Producto{
 					
 					/* Construimos una cadena para representar cada paréntesis que contiene el 'productoId' y la 'cantidad', esto se agrega al
 					 * StringBuilder 'datos'.*/
-					datos.append("(ID= ").append(productoId).append(", cantidad: ").append(cantidad).append(")");
+					datos.append("(PRODUCTO_ID= ").append(productoId).append(", CANTIDAD= ").append(cantidad).append(")");
 					
 				}
 				
@@ -134,10 +134,16 @@ public class ProductoVentas extends Producto{
 				
 			}
 			
-			/* Finalmente, iteramos sobre la lista 'datosProductoVenta' y mostramos los elementos en consola. */
-			for(String dato : datosProductoVenta) {
-				System.out.println(dato);
+			/* Finalmente, iteramos sobre la lista 'datosProductoVenta', si tiene contenido, mostramos los elementos en consola. 
+			 * Si no, damos el msj de que no contiene datos.*/
+			if(!datosProductoVenta.isEmpty()) {
+				for(String dato : datosProductoVenta) {
+					System.out.println(dato);
+				}
+			} else {
+				System.out.println("No hay registros de productos vendidos en el sistema!");
 			}
+
 
 			
 			

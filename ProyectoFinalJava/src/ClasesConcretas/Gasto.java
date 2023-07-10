@@ -235,18 +235,8 @@ public class Gasto extends Transaccion implements GestionDeFacturas<Gasto>{
 					System.out.println(dato);
 				}
 			} else {
-				
-				datos.clear();
-				
+								
 				System.out.println("No hay gastos registrados en el sistema!");
-				
-				String actualizarIDQuery1 = "ALTER TABLE transaccion AUTO_INCREMENT = 1";
-				String actualizarIDQuery2 = "ALTER TABLE gastos AUTO_INCREMENT = 1";
-				
-				ps = cn.prepareStatement(actualizarIDQuery1);
-				ps.executeUpdate();
-				ps = cn.prepareStatement(actualizarIDQuery2);
-				ps.executeUpdate();
 				
 				
 			}
@@ -276,7 +266,7 @@ public class Gasto extends Transaccion implements GestionDeFacturas<Gasto>{
 			/* BORRAR DATOS (esto se puede hacer en un método aparte en donde llamemos un método para mostrar los datos. */
 			
 			if(datos.isEmpty() == false) {
-				System.out.println("Seleccione la factura a eliminar por su ID de transaccion: ");
+				System.out.println("Ingrese el ID de la factura que desea eliminar: ");
 				idSeleccionador = sc.nextInt();
 				
 				/* Creamos dos QUERY, uno para borrar en primera instancia los datos contenidos en "gastos". En segunda instancia
@@ -298,29 +288,46 @@ public class Gasto extends Transaccion implements GestionDeFacturas<Gasto>{
 				 * con el número siguiente al último id borrado. Ahora, los id's, al no tener contenido la tabla, comenzarán 
 				 * su auto-incremento desde cero nuevamente. */
 
-				if(datos.isEmpty()) {
-					datos.clear();
+				/* Verificamos si no hay registros en la tabla antes de restablecer sus valores de ID a 0*/
+				
+				/* Sumamos las ventas en un atributo propio de SQL al que llamamos gastos, para verificar si existen gastos o no. */
+				String verificarRegistrosQueryGastos = "SELECT COUNT(*) as total FROM gastos";
+				ps = cn.prepareStatement(verificarRegistrosQueryGastos);
+				rs = ps.executeQuery();
+				
+				/* Ejecutamos un condicional para verificar si hay resultados de la consulta. */
+				if(rs.next()) {
 					
-					String actualizarIDQuery1 = "ALTER TABLE transaccion AUTO_INCREMENT = 1";
-					String actualizarIDQuery2 = "ALTER TABLE gastos AUTO_INCREMENT = 1";
+					/* Registramos el total de gastos que existen en la DB */
+					int totalRegistrosGastos = rs.getInt("total");
 					
-					ps = cn.prepareStatement(actualizarIDQuery1);
-					ps.executeUpdate();
-					ps = cn.prepareStatement(actualizarIDQuery2);
-					ps.executeUpdate();
+					/* Por lo tanto, si ese total nos da igual a 0, significa que no hay registros de gastos por lo que actualizará el valor 
+					 * del auto incremento del ID a 0. */
+					if(totalRegistrosGastos == 0) {
+						String actualizarIDGastos = "ALTER TABLE gastos AUTO_INCREMENT = 1";
+						
+						ps = cn.prepareStatement(actualizarIDGastos);
+						ps.executeUpdate();
+					}
 				}
+				
+				String verificarRegistrosQueryTransaccion = "SELECT COUNT(*) as total FROM transaccion";
+				ps = cn.prepareStatement(verificarRegistrosQueryTransaccion);
+				rs = ps.executeQuery();
+				
+				if(rs.next()) {
+					int totalRegistrosTransaccion = rs.getInt("total");
+					
+					if(totalRegistrosTransaccion == 0) {
+						String actualizarIDTransaccion = "ALTER TABLE transaccion AUTO_INCREMENT = 1";
+						
+						ps = cn.prepareStatement(actualizarIDTransaccion);
+						ps.executeUpdate();
+					}
+				}
+				
 	
 				
-			} else {
-				
-				String actualizarIDQuery1 = "ALTER TABLE transaccion AUTO_INCREMENT = 1";
-				String actualizarIDQuery2 = "ALTER TABLE gastos AUTO_INCREMENT = 1";
-				
-				ps = cn.prepareStatement(actualizarIDQuery1);
-				ps.executeUpdate();
-				ps = cn.prepareStatement(actualizarIDQuery2);
-				ps.executeUpdate();
-
 			}
 
 

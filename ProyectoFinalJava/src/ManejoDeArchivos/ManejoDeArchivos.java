@@ -9,6 +9,8 @@ public class ManejoDeArchivos {
 
 	public void crearArchivo(String nombreArchivo) {
 		
+		
+		
 	}
 	
 	public void escribirArchivo(String nombreArchivo) {

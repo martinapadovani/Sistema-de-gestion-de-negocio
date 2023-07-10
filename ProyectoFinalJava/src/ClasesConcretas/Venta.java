@@ -99,7 +99,6 @@ public class Venta extends Transaccion implements GestionDeFacturas<Venta>{
 			// Establecemos conexion con la base de datos.
 			cn = conexion.conectar();
 			
-			
 			/* Pasamos la fecha que se registro al momento de instanciar el objeto a uno de tipo Date 
 			 * para que se pueda registrar en la DB. */
 			LocalDate fecha = LocalDate.now();
@@ -181,10 +180,10 @@ public class Venta extends Transaccion implements GestionDeFacturas<Venta>{
 				stockDisponible = rs.getInt("stockDisponible");
 				precioxUnidad = rs.getInt("precioxUnidad");
 				
-				String agregarProductoALista = "[ID producto= " + idProducto 
-						+ ", nombre producto= " + nombreProducto 
-						+ ", stock disponible= " + stockDisponible 
-						+ ", precio X unidad= " + precioxUnidad;
+				String agregarProductoALista = "[ID PRODUCTO= " + idProducto 
+						+ ", NOMBRE PRODUCTO= " + nombreProducto 
+						+ ", STOCK DISPONIBLE= " + stockDisponible 
+						+ ", PRECIO X UNIDAD= " + precioxUnidad;
 				
 				/* Insertamos los productos dentro de un ArrayList, para luego poder mostrarlos al usuario. */
 				productos.add(agregarProductoALista);
@@ -206,6 +205,22 @@ public class Venta extends Transaccion implements GestionDeFacturas<Venta>{
 				String query6 = "INSERT INTO productoVenta(venta_id, producto_id) VALUES (?, ?)";
 				ps = cn.prepareStatement(query6);
 				ps.setInt(1, idVentas);
+				ps.setInt(2, idProductoAEnlazar);
+				ps.executeUpdate();
+				
+				String query7 = "SELECT stockDisponible FROM producto WHERE idProducto= ?";
+				ps = cn.prepareStatement(query7);
+				ps.setInt(1, idProductoAEnlazar);
+				rs = ps.executeQuery();
+				
+				int stockActualizado = 0;
+				if(rs.next()) {
+					stockActualizado = rs.getInt("stockDisponible") - 1;
+				}
+				
+				String query8 = "UPDATE producto SET stockDisponible = ? WHERE idProducto = ?";
+				ps = cn.prepareStatement(query8);
+				ps.setInt(1, stockActualizado);
 				ps.setInt(2, idProductoAEnlazar);
 				ps.executeUpdate();
 				
@@ -244,15 +259,23 @@ public class Venta extends Transaccion implements GestionDeFacturas<Venta>{
 			cn = conexion.conectar();
 			
 			ArrayList<String> datos = mostrarVentas();
-			int idSeleccionador = 0;
+			int idSeleccionadorTransaccion = 0;
+			int idSeleccionadorVentas = 0;
 			
 			if(datos.isEmpty() == false) {
-				System.out.println("Seleccione la factura a eliminar por su ID de transaccion:");
+				System.out.println("Ingrese el ID de la transaccion a eliminar:");
 				System.out.print("Su opcion: ");
-				idSeleccionador = sc.nextInt();
+				idSeleccionadorTransaccion = sc.nextInt();
 				
-				String query1 = "DELETE from ventas WHERE transaccion_id = "+idSeleccionador;
-				String query2 = "DELETE from transaccion WHERE idTransaccion ="+idSeleccionador;
+				System.out.println("Ingrese el ID de la venta a eliminar: ");
+				idSeleccionadorVentas = sc.nextInt();
+				
+				String query1 = "DELETE from ventas WHERE transaccion_id = "+idSeleccionadorTransaccion;
+				String query2 = "DELETE from transaccion WHERE idTransaccion ="+idSeleccionadorTransaccion;
+				String query3 = "DELETE from productoVenta WHERE venta_id ="+idSeleccionadorVentas ;
+				
+				ps = cn.prepareStatement(query3);
+				ps.executeUpdate();
 				
 				ps = cn.prepareStatement(query1);
 				ps.executeUpdate();
@@ -260,18 +283,45 @@ public class Venta extends Transaccion implements GestionDeFacturas<Venta>{
 				ps = cn.prepareStatement(query2);
 				ps.executeUpdate();
 				
+				
 				System.out.println("La venta seleccionada ha sido eliminada con éxito!");
 				
-				if(datos.isEmpty()) {
-					datos.clear();
+				/* Verificamos si no hay registros en la tabla antes de restablecer sus valores de ID a 0*/
+				
+				/* Sumamos las ventas en un atributo propio de SQL al que llamamos ventas, para verificar si existen ventas o no. */
+				String verificarRegistrosQueryVentas = "SELECT COUNT(*) as total FROM ventas";
+				ps = cn.prepareStatement(verificarRegistrosQueryVentas);
+				rs = ps.executeQuery();
+				
+				/* Ejecutamos un condicional para verificar si hay resultados de la consulta. */
+				if(rs.next()) {
 					
-					String actualizarIDQuery1 = "ALTER TABLE transaccion AUTO_INCREMENT = 1";
-					String actualizarIDQuery2 = "ALTER TABLE gastos AUTO_INCREMENT = 1";
+					/* Registramos el total de ventas que existen en la DB */
+					int totalRegistrosVentas = rs.getInt("total");
 					
-					ps = cn.prepareStatement(actualizarIDQuery1);
-					ps.executeUpdate();
-					ps = cn.prepareStatement(actualizarIDQuery2);
-					ps.executeUpdate();
+					/* Por lo tanto, si ese total nos da igual a 0, significa que no hay registros de ventas por lo que actualizará el valor 
+					 * del auto incremento del ID a 0. */
+					if(totalRegistrosVentas == 0) {
+						String actualizarIDVentas = "ALTER TABLE ventas AUTO_INCREMENT = 1";
+						
+						ps = cn.prepareStatement(actualizarIDVentas);
+						ps.executeUpdate();
+					}
+				}
+				
+				String verificarRegistrosQueryTransaccion = "SELECT COUNT(*) as total FROM transaccion";
+				ps = cn.prepareStatement(verificarRegistrosQueryTransaccion);
+				rs = ps.executeQuery();
+				
+				if(rs.next()) {
+					int totalRegistrosTransaccion = rs.getInt("total");
+					
+					if(totalRegistrosTransaccion == 0) {
+						String actualizarIDTransaccion = "ALTER TABLE transaccion AUTO_INCREMENT = 1";
+						
+						ps = cn.prepareStatement(actualizarIDTransaccion);
+						ps.executeUpdate();
+					}
 				}
 			}	
 			
@@ -323,12 +373,12 @@ public class Venta extends Transaccion implements GestionDeFacturas<Venta>{
 				}
 				
 				System.out.println("Datos de la venta:\n" 
-				+ "ID transaccion: " + idTransaccion + "\n" 
-				+ "ID venta: " + idVentas + "\n" 
-				+ "ID empleado: " + idEmpleado + "\n" 
-				+ "Monto total: " + montoTotal + "\n" 
-				+ "Medio de pago: " + medioDePago + "\n" 
-				+ "Fecha de transaccion: " + fechaDeTransaccion);
+				+ "ID TRANSACCION: " + idTransaccion + "\n" 
+				+ "ID VENTA: " + idVentas + "\n" 
+				+ "ID ID EMPLEADO: " + idEmpleado + "\n" 
+				+ "MONTO TOTAL: " + montoTotal + "\n" 
+				+ "MEDIO DE PAGO: " + medioDePago + "\n" 
+				+ "FECHA TRANSACCION: " + fechaDeTransaccion);
 				
 			} 
 			
@@ -408,14 +458,14 @@ public class Venta extends Transaccion implements GestionDeFacturas<Venta>{
 					
 					
 				/* Registro los datos en una variable de tipo String para despuyés insertarla en el ArrayList de tipo String.*/
-				String cadenaDeDatos = "[ID transaccion=" + idTransaccion 
-						+ ", ID venta= " + idVentas 
-						+ ", ID empleado=" + idEmpleado
-						+ ", ID persona=" + idPersona 
-						+ ", nombre completo= " + nombrePersona + " " + apellidoPersona
-						+ ", fecha de transaccion =" + fechaDeTransaccion 
-						+ ", medioDePago=" + medioDePago 
-						+ ", montoTotal=" + montoTotal;
+				String cadenaDeDatos = "[ID TRANSACCION=" + idTransaccion 
+						+ ", ID VENTA= " + idVentas 
+						+ ", ID EMPLEADO=" + idEmpleado
+						+ ", ID PERSONA=" + idPersona 
+						+ ", NOMBRE COMPLETO= " + nombrePersona + " " + apellidoPersona
+						+ ", FECHA TRANSACCION=" + fechaDeTransaccion 
+						+ ", MEDIO DE PAGO=" + medioDePago 
+						+ ", MONTO TOTAL=" + montoTotal;
 						
 				
 				/* Inserto en el ArrayList los datos que se obtuvieron de la base de datos. */
@@ -432,16 +482,7 @@ public class Venta extends Transaccion implements GestionDeFacturas<Venta>{
 					}
 				} else {
 					System.out.println("No hay ventas registradas en el sistema!");
-					
-					datos.clear();
-										
-					String actualizarIDQuery1 = "ALTER TABLE transaccion AUTO_INCREMENT = 1";
-					String actualizarIDQuery2 = "ALTER TABLE gastos AUTO_INCREMENT = 1";
-					
-					ps = cn.prepareStatement(actualizarIDQuery1);
-					ps.executeUpdate();
-					ps = cn.prepareStatement(actualizarIDQuery2);
-					ps.executeUpdate();
+
 				}
 
 				
