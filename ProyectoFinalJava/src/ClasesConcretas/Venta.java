@@ -415,8 +415,7 @@ public class Venta extends Transaccion implements GestionDeFacturas<Venta>{
 						+ ", nombre completo= " + nombrePersona + " " + apellidoPersona
 						+ ", fecha de transaccion =" + fechaDeTransaccion 
 						+ ", medioDePago=" + medioDePago 
-						+ ", montoTotal=" + montoTotal
-						+ ", idProducto= " + idProducto;
+						+ ", montoTotal=" + montoTotal;
 						
 				
 				/* Inserto en el ArrayList los datos que se obtuvieron de la base de datos. */
@@ -451,70 +450,6 @@ public class Venta extends Transaccion implements GestionDeFacturas<Venta>{
 		}
 		return datos;	
 	}
-	
-	public void mostrarProductosEnlazadosAUnaVenta() {
-		try {
-			cn = conexion.conectar();
-			
-			ArrayList<String>datosProductoVenta = new ArrayList<>();
-			
-			/* Declaramos un HashMap, que es una estructura de datos que permite almacenar pares clave valor, donde cada
-			 * clave es única y se utiliza para acceder a su valor correspondiente de manera más eficiente. 
-			 * En este caso, se utiliza para asociar cada "ventaId" con una lista de productos enlazados a esa venta.
-			 * En este caso, Integer hace referencia a que la clave "ventaId" es de tipo Integer y el valor asociado será una lista
-			 * de enteros que contiene los "productoIdEnlazado".*/
-			HashMap<Integer, ArrayList<Integer>> productosPorVenta = new HashMap<>();
-			
-			
-			String query = "SELECT * FROM productoVenta";
-			
-			ps = cn.prepareStatement(query);
-			rs = ps.executeQuery(query);
-			
-			while(rs.next()) {
-				ventaId = rs.getInt("venta_id");
-				productoIdEnlazado = rs.getInt("producto_id");
-				
-				/* Primero verificamos si el "ventaId" actual ya está presente como una clave en el HashMap. Si no está presente
-				 * agregamos una nueva entrada al 'HashMap' con el 'ventaId' como clave y una nueva lista vacía como valor.
-				 * Luego, agregamos el 'productoIdEnlazado' a la lista correspondiente utilizando el método 'get()' y 'add()' */
-				if(!productosPorVenta.containsKey(ventaId)) {
-					productosPorVenta.put(ventaId, new ArrayList<>());
-				}
-				
-				productosPorVenta.get(ventaId).add(productoIdEnlazado);
-			}
-			
-			String datos = null;
-			
-			
-			/*  Cuando se utiliza el método entrySet() en un HashMap nos devuelve un conjunto de entradas(claves y valores) en el HashMap. Cada entrada
-			 * es representada por la interfaz 'Map.Entry<K, V>', donde 'K' es el tipo de dato de la clave y 'V' es el tipo de dato del valor asociado. 
-			 * Cada entrada puede ser accedida utilizando métodos como 'getKey()' para obtener la clave y 'getValue()' para obtener el valor asociado. 
-			 * 
-			 * En este caso, se utiliza el método 'entrySet()' para recorrer todas las entradas del 'HashMap' 'productosPorVenta' dentro del bucle 'for'. 
-			 * Al utilizar el bucle, en combinación con entrySet() se puede iterar sobre todas las entradas del 'HashMap' y acceder a la clave ('ventaId') 
-			 * y al valor ('ArrayList<Integer>' de productos enlazados) de cada entrada.*/
-			for(Map.Entry<Integer, ArrayList<Integer>> entry : productosPorVenta.entrySet()) {
-				int ventaId = entry.getKey();
-				ArrayList<Integer> productosEnlazados = entry.getValue();
-				
-				/* Construimos el String dato con los datos. */
-				datos = "ID venta= " + ventaId + ", producto enlazados= " + productosEnlazados.toString();
-				
-				/* Agregamos los datos. */
-				datosProductoVenta.add(datos);
-				
-			}
-			
-			for (String dato : datosProductoVenta) {
-				System.out.println(dato);
-			}
-			
-			
-		} catch(SQLException e) {
-			e.printStackTrace();
-		}
-	}
-
 }
+	
+

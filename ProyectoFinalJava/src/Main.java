@@ -446,6 +446,7 @@ public class Main {
 					  
 					  Empleado ejecutarMetodosEmpleado = new Empleado();
 					  Venta ejecutarMetodosVenta = new Venta(null, 0, ejecutarMetodosEmpleado, null);
+					  ProductoVentas ejecutarMetodosProductoVentas = new ProductoVentas();
 					  
 					  System.out.print("Su opción: ");
 					  int opcionVenta = scanner.nextInt();
@@ -459,7 +460,7 @@ public class Main {
 						  
 					  case 2: 
 						  
-						  ejecutarMetodosVenta.mostrarProductosEnlazadosAUnaVenta();
+						  ejecutarMetodosProductoVentas.mostrarProductosEnlazadosAUnaVenta();
 
 						  
 						  break;
