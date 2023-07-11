@@ -237,8 +237,6 @@ public class Venta extends Transaccion implements GestionDeFacturas<Venta>{
 				
 			}
 			
-
-			
 			System.out.println("Se han insertado los datos correctamente");
 			
 	

@@ -181,8 +181,6 @@ public class main2 {
 				     case 4:
 					  
 					      System.out.println("Elegiste la opcion de calcular desempeño!");
-	      					int idDesempeño = scanner.nextInt();
-					      ejecutarMetodosGenerales.calcularDesempeño(idDesempeño);
 					  
 					  break;
 						default:
