@@ -71,7 +71,7 @@ public class Proveedor implements GestionDeDatos<Proveedor>{
 			while(resultados.next()) { //mientras haya datos por leer
 			System.out.println(
 						"ID: " + resultados.getInt("idProveedor") + ". Nombre: " +resultados.getString("nombreProveedor") + 
-						 ". Telefono: " + resultados.getInt("telefonoProveedor"));
+						 ". Telefono: " + resultados.getLong("telefonoProveedor"));
 			}
 		} catch(SQLException e){
 			e.printStackTrace();
@@ -95,7 +95,7 @@ public class Proveedor implements GestionDeDatos<Proveedor>{
 					//Puede ser in if ya que solo se va a leer un registro
 						System.out.println(
 									"ID: " + resultados.getInt("idProveedor") + ". Nombre: " +resultados.getString("nombreProveedor") + 
-									 ". Telefono: " + resultados.getInt("telefonoProveedor"));
+									 ". Telefono: " + resultados.getLong("telefonoProveedor"));
 				}else {
 					System.out.println("ID inválido! Vuelva a intentarlo.");
 				}
@@ -120,41 +120,81 @@ public class Proveedor implements GestionDeDatos<Proveedor>{
 			
 			if(resultados.next()) {
 				
-				System.out.println("Por favor, ingrese los datos correspondientes");
-				System.out.println("Nombre: ");
-				String nombreProveedor = (scanner.nextLine()).trim().replace(" ", "_");
-				System.out.println("Telefono: ");
-				int telefono = scanner.nextInt();
+			boolean salir = false;
 				
-				//ACTUALIZACION
+			  while (!salir) {
+				  
+				System.out.println("Ingrese el atributo que quisiera actualizar");
+				System.out.println("1. Nombre.");
+				System.out.println("2. Telefono.");
+				int opcion = scanner.nextInt();
 				
-				String queryUpdate = "UPDATE proveedor SET nombreProveedor = ?, telefonoProveedor = ? WHERE  idProveedor = ?";
-				
-				PreparedStatement declaracionUpdate  = cn.prepareStatement(queryUpdate);
-			
-				declaracionUpdate.setString(1, nombreProveedor);
-				declaracionUpdate.setInt(2, telefono);
-				declaracionUpdate.setInt(3, id);
+					switch(opcion) {
 					
-				declaracionUpdate.executeUpdate();
-				
-				//VER DATOS ACTUALIZADOS
-				
-				ResultSet resultados2 = declaracionSelect.executeQuery();
-				
-				while(resultados2.next()) { //mientras haya datos por leer
-					System.out.println("Proceso exitoso! Datos actualizados: ");
-						System.out.println(
-									"ID: " + resultados2.getInt("idProveedor") + ". Nombre: " +resultados2.getString("nombreProveedor") + 
-									 ". Telefono: " + resultados2.getInt("telefonoProveedor"));
+					case 1:
+						scanner.nextLine();
+						System.out.println("Nombre:");
+						String nombreProveedor = (scanner.nextLine()).trim().replace(" ", "_");
+						
+						String queryUpdate1 = "UPDATE proveedor SET nombreProveedor = ? WHERE  idProveedor = ?";
+						
+						PreparedStatement declaracionUpdate1  = cn.prepareStatement(queryUpdate1);
+					
+						declaracionUpdate1.setString(1, nombreProveedor);
+						declaracionUpdate1.setInt(2, id);
+							
+						declaracionUpdate1.executeUpdate();
+						
+					break;
+						
+					case 2:
+						scanner.nextLine();
+						System.out.println("Telefono:");
+						long  telefono = scanner.nextLong();
+						
+						String queryUpdate = "UPDATE proveedor SET telefonoProveedor = ? WHERE  idProveedor = ?";
+						
+						PreparedStatement declaracionUpdate  = cn.prepareStatement(queryUpdate);
+					
+						declaracionUpdate.setLong(1, telefono);
+						declaracionUpdate.setInt(2, id);
+							
+						declaracionUpdate.executeUpdate();
+					break;
+					
+					default:
+						System.out.println("Opcion inválida! Vuelva a intentarlo.");
+						break;
+					}
+					
+					System.out.println("Desea seguir actualizando? (si/no)");
+					String seguir = scanner.next();
+					  
+					  if(seguir.equalsIgnoreCase("si")) {
+						  
+						  salir = false;
+						  
+					  }else {
+						  salir = true;
+					  }
 				}
 				
+				//VER DATOS ACTUALIZADOS
+				ResultSet resultados2 = declaracionSelect.executeQuery();
+					
+				while(resultados2.next()) { //mientras haya datos por leer
+						System.out.println("Proceso exitoso! Datos actualizados: ");
+						System.out.println(
+							"ID: " + resultados2.getInt("idProveedor") + ". Nombre: " +resultados2.getString("nombreProveedor") + 
+							". Telefono: " + resultados2.getLong("telefonoProveedor"));
+					}
 			}else {
 				System.out.println("ID inválido! Vuelva a intentarlo.");
 			}
 		} catch(SQLException e){
 			e.printStackTrace();
 		} 
+		
 	}
 	
 	@Override
@@ -164,7 +204,7 @@ public class Proveedor implements GestionDeDatos<Proveedor>{
 		System.out.println("Nombre: ");
 		String nombreProveedor = (scanner.nextLine()).trim().replace(" ", "_");
 		System.out.println("Telefono: ");
-		int telefono = scanner.nextInt();
+		long telefono = scanner.nextLong();
 
 		try{
 			cn = conexion.conectar();
@@ -175,7 +215,7 @@ public class Proveedor implements GestionDeDatos<Proveedor>{
 			PreparedStatement declaracion  = cn.prepareStatement(query);
 			
 				declaracion.setString(1, nombreProveedor);
-				declaracion.setInt(2, telefono);
+				declaracion.setLong(2, telefono);
 				
 				declaracion.executeUpdate();
 				
@@ -185,6 +225,7 @@ public class Proveedor implements GestionDeDatos<Proveedor>{
 			e.printStackTrace();
 		} 
 	}
+	
 	
 	@Override
 	public void Eliminar(int id) {

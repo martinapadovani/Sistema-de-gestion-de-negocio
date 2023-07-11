@@ -29,16 +29,15 @@ public class Main {
 		
 		while (!salir.get()) {	
 			System.out.println("Bienvenido! Ingrese el sector al que desea acceder:");
-			System.out.println("1. Empleados");
-			System.out.println("2. Proveedores	");
-			System.out.println("3. Productos");
-			System.out.println("4. Transacciones");
-			System.out.println("0. Salir");
+			System.out.println("1. Empleados.");
+			System.out.println("2. Proveedores.");
+			System.out.println("3. Productos.");
+			System.out.println("4. Transacciones.");
+			System.out.println("0. Salir.");
 			
 			int sector = scanner.nextInt(); 
 			/* nextInt solo consume el número en sí y deja el carácter de nueva línea (salto de línea) 
 			en el búfer de entrada. Este es capturado por la siguiente llamada a nextLine() y se interpreta como una línea vacía*/
-			
 			   
 			switch(sector) {
 
@@ -160,7 +159,6 @@ public class Main {
 					  System.out.println("1. Agregar nuevo empleado al sistema.");
 					  System.out.println("2. Eliminar empleado del sistema.");
 					  System.out.println("3. Calcular salario de empleado.");
-					  System.out.println("4. Calcular desempeño de empleado.");
 					  System.out.println("0. Menu Principal.");
 					  
 					  scanner.nextLine(); // adicional
@@ -192,14 +190,7 @@ public class Main {
 						  ejecutarMetodosGenerales.calcularSalario(idSalario);
 						  
 						  break;  
-				     case 4:
-					  
-					      System.out.println("Elegiste la opcion de calcular desempeño!");
-						  System.out.println("Ingrese el ID del empleado:");
-	      					int idDesempeño = scanner.nextInt();
-					      ejecutarMetodosGenerales.calcularDesempeño(idDesempeño);
-					  
-					  break;
+
 					  case 0:
 						  salir.set(false);
 						  break;
@@ -362,8 +353,7 @@ public class Main {
 					  System.out.println("Bienvenido a la gestion de stocks!");
 					  System.out.println("Seleccione segun corresponda:");
 					  System.out.println("1. Ver stock.");
-					  System.out.println("2. Calcular stock.");
-					  System.out.println("3. Modificar stock.");
+					  System.out.println("2. Modificar stock.");
 					  System.out.println("0. Menu Principal");
 					  
 					  int opcionStock = scanner.nextInt();
@@ -379,14 +369,6 @@ public class Main {
 						  
 						  break;
 					  case 2:
-						  
-						  System.out.println("Elegiste la opcion de calcular stock!");  
-		        			System.out.println("Ingrese el ID del producto:");
-		        			int idCalcularStock = scanner.nextInt(); 
-		        			ejecutarMetodosProductos.calcularStock(idCalcularStock);;
-		        			
-						  break;
-					  case 3:
 						  
 						  System.out.println("Elegiste la opcion de modificar stock!");
 		        			System.out.println("Ingrese el ID del producto:");

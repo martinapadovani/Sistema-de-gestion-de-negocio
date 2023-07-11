@@ -43,14 +43,9 @@ public class Producto implements GestionDeDatos<Producto>{
 			}else {
 				System.out.println("ID inválido! Vuelva a intentarlo.");
 			}
-			
 		} catch(SQLException e){
 			e.printStackTrace();
 		} 
-	}
-	
-	public void calcularStock(int id) {
-		
 	}
 	
 	public void modificarStock(int id) {
@@ -230,11 +225,10 @@ public class Producto implements GestionDeDatos<Producto>{
 			e.printStackTrace();
 		} 
 	}
-
+	
 	
 	@Override
 	public void Actualizar(int id) {
-		
 		try{
 			cn = conexion.conectar();
 			
@@ -247,51 +241,126 @@ public class Producto implements GestionDeDatos<Producto>{
 			
 			if(resultados.next()) {
 				
-				System.out.println("Por favor, ingrese los datos correspondientes");
-				System.out.println("Nombre: ");
-				String nombreProducto = (scanner.nextLine()).trim().replace(" ", "_");
-				// .trim para eliminar los espacios en blanco al principio y al final de un String
-				//.replace, para reemplazar los espacios blancos por _, y que no rechace con un error el ingreso de espacios
-				System.out.println("Categoria: ");
-				String categoria = (scanner.nextLine()).trim().replace(" ", "_") ;
-				System.out.println("Stock: ");
-				int stockDisponible = scanner.nextInt();
-				System.out.println("Precio (x unidad): ");
-				int precioxUnidad = scanner.nextInt();
-				System.out.println("ID del Proveedor: ");
-				int proveedor_id = scanner.nextInt();
+			boolean salir = false;
 				
-				//ACTUALIZACION
+			  while (!salir) {
+				  
+				System.out.println("Ingrese el atributo que quisiera actualizar");
 				
-				String queryUpdate = "UPDATE producto SET nombreProducto = ?, categoria = ?, stockDisponible = ?, precioxUnidad = ?, proveedor_id = ? WHERE  idProducto = ?";
+				System.out.println("1. Nombre.");
+				System.out.println("2. Categoria.");
+				System.out.println("3. Stock.");
+				System.out.println("4. Precio (x unidad).");
+				System.out.println("5. ID del Proveedor.");
 				
-				PreparedStatement declaracionUpdate  = cn.prepareStatement(queryUpdate);
-			
-				declaracionUpdate.setString(1, nombreProducto);
-				declaracionUpdate.setString(2, categoria);
-				declaracionUpdate.setInt(3, stockDisponible);
-				declaracionUpdate.setInt(4, precioxUnidad);
-				declaracionUpdate.setInt(5, proveedor_id);
+				int opcion = scanner.nextInt();
 				
-				declaracionUpdate.setInt(6, id);
+					switch(opcion) {
 					
-				declaracionUpdate.executeUpdate();
+					case 1:
+						scanner.nextLine();
+						System.out.println("Nombre:");
+						String nombreProducto = (scanner.nextLine()).trim().replace(" ", "_");
+						
+						String queryUpdate1 = "UPDATE producto SET nombreProducto = ? WHERE  idProducto = ?";
+						
+						PreparedStatement declaracionUpdate1  = cn.prepareStatement(queryUpdate1);
+					
+						declaracionUpdate1.setString(1, nombreProducto);
+						declaracionUpdate1.setInt(2, id);
+							
+						declaracionUpdate1.executeUpdate();
+					break;
+						
+					case 2:
+						scanner.nextLine();
+						System.out.println("Categoria:");
+						String categoria = (scanner.nextLine()).trim().replace(" ", "_") ;
+						
+						String queryUpdate2 = "UPDATE producto SET categoria = ? WHERE  idProducto = ?";
+						
+						PreparedStatement declaracionUpdate2  = cn.prepareStatement(queryUpdate2);
+					
+						declaracionUpdate2.setString(1, categoria);
+						declaracionUpdate2.setInt(2, id);
+							
+						declaracionUpdate2.executeUpdate();
+					break;
+					
+					case 3:
+						scanner.nextLine();
+						System.out.println("Stock:");
+						int stockDisponible = scanner.nextInt();
+						
+						String queryUpdate3 = "UPDATE producto SET stockDisponible = ? WHERE  idProducto = ?";
+						
+						PreparedStatement declaracionUpdate3  = cn.prepareStatement(queryUpdate3);
+					
+						declaracionUpdate3.setInt(1, stockDisponible);
+						declaracionUpdate3.setInt(2, id);
+							
+						declaracionUpdate3.executeUpdate();
+						break;
+					
+					case 4:
+						scanner.nextLine();
+						System.out.println("Precio por unidad:");
+						int precioxUnidad = scanner.nextInt();
+						
+						String queryUpdate4 = "UPDATE producto SET precioxUnidad = ? WHERE  idProducto = ?";
+						
+						PreparedStatement declaracionUpdate4  = cn.prepareStatement(queryUpdate4);
+					
+						declaracionUpdate4.setInt(1, precioxUnidad);
+						declaracionUpdate4.setInt(2, id);
+							
+						declaracionUpdate4.executeUpdate();
+						break;
+						
+					case 5:
+						scanner.nextLine();
+						System.out.println("Proveedor ID:");
+						int proveedor_id = scanner.nextInt();
+						
+						String queryUpdate5 = "UPDATE producto SET categoria = ? WHERE  idProducto = ?";
+						
+						PreparedStatement declaracionUpdate5 = cn.prepareStatement(queryUpdate5);
+					
+						declaracionUpdate5.setInt(1, proveedor_id);
+						declaracionUpdate5.setInt(2, id);
+							
+						declaracionUpdate5.executeUpdate();
+						break;
+					
+					default:
+						System.out.println("Opcion inválida! Vuelva a intentarlo.");
+						break;
+					}
+					System.out.println("Desea seguir actualizando? (si/no)");
+					String seguir = scanner.next();
+					  
+					  if(seguir.equalsIgnoreCase("si")) {
+						  
+						  salir = false;
+						  
+					  }else {
+						  salir = true;
+					  }
+				}
 				
-				//VER DATOS
-
+				//VER DATOS ACTUALIZADOS
 				ResultSet resultados2 = declaracionSelect.executeQuery();
-				
+					
 				while(resultados2.next()) { //mientras haya datos por leer
-					System.out.println("Proceso exitoso! Datos actualizados: ");
+						System.out.println("Proceso exitoso! Datos actualizados: ");
 						System.out.println(
 								"ID: " + resultados2.getInt("idProducto") + ". Nombre: " +resultados2.getString("nombreProducto") + 
 								". Categoria: " + resultados2.getString("categoria") + ". Stock: " + resultados2.getInt("stockDisponible") + 
 								". Precio: " + resultados2.getInt("precioxUnidad") + ". Id Proveedor: " +  resultados2.getInt("proveedor_id"));
-				}
+					}
 			}else {
 				System.out.println("ID inválido! Vuelva a intentarlo.");
-			}	
-			
+			}
 		} catch(SQLException e){
 			e.printStackTrace();
 		} 

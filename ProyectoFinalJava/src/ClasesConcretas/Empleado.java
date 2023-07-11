@@ -73,10 +73,6 @@ public class Empleado extends Personas implements GestionDeDatos<Empleado>{
 		} 
 	}
 	
-	public void calcularDesempeño(int id){	
-		
-	}
-	
 	//OVERRIDES
 	
 	@Override
@@ -110,7 +106,7 @@ public class Empleado extends Personas implements GestionDeDatos<Empleado>{
 	    System.out.println("DNI: ");
 	    int dni = scanner.nextInt();
 	    System.out.println("Telefono: ");
-	    int telefono = scanner.nextInt();
+	    long telefono = scanner.nextLong();
 	    System.out.println("Nombre: ");
 	    String nombre = scanner.next().trim().replace(" ", "_");
 	    System.out.println("Apellido:");
@@ -150,7 +146,7 @@ public class Empleado extends Personas implements GestionDeDatos<Empleado>{
 	        //Utilizo .RETURN_GENERATED_KEYS al crear el PreparedStatement para que los ID generados sean devueltos por la consulta.
 
 	        declaracionPersona.setInt(1, dni);
-	        declaracionPersona.setInt(2, telefono);
+	        declaracionPersona.setLong(2, telefono);
 	        declaracionPersona.setString(3, nombre);
 	        declaracionPersona.setString(4, apellido);
 	        declaracionPersona.setInt(5, edad);
@@ -221,74 +217,160 @@ public class Empleado extends Personas implements GestionDeDatos<Empleado>{
 		} 
 	}
 	
-	@Override
-	public void Actualizar(int id) {
 	
+@Override
+	public void Actualizar(int id)  {
+		
 		try{
 			cn = conexion.conectar();
 			
-			String querySelectEmpleado = "SELECT * FROM empleado WHERE  idEmpleado = ?";
+			String querySelect = "SELECT * FROM empleado WHERE  idEmpleado = ?";
 			
-			PreparedStatement declaracionSelectEmpleado  = cn.prepareStatement(querySelectEmpleado);
+			PreparedStatement declaracionSelect  = cn.prepareStatement(querySelect);
 		
-			declaracionSelectEmpleado.setInt(1, id);
-			ResultSet resultadosEmpleado = declaracionSelectEmpleado.executeQuery();
+			declaracionSelect.setInt(1, id);
+			ResultSet resultados = declaracionSelect.executeQuery();
 			
-			if(resultadosEmpleado.next()) {
+			if(resultados.next()) {
 				
-			    // Obtener los datos laborales
-			    System.out.println("Horas mensuales: ");
-			    int horasMensuales = scanner.nextInt();
-			    System.out.println("Sueldo: ");
-			    double sueldo = scanner.nextDouble();
-			    System.out.println("Ventas Mensuales: ");
-			    int ventasMensuales = scanner.nextInt();
-			    System.out.println("Turno: ");
-			    String turno = scanner.next().trim().replace(" ", "_");
-			    System.out.println("Puesto: ");
-			    String puesto = scanner.next().trim().replace(" ", "_");
-			    System.out.println("Activo (true/false): ");
-			    boolean activo = scanner.nextBoolean();
-			    
+			boolean salir = false;
 				
-				//ACTUALIZACION
+			  while (!salir) {
+				  
+				System.out.println("Ingrese el atributo que quisiera actualizar");
+				System.out.println("1. Horas mensuales.");
+				System.out.println("2. Sueldo.");
+				System.out.println("3. Ventas Mensuales.");
+				System.out.println("4. Turno.");
+				System.out.println("5. Puesto.");
+				System.out.println("6. Activo (true/false).");
+
+
+				int opcion = scanner.nextInt();
 				
-				String queryUpdate = "UPDATE empleado SET horasMensuales = ?, sueldo = ?, ventasMensuales = ?, turno = ?, puesto = ?, activo = ? WHERE  idEmpleado = ?";
-				
-				PreparedStatement declaracionUpdate  = cn.prepareStatement(queryUpdate);
-			
-				declaracionUpdate.setInt(1, horasMensuales);
-				declaracionUpdate.setDouble(2, sueldo);
-				declaracionUpdate.setInt(3, ventasMensuales);
-				declaracionUpdate.setString(4, turno);
-				declaracionUpdate.setString(5, puesto);
-				declaracionUpdate.setBoolean(6, activo);
-				
-				declaracionUpdate.setInt(7, id);
+					switch(opcion) {
 					
-				declaracionUpdate.executeUpdate();
+					case 1:
+						scanner.nextLine();
+						System.out.println("Horas mensuales:");
+						int horasMensuales = scanner.nextInt();
+						
+						String queryUpdate1 = "UPDATE empleado SET horasMensuales = ? WHERE  idEmpleado = ?";
+						PreparedStatement declaracionUpdate1  = cn.prepareStatement(queryUpdate1);
+					
+						declaracionUpdate1.setInt(1, horasMensuales);
+						declaracionUpdate1.setInt(2, id);
+							
+						declaracionUpdate1.executeUpdate();
+					break;
+						
+					case 2:
+						scanner.nextLine();
+						System.out.println("Sueldo:");
+						double sueldo = scanner.nextDouble();
+						
+						String queryUpdate2 = "UPDATE empleado SET sueldo = ? WHERE  idEmpleado = ?";
+						PreparedStatement declaracionUpdate2  = cn.prepareStatement(queryUpdate2);
+					
+						declaracionUpdate2.setDouble(1, sueldo);
+						declaracionUpdate2.setInt(2, id);
+							
+						declaracionUpdate2.executeUpdate();
+					break;
+					
+					case 3:
+						scanner.nextLine();
+						System.out.println("Ventas mensuales:");
+						int ventasMensuales = scanner.nextInt();
+						
+						String queryUpdate3 = "UPDATE empleado SET ventasMensuales = ? WHERE  idEmpleado = ?";
+						PreparedStatement declaracionUpdate3  = cn.prepareStatement(queryUpdate3);
+					
+						declaracionUpdate3.setInt(1, ventasMensuales);
+						declaracionUpdate3.setInt(2, id);
+							
+						declaracionUpdate3.executeUpdate();
+						break;
+						
+					case 4:
+						scanner.nextLine();
+						System.out.println("Turno:");
+						String turno = scanner.next().trim().replace(" ", "_");
+						
+						String queryUpdate4 = "UPDATE empleado SET turno = ? WHERE  idEmpleado = ?";
+						PreparedStatement declaracionUpdate4 = cn.prepareStatement(queryUpdate4);
+					
+						declaracionUpdate4.setString(1, turno);
+						declaracionUpdate4.setInt(2, id);
+							
+						declaracionUpdate4.executeUpdate();
+						break;
+						
+					case 5:
+						scanner.nextLine();
+						System.out.println("Puesto:");
+						String puesto = scanner.next().trim().replace(" ", "_");
+						
+						String queryUpdate5 = "UPDATE empleado SET puesto = ? WHERE  idEmpleado = ?";
+						PreparedStatement declaracionUpdate5 = cn.prepareStatement(queryUpdate5);
+					
+						declaracionUpdate5.setString(1, puesto);
+						declaracionUpdate5.setInt(2, id);
+							
+						declaracionUpdate5.executeUpdate();
+						break;
+						
+					case 6:
+						scanner.nextLine();
+						System.out.println("Activo:");
+						boolean activo = scanner.nextBoolean();
+						
+						String queryUpdate6 = "UPDATE empleado SET activo = ? WHERE  idEmpleado = ?";
+						PreparedStatement declaracionUpdate6 = cn.prepareStatement(queryUpdate6);
+					
+						declaracionUpdate6.setBoolean(1, activo);
+						declaracionUpdate6.setInt(2, id);
+							
+						declaracionUpdate6.executeUpdate();
+						break;
+					
+					default:
+						System.out.println("Opcion inválida! Vuelva a intentarlo.");
+						break;
+					}
+					
+					System.out.println("Desea seguir actualizando? (si/no)");
+					String seguir = scanner.next();
+					  
+					  if(seguir.equalsIgnoreCase("si")) {
+						  salir = false;
+					  }else {
+						  salir = true;
+					  }
+				}
 				
-				//VER DATOS
-				
-				ResultSet resultados2 = declaracionSelectEmpleado.executeQuery();
+				//VER DATOS ACTUALIZADOS
+				ResultSet resultados2 = declaracionSelect.executeQuery();
 					
 				while(resultados2.next()) { //mientras haya datos por leer
-					System.out.println("Proceso exitoso! Datos actualizados: ");
+						System.out.println("Proceso exitoso! Datos actualizados: ");
 						System.out.println(
 								"ID: " + resultados2.getInt("idEmpleado") + ". Horas mensuales: " +resultados2.getInt("horasMensuales") + 
 								". Sueldo: " + resultados2.getBigDecimal("sueldo") + ". Ventas mensuales: " + resultados2.getBigDecimal("ventasMensuales") + 
 								". Turno: " + resultados2.getString("turno") + ". Puesto: " +  resultados2.getString("puesto") + 
 								". Activo: " +  resultados2.getBoolean("activo") + ". Fecha de Inicio: " +  resultados2.getDate("fechaDeInicio") +
 								". Id Persona: " +  resultados2.getInt("persona_id") );
-				}
+					}
 			}else {
 				System.out.println("ID inválido! Vuelva a intentarlo.");
 			}
 		} catch(SQLException e){
 			e.printStackTrace();
 		} 
+		
 	}
 	
+
 	@Override
 	public void Eliminar(int id) {
 		
