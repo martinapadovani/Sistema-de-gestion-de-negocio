@@ -10,8 +10,8 @@ public class Conexion {
  private final static String CONTROLADOR = "com.mysql.cj.jdbc.Driver";
 	private final static String URL = "jdbc:mysql://localhost:3306/java_proyecto";
 	private final static String USER = "root";
-	private final static String PASSWORD = "roukoperro2013";
-	private final static String PASSWORDM = "dimon2003";
+	private final static String PASSWORD = "";
+	private final static String PASSWORDM = "";
 	
 	static {
 		try {
